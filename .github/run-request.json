@@ -1,6 +1,6 @@
 {
-  "sample": 10,
-  "trw_pages": 25,
+  "sample": 0,
+  "trw_pages": 0,
   "dry_run": false,
-  "note": "diagnostic: log which spreadsheet SHEET_ID actually opens"
+  "note": "first full production run: all sources, all US+CA productions"
 }
