@@ -138,7 +138,7 @@ def send_digest(new_today: list, registry: dict, stats: dict,
 
   <hr style="border:0;border-top:1px solid #eee;margin:22px 0">
   <p style="font-size:13px;color:#666;margin:0">
-    {with_contact} of {n} new production{'s' if n != 1 else ''} have a contact on file.<br>
+    Contact on file for {with_contact} of {n} new production{'s' if n != 1 else ''}.<br>
     Tracking {stats.get('total', 0):,} live productions across
     {stats.get('orgs', 0):,} organizations
     ({stats.get('pct_with_contact', 0)}% with contact info).<br>

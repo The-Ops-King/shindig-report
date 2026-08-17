@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import json
 import logging
+from datetime import date
 
 import gspread
 from google.oauth2.service_account import Credentials
@@ -41,7 +42,7 @@ ORG_HEADERS = [
 
 LOG_HEADERS = [
     "Run At (UTC)", "MTI", "Concord", "TRW", "In Scope", "New Today",
-    "Orgs", "Orgs Fetched", "Cache Hits", "With Contact", "%% Contact",
+    "Orgs", "Orgs Fetched", "Cache Hits", "With Contact", "Pct Contact",
     "Duration (s)", "Status", "Notes",
 ]
 
@@ -105,7 +106,19 @@ def org_row(o) -> list:
 
 
 def _sort_key(p):
-    return (p.start_date or __import__("datetime").date.max, p.organization)
+    return (p.start_date or date.max, p.organization)
+
+
+# ~23k rows x 19 columns in a single update is a multi-megabyte request body.
+# Chunking keeps each call well inside Google's request-size limit while
+# staying far below the 300 req/min quota.
+CHUNK_ROWS = 5000
+
+
+def _write_rows(ws, rows: list) -> None:
+    for start in range(0, len(rows), CHUNK_ROWS):
+        block = rows[start:start + CHUNK_ROWS]
+        ws.update(block, f"A{start + 1}", value_input_option="RAW")
 
 
 def write_productions(book, title: str, productions: list, registry: dict):
@@ -115,7 +128,7 @@ def write_productions(book, title: str, productions: list, registry: dict):
 
     ws = _tab(book, title, len(rows) + 10, len(PRODUCTION_HEADERS))
     ws.clear()
-    ws.update(rows, "A1", value_input_option="RAW")
+    _write_rows(ws, rows)
     ws.freeze(rows=1)
     log.info("wrote %d rows to %r", len(rows) - 1, title)
 
@@ -128,7 +141,7 @@ def write_orgs(book, registry: dict):
     rows = [ORG_HEADERS] + [org_row(o) for o in ordered]
     ws = _tab(book, config.TAB_ORGS, len(rows) + 10, len(ORG_HEADERS))
     ws.clear()
-    ws.update(rows, "A1", value_input_option="RAW")
+    _write_rows(ws, rows)
     ws.freeze(rows=1)
     log.info("wrote %d organizations", len(rows) - 1)
 
@@ -136,7 +149,7 @@ def write_orgs(book, registry: dict):
 def append_log(book, entry: list):
     ws = _tab(book, config.TAB_LOG, 200, len(LOG_HEADERS))
     if not ws.get_values("A1:A1"):
-        ws.update([[h.replace("%%", "%") for h in LOG_HEADERS]], "A1")
+        ws.update([LOG_HEADERS], "A1")
         ws.freeze(rows=1)
     ws.append_row(entry, value_input_option="RAW")
 

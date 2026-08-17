@@ -103,6 +103,9 @@ def main(argv=None) -> int:
                     help="comma-separated sources to skip (mti,concord,trw)")
     ap.add_argument("--force-enrich", action="store_true",
                     help="ignore the contact cache TTL")
+    ap.add_argument("--save-cache", action="store_true",
+                    help="persist the contact cache even on a dry run, so the "
+                         "one-time bootstrap is not thrown away")
     args = ap.parse_args(argv)
 
     _setup_logging()
@@ -146,7 +149,7 @@ def main(argv=None) -> int:
                 registry, cache, today, force=args.force_enrich
             )
             log.info("enrichment: %s", enrich_stats)
-            if not args.dry_run:
+            if not args.dry_run or args.save_cache:
                 state_mod.save_org_cache(cache)
 
         seen = state_mod.load_seen()
