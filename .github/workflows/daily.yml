@@ -1,0 +1,81 @@
+name: Daily production scrape
+
+on:
+  schedule:
+    # 10:00 UTC ~ 6am US Eastern (5am when EST is in effect -- GitHub cron is
+    # UTC and does not follow DST, so this drifts an hour seasonally).
+    - cron: '0 10 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Scrape only; write no Sheet and send no email'
+        type: boolean
+        default: false
+
+# Never let a slow run overlap the next day's.
+concurrency:
+  group: daily-scrape
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run parser tests
+        # Cheap guard: if a licensor changed their markup, fail here rather
+        # than overwriting the sheet with garbage.
+        run: |
+          pip install pytest
+          python -m pytest tests/ -q
+
+      - name: Scrape and publish
+        env:
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          SHEET_ID: ${{ secrets.SHEET_ID }}
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          REPORT_TO: ${{ secrets.REPORT_TO }}
+        run: |
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            python main.py --dry-run
+          else
+            python main.py
+          fi
+
+      - name: Commit state
+        # seen.json is what makes "new today" meaningful tomorrow; org_cache
+        # is what stops the same organization being re-scraped every morning.
+        if: ${{ inputs.dry_run != true }}
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add state/
+          if git diff --staged --quiet; then
+            echo "no state changes"
+          else
+            git commit -m "chore: update scrape state $(date -u +%Y-%m-%d)"
+            git push
+          fi
+
+      - name: Upload preview on dry run
+        if: ${{ inputs.dry_run == true }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: preview
+          path: out/preview.csv
+          if-no-files-found: ignore
