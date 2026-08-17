@@ -58,13 +58,24 @@ jobs:
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
           REPORT_TO: ${{ secrets.REPORT_TO }}
+          # Passed through the environment rather than interpolated into the
+          # script, so a value can never be spliced into the shell command.
+          DRY_RUN: ${{ inputs.dry_run }}
+          SAMPLE: ${{ inputs.sample }}
+          TRW_PAGES: ${{ inputs.trw_pages }}
+        # Steps run under `bash -e`, so a bare `[ test ] && assign` would abort
+        # the step whenever the test is false. Use explicit ifs.
         run: |
           ARGS=""
-          [ "${{ inputs.dry_run }}" = "true" ] && ARGS="$ARGS --dry-run"
-          [ -n "${{ inputs.sample }}" ] && [ "${{ inputs.sample }}" != "0" ] \
-            && ARGS="$ARGS --sample ${{ inputs.sample }}"
-          [ -n "${{ inputs.trw_pages }}" ] && [ "${{ inputs.trw_pages }}" != "0" ] \
-            && ARGS="$ARGS --trw-pages ${{ inputs.trw_pages }}"
+          if [ "${DRY_RUN}" = "true" ]; then
+            ARGS="$ARGS --dry-run"
+          fi
+          if [ -n "${SAMPLE}" ] && [ "${SAMPLE}" != "0" ]; then
+            ARGS="$ARGS --sample ${SAMPLE}"
+          fi
+          if [ -n "${TRW_PAGES}" ] && [ "${TRW_PAGES}" != "0" ]; then
+            ARGS="$ARGS --trw-pages ${TRW_PAGES}"
+          fi
           echo "running: python main.py$ARGS"
           python main.py $ARGS
 
