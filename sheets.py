@@ -68,7 +68,13 @@ def client() -> gspread.Client:
 def open_sheet(gc: gspread.Client):
     if not config.SHEET_ID:
         raise RuntimeError("SHEET_ID is not set")
-    return gc.open_by_key(config.SHEET_ID)
+    book = gc.open_by_key(config.SHEET_ID)
+    # Name the document explicitly. "The run succeeded but I see nothing in my
+    # sheet" is almost always a SHEET_ID pointing at a different spreadsheet,
+    # and without this the logs cannot tell you which one was written.
+    log.info("opened spreadsheet %r -> %s", book.title, book.url)
+    log.info("existing tabs: %s", [ws.title for ws in book.worksheets()])
+    return book
 
 
 def _tab(book, title: str, rows: int, cols: int):
