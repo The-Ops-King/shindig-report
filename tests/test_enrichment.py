@@ -199,6 +199,49 @@ def test_address_match_shares_website_across_licensors():
     assert sites["Murphey School Auditorium"] == "http://burningcoal.org"
 
 
+# --- malformed licensor data must not take down a run ----------------------
+
+@pytest.mark.parametrize("bad", [
+    "http://starlights-youth-theatre..org",  # empty label -- aborted a real run
+    "http://.org", "http://-bad-.com", "http://localhost",
+    "n/a", "tbd", "", "   ",
+])
+def test_malformed_websites_are_rejected(bad):
+    from orgs import _clean_url
+    assert _clean_url(bad) == ""
+
+
+@pytest.mark.parametrize("good,want", [
+    ("www.burningcoal.org", "http://www.burningcoal.org"),
+    ("http://theatre.org/contact", "http://theatre.org/contact"),
+    ("https://x.co", "https://x.co"),
+])
+def test_valid_websites_survive_cleaning(good, want):
+    from orgs import _clean_url
+    assert _clean_url(good) == want
+
+
+def test_org_with_malformed_url_is_treated_as_having_none():
+    p = make_production("mti:1", "Starlights Youth Theatre",
+                        website="http://starlights-youth-theatre..org")
+    org = next(iter(build_registry([p]).values()))
+    assert org.website == ""
+
+
+def test_one_broken_site_does_not_abort_enrichment(monkeypatch):
+    """A single third-party failure must cost one organization, not the run."""
+    import enrich as e
+
+    class Boom:
+        def get(self, *a, **k):
+            raise Exception("LocationParseError from deep inside urllib3")
+
+    org = Organization(key="k", name="Broken", website="http://example.org")
+    result = e.enrich_one(org, Boom(), TODAY)
+    assert result["status"] == "error"
+    assert result["email"] == ""
+
+
 def test_street_normalization_matches_abbreviations():
     assert normalize_street("224 Polk Street") == normalize_street("224 Polk St.")
     assert normalize_street("100 N Main Ave") == normalize_street("100 North Main Avenue")

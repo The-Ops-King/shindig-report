@@ -18,6 +18,7 @@ from __future__ import annotations
 import logging
 import re
 from dataclasses import dataclass, field
+from urllib.parse import urlparse
 
 from normalize import Production, org_key
 
@@ -63,16 +64,29 @@ class Organization:
     contact_checked: str = ""
 
 
+_HOSTNAME_RE = re.compile(
+    r"^(?=.{1,253}$)([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$", re.I
+)
+
+
 def _clean_url(url: str) -> str:
+    """Normalise a licensor-supplied website, rejecting unusable ones.
+
+    Licensor data carries genuinely malformed hostnames -- an empty label in
+    "starlights-youth-theatre..org" raised a parse error deep inside urllib3
+    and aborted a whole run. Validating the host here means such rows are
+    simply treated as having no website.
+    """
     u = (url or "").strip()
     if not u:
         return ""
     if not u.startswith(("http://", "https://")):
         u = "http://" + u
-    # Reject obvious junk that some listings carry in the URL field.
-    if "." not in u.split("//", 1)[-1].split("/", 1)[0]:
+    try:
+        host = urlparse(u).hostname or ""
+    except ValueError:
         return ""
-    return u
+    return u if _HOSTNAME_RE.match(host) else ""
 
 
 def build_registry(productions: list[Production]) -> dict[str, Organization]:

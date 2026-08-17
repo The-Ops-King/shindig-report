@@ -221,7 +221,13 @@ def enrich_one(org: Organization, session: requests.Session,
                     "Content-Type", "text/html"):
                 return None
             return r
-        except requests.RequestException:
+        except Exception:
+            # Deliberately broad. Enrichment is best-effort against thousands
+            # of third-party sites, and one bad row must never take down the
+            # day's report. A malformed URL in a licensor's own data
+            # ("starlights-youth-theatre..org") raised urllib3's
+            # LocationParseError straight past `requests.RequestException` and
+            # killed a full run.
             return None
 
     resp = fetch(org.website)
