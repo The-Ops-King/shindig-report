@@ -385,3 +385,37 @@ def test_first_seen_is_preserved_across_runs():
     state_mod.diff_new([later], seen, TODAY + timedelta(days=5))
     assert later.first_seen == TODAY.isoformat()
     assert later.last_seen == (TODAY + timedelta(days=5)).isoformat()
+
+
+# --- one company must read as one lead -------------------------------------
+
+def test_canonical_name_prefers_mixed_case_over_shouting():
+    """Concord shouts where MTI does not; the same company must not look like
+    two different leads in the Sheet."""
+    from orgs import _better_name
+    assert _better_name("BROADWAY PALM DINNER THEATRE",
+                        "Broadway Palm Dinner Theatre") == \
+        "Broadway Palm Dinner Theatre"
+    assert _better_name("Broadway Palm Dinner Theatre",
+                        "BROADWAY PALM DINNER THEATRE") == \
+        "Broadway Palm Dinner Theatre"
+
+
+def test_canonical_name_prefers_longer_when_case_matches():
+    from orgs import _better_name
+    assert _better_name("Cape Rep", "Cape Cod Repertory Theatre") == \
+        "Cape Cod Repertory Theatre"
+
+
+def test_same_company_from_two_licensors_is_one_org_one_row_name():
+    a = make_production("mti:1", "Broadway Palm Dinner Theatre",
+                        city="Fort Myers", st="FL")
+    b = make_production("concord:1", "BROADWAY PALM DINNER THEATRE",
+                        city="FORT MYERS", st="FL")
+    b.source = "concord"
+    registry = build_registry([a, b])
+    assert len(registry) == 1
+    org = next(iter(registry.values()))
+    assert org.name == "Broadway Palm Dinner Theatre"
+    assert org.production_count == 2
+    assert org.sources == {"mti", "concord"}

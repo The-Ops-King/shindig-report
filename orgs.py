@@ -89,6 +89,30 @@ def _clean_url(url: str) -> str:
     return u if _HOSTNAME_RE.match(host) else ""
 
 
+def _is_shouty(name: str) -> bool:
+    letters = [c for c in name if c.isalpha()]
+    return bool(letters) and all(c.isupper() for c in letters)
+
+
+def _better_name(current: str, candidate: str) -> str:
+    """Pick the more presentable of two spellings of the same organization.
+
+    Licensors disagree on capitalisation -- Concord lists "BROADWAY PALM DINNER
+    THEATRE" where MTI has "Broadway Palm Dinner Theatre". Both resolve to the
+    same organization, but showing each source's raw spelling in the Sheet
+    makes one company look like two leads. Prefer mixed case, then the longer
+    name, since the longer one usually carries the full legal name.
+    """
+    if not current:
+        return candidate
+    if not candidate:
+        return current
+    shouty_current, shouty_candidate = _is_shouty(current), _is_shouty(candidate)
+    if shouty_current != shouty_candidate:
+        return candidate if shouty_current else current
+    return candidate if len(candidate) > len(current) else current
+
+
 def build_registry(productions: list[Production]) -> dict[str, Organization]:
     """Collapse productions into one Organization per (name, city, state).
 
@@ -110,8 +134,7 @@ def build_registry(productions: list[Production]) -> dict[str, Organization]:
         org.production_count += 1
         org.sources.add(p.source)
 
-        if len(p.organization) > len(org.name):
-            org.name = p.organization
+        org.name = _better_name(org.name, p.organization)
         if not org.street and p.street:
             org.street = p.street
         if not org.country and p.country:

@@ -71,6 +71,11 @@ organizations are linked across sources two ways:
 - **by name** — normalized (`The Old Courthouse Theatre, Inc.` → `old courthouse theatre`)
 - **by street address** — normalized (`224 Polk Street` → `224 Polk St.`)
 
+Licensors also disagree on capitalisation — Concord shouts `BROADWAY PALM
+DINNER THEATRE` where MTI writes `Broadway Palm Dinner Theatre`. Both resolve
+to the same organization, and the Sheet shows a single canonical name so one
+company reads as one lead.
+
 Address matching matters more than name matching, because Concord names the
 *venue* where MTI names the *producing company*. Name matching alone links ~410
 organizations; adding address matching takes it to ~980.
@@ -154,13 +159,30 @@ python -m pytest tests/ -q
 | LLM / AI calls | **None.** Every parser is deterministic. |
 
 Steady-state runtime is roughly 25 minutes/day, nearly all of it TRW's polite
-2s crawl delay. The one-time bootstrap adds ~15 minutes for the initial
-enrichment of ~5,000 organizations; every run after that enriches only
-organizations that are not already in the Contacts tab, which is typically a
-handful.
+2s crawl delay. The one-time bootstrap adds **~37 minutes** for the initial
+enrichment of ~5,000 organizations (measured, not estimated). Every run after
+that only looks up organizations missing from the Contacts tab, which is
+typically a handful.
 
 If the budget ever tightens, the cheapest lever is dropping TRW to twice
 weekly — it is the smallest dataset and by far the slowest scrape.
+
+## Measured results
+
+From a full live run (August 2026):
+
+| | |
+|---|---|
+| Productions in scope (US + CA) | 22,646 |
+| Distinct organizations | 14,868 |
+| Organizations with a website | 4,977 (33.5%) |
+| — of those, contact found | 3,553 (**71%**) |
+| Organizations with a contact | 3,553 (**23.9%** of all) |
+| Requests spent enriching | 7,423 — **1.49 per organization**, cap is 3 |
+
+The gap is not enrichment failing; it is that two thirds of these
+organizations publish no website through any licensor. Where a site exists,
+the cursory pass finds a contact roughly seven times in ten.
 
 ## Design notes worth knowing
 

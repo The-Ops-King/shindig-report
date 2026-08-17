@@ -89,7 +89,9 @@ def production_row(p, org) -> list:
     return [
         p.show_title,
         p.venue or p.organization,
-        p.organization,
+        # The canonical name, not this licensor's raw spelling, so one company
+        # reads as one lead rather than several.
+        org.name if org else p.organization,
         p.address,
         p.city, p.state, p.postal, p.country,
         p.start_date.isoformat() if p.start_date else "",

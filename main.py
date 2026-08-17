@@ -39,7 +39,47 @@ def _setup_logging(verbose: bool = True):
     logging.getLogger("urllib3").setLevel(logging.WARNING)
 
 
-def scrape_all(skip: set[str]) -> tuple[dict, list]:
+def take_sample(productions: list, n: int) -> list:
+    """Keep every production belonging to N organizations.
+
+    Sampling by organization rather than by production keeps the run coherent:
+    the Sheet still shows a company's full season, and enrichment still does
+    exactly one lookup per company, which is the behaviour worth eyeballing.
+    Organizations with a website are preferred so enrichment actually has
+    something to do, and sources are interleaved so all three are represented.
+    """
+    by_org: dict[str, list] = {}
+    for p in productions:
+        by_org.setdefault(p.org_key, []).append(p)
+
+    def rank(item):
+        key, rows = item
+        has_site = any(r.org_website for r in rows)
+        # Deterministic: no randomness, so a repeat run samples the same orgs.
+        return (0 if has_site else 1, rows[0].source, -len(rows), key)
+
+    chosen, seen_sources = [], set()
+    ordered = sorted(by_org.items(), key=rank)
+    # First pass: guarantee at least one organization from each source.
+    for key, rows in ordered:
+        src = rows[0].source
+        if src not in seen_sources and len(chosen) < n:
+            seen_sources.add(src)
+            chosen.append(key)
+    for key, _ in ordered:
+        if len(chosen) >= n:
+            break
+        if key not in chosen:
+            chosen.append(key)
+
+    picked = [p for key in chosen for p in by_org[key]]
+    log.info("sample: %d organizations, %d productions (sources: %s)",
+             len(chosen), len(picked),
+             ", ".join(sorted({p.source for p in picked})))
+    return picked
+
+
+def scrape_all(skip: set[str], trw_pages: int = 0) -> tuple[dict, list]:
     """Run the three scrapers. Concord and TRW overlap; MTI is one request.
 
     A source that raises propagates: an empty Sheet is worse than a loud
@@ -66,7 +106,8 @@ def scrape_all(skip: set[str]) -> tuple[dict, list]:
     if "concord" not in skip:
         jobs.append(("concord", lambda: concord.scrape()))
     if "trw" not in skip:
-        jobs.append(("trw", lambda: trw.scrape(Fetcher(delay=config.TRW_DELAY))))
+        jobs.append(("trw", lambda: trw.scrape(
+            Fetcher(delay=config.TRW_DELAY), limit=trw_pages or None)))
 
     # TRW is the long pole (~13 min); running it alongside the others keeps
     # total wall clock near TRW's own runtime.
@@ -106,6 +147,13 @@ def main(argv=None) -> int:
     ap.add_argument("--save-cache", action="store_true",
                     help="persist the contact cache even on a dry run, so the "
                          "one-time bootstrap is not thrown away")
+    ap.add_argument("--sample", type=int, default=0, metavar="N",
+                    help="keep only N organizations (and their productions). "
+                         "A real run end to end -- Sheet and email included -- "
+                         "just small enough to eyeball before the full one.")
+    ap.add_argument("--trw-pages", type=int, default=0, metavar="N",
+                    help="fetch only N TRW show pages; TRW's full sweep takes "
+                         "~13 minutes, which is a long wait for a smoke test")
     args = ap.parse_args(argv)
 
     _setup_logging()
@@ -114,7 +162,7 @@ def main(argv=None) -> int:
     skip = {s.strip() for s in args.skip.split(",") if s.strip()}
 
     try:
-        results, _ = scrape_all(skip)
+        results, _ = scrape_all(skip, trw_pages=args.trw_pages)
 
         everything = [p for rows in results.values() for p in rows]
 
@@ -131,6 +179,9 @@ def main(argv=None) -> int:
         ]
         log.info("scope: %d of %d productions in %s",
                  len(scoped), len(everything), sorted(config.COUNTRIES))
+
+        if args.sample:
+            scoped = take_sample(scoped, args.sample)
 
         # Organizations first, enrichment second: this ordering is what makes a
         # company with 15 shows cost exactly one fetch.

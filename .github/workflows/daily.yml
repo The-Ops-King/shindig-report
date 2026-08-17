@@ -11,6 +11,14 @@ on:
         description: 'Scrape only; write no Sheet and send no email'
         type: boolean
         default: false
+      sample:
+        description: 'Limit to N organizations (0 = all). A real end-to-end run, just small.'
+        type: string
+        default: '0'
+      trw_pages:
+        description: 'Limit TRW to N show pages (0 = all 381, ~13 min)'
+        type: string
+        default: '0'
 
 # Never let a slow run overlap the next day's.
 concurrency:
@@ -51,11 +59,14 @@ jobs:
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
           REPORT_TO: ${{ secrets.REPORT_TO }}
         run: |
-          if [ "${{ inputs.dry_run }}" = "true" ]; then
-            python main.py --dry-run
-          else
-            python main.py
-          fi
+          ARGS=""
+          [ "${{ inputs.dry_run }}" = "true" ] && ARGS="$ARGS --dry-run"
+          [ -n "${{ inputs.sample }}" ] && [ "${{ inputs.sample }}" != "0" ] \
+            && ARGS="$ARGS --sample ${{ inputs.sample }}"
+          [ -n "${{ inputs.trw_pages }}" ] && [ "${{ inputs.trw_pages }}" != "0" ] \
+            && ARGS="$ARGS --trw-pages ${{ inputs.trw_pages }}"
+          echo "running: python main.py$ARGS"
+          python main.py $ARGS
 
       - name: Commit state
         # seen.json is what makes "new today" meaningful tomorrow; org_cache
