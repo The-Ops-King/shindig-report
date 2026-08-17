@@ -29,7 +29,7 @@ SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 PRODUCTION_HEADERS = [
     "Show", "Venue", "Organization", "Address",
     "City", "State", "Postal", "Country",
-    "Start", "End", "Venue Type",
+    "Start", "End", "Run Days", "Date Type", "Venue Type",
     "Org Website", "Email", "Phone", "Facebook", "Instagram",
     "Source", "Source URL", "First Seen",
 ]
@@ -102,6 +102,8 @@ def production_row(p, org) -> list:
         p.city, p.state, p.postal, p.country,
         p.start_date.isoformat() if p.start_date else "",
         p.end_date.isoformat() if p.end_date else "",
+        p.run_days if p.run_days is not None else "",
+        p.date_type,
         p.venue_type,
         p.org_website or (org.website if org else ""),
         org.email if org else "",

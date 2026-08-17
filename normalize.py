@@ -225,6 +225,37 @@ class Production:
     def org_key(self) -> str:
         return org_key(self.organization, self.city, self.state)
 
+    @property
+    def run_days(self) -> int | None:
+        if not (self.start_date and self.end_date):
+            return None
+        return (self.end_date - self.start_date).days
+
+    @property
+    def date_type(self) -> str:
+        """What the start/end pair actually represents.
+
+        Licensors publish one date pair meaning "the period this licence
+        covers", which is not always a performance run. Verified against MTI's
+        own data: the median gap is 3 days (a normal weekend school run), but
+        ~10% exceed 120 days and the longest is 3,270 -- "Mini Musicals On The
+        Move" holds The Music Man from May 2018 to May 2027. That is a rights
+        window for a touring producer, not nine years of performances.
+
+        Both kinds are real leads, but they are different leads, so the Sheet
+        labels which is which rather than presenting them identically.
+        """
+        days = self.run_days
+        if days is None:
+            return "unknown"
+        if days < 0:
+            return "invalid"
+        if days <= 14:
+            return "performance run"
+        if days <= 120:
+            return "extended run"
+        return "license window"
+
     def to_dict(self) -> dict:
         d = asdict(self)
         d["start_date"] = self.start_date.isoformat() if self.start_date else ""

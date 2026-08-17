@@ -202,6 +202,29 @@ every date past the 12th of a month.
 `Mar 14, 2027` (crosses a month). Runs crossing New Year need the start year
 decremented. All three shapes are tested.
 
+**The date pair is a licence period, not always a performance run.** Each
+licensor publishes one start/end pair meaning "the period this licence
+covers". Usually that is the run: the median MTI gap is **3 days**, a normal
+weekend school production, and 57% are 3 days or fewer. But ~10% exceed 120
+days and the longest is **3,270 days** — "Mini Musicals On The Move" holds
+*The Music Man* from May 2018 to May 2027. That is a touring producer's rights
+window, not nine years of performances.
+
+This is the licensors' own data, not a parsing error: MTI publishes both ISO
+fields and a human-readable `date_range`, and ours agree with theirs on
+**17,433 of 17,433** records (a test pins this). So rather than hide it, the
+Sheet labels it in a **Date Type** column:
+
+| Date Type | Gap | Read it as |
+|---|---|---|
+| `performance run` | ≤ 14 days | Real show dates — the common case |
+| `extended run` | 15–120 days | A professional house running a season |
+| `license window` | > 120 days | A rights window; actual dates unknown |
+
+Both are real leads, but they are different leads — someone opening in six
+weeks is a very different call from someone holding a multi-year touring
+licence. Filter on this column rather than trusting every date as a run.
+
 **Zero is a failure, not a quiet day.** Each source has a floor in
 `config.MIN_EXPECTED`; falling below it raises rather than writing an empty
 Sheet. The digest sends even on a zero-new day, because a silent morning is

@@ -210,3 +210,54 @@ def test_org_key_separates_same_name_different_city():
 ])
 def test_state_code(raw, want):
     assert state_code(raw) == want
+
+
+# --- what the date pair actually means -------------------------------------
+
+@pytest.mark.parametrize("start,end,days,kind", [
+    # A normal weekend school run -- the median MTI record is 3 days.
+    (date(2026, 12, 10), date(2026, 12, 13), 3, "performance run"),
+    (date(2026, 12, 10), date(2026, 12, 10), 0, "performance run"),
+    (date(2026, 12, 1), date(2026, 12, 15), 14, "performance run"),
+    # A professional house running a show for a season.
+    (date(2026, 1, 18), date(2026, 2, 18), 31, "extended run"),
+    # A touring producer's multi-year rights window, not a performance run.
+    (date(2018, 5, 18), date(2027, 5, 1), 3270, "license window"),
+    (date(2026, 1, 1), date(2026, 12, 31), 364, "license window"),
+])
+def test_date_type_classification(start, end, days, kind):
+    from normalize import Production
+    p = Production(key="k", source="mti", show_title="S", organization="O",
+                   start_date=start, end_date=end)
+    assert p.run_days == days
+    assert p.date_type == kind
+
+
+def test_date_type_handles_missing_and_reversed_dates():
+    from normalize import Production
+    none = Production(key="k", source="mti", show_title="S", organization="O")
+    assert none.run_days is None and none.date_type == "unknown"
+    backwards = Production(key="k", source="mti", show_title="S",
+                           organization="O", start_date=date(2026, 5, 1),
+                           end_date=date(2026, 4, 1))
+    assert backwards.date_type == "invalid"
+
+
+def test_mti_start_end_match_its_own_date_range_text():
+    """MTI publishes both ISO fields and a human-readable range. They must
+    agree, or we are misreading the feed rather than reporting it."""
+    import datetime
+    import re
+    rows = json.loads(load("mti_sample.json"))["data"]
+    checked = 0
+    for r in rows:
+        m = re.match(r"^(.+?) to (.+)$", (r.get("date_range") or "").strip())
+        if not m:
+            continue
+        fmt = "%b %d, %Y"
+        start = datetime.datetime.strptime(m.group(1).strip(), fmt).date()
+        end = datetime.datetime.strptime(m.group(2).strip(), fmt).date()
+        assert start.isoformat() == r["start"]
+        assert end.isoformat() == r["end"]
+        checked += 1
+    assert checked, "fixture carried no parseable date_range values"
