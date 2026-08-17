@@ -284,26 +284,32 @@ def enrich(registry: dict[str, Organization], cache: dict,
 
     todo = []
     cache_hits = 0
+    manual_hits = 0
     for key, org in registry.items():
         entry = cache.get(key)
+        # A hand-edited row always wins, even under --force-enrich: the whole
+        # point of letting someone correct a contact is that we never clobber it.
+        if entry and entry.get("manual"):
+            manual_hits += 1
+            cache_hits += 1
+            _apply(org, entry)
+            if not org.website and entry.get("website"):
+                org.website = entry["website"]
+            continue
         if entry and not force and state.is_fresh(entry, today):
             cache_hits += 1
             _apply(org, entry)
             continue
         if not org.website:
             # Nothing to fetch; record it so it is not reconsidered daily.
-            cache[key] = {
-                "email": "", "phone": "", "facebook": "", "instagram": "",
-                "status": "no_website", "checked": today.isoformat(),
-                "requests": 0,
-            }
+            cache[key] = _entry(org, today, status="no_website")
             _apply(org, cache[key])
             continue
         todo.append(org)
 
     log.info(
-        "enrichment: %d orgs seen, %d cache hits, %d to fetch",
-        len(registry), cache_hits, len(todo),
+        "enrichment: %d orgs seen, %d cache hits (%d manual), %d to fetch",
+        len(registry), cache_hits, manual_hits, len(todo),
     )
     # Rule 1, asserted rather than assumed.
     assert len(todo) <= len(registry), "enrichment queue exceeded org count"
@@ -313,6 +319,10 @@ def enrich(registry: dict[str, Organization], cache: dict,
         with ThreadPoolExecutor(max_workers=config.ENRICH_CONCURRENCY) as pool:
             results = pool.map(lambda o: (o, enrich_one(o, session, today)), todo)
             for org, entry in results:
+                # Carry the org's identity onto the entry so the Contacts tab
+                # is readable rather than a wall of opaque keys.
+                entry.update(name=org.name, city=org.city, state=org.state,
+                             website=org.website, manual=False)
                 cache[org.key] = entry
                 _apply(org, entry)
 
@@ -330,10 +340,20 @@ def enrich(registry: dict[str, Organization], cache: dict,
     return {
         "orgs_seen": len(registry),
         "cache_hits": cache_hits,
+        "manual_hits": manual_hits,
         "orgs_fetched": len(todo),
         "requests_spent": requests_spent,
         "with_contact": found,
         "pct_with_contact": round(100 * found / len(registry), 1) if registry else 0.0,
+    }
+
+
+def _entry(org: Organization, today: date, status: str) -> dict:
+    return {
+        "email": "", "phone": "", "facebook": "", "instagram": "",
+        "status": status, "checked": today.isoformat(), "requests": 0,
+        "name": org.name, "city": org.city, "state": org.state,
+        "website": org.website, "manual": False,
     }
 
 

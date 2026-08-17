@@ -75,7 +75,13 @@ ENRICH_TIMEOUT = 8
 # the one-time bootstrap of ~5,000 orgs take 29 minutes; 24 brings it to ~12.
 # Steady-state runs only ever see organizations never seen before.
 ENRICH_CONCURRENCY = 24
-ENRICH_SUCCESS_TTL_DAYS = 90
+# A successful lookup is kept forever: once an organization's contact is in the
+# Contacts tab it is reused and never re-fetched, so an org is visited exactly
+# once in its lifetime. Set ENRICH_REFRESH_FOUND=True (or pass --force-enrich)
+# to re-check them on a TTL instead.
+ENRICH_REFRESH_FOUND = False
+ENRICH_SUCCESS_TTL_DAYS = 365
+# Dead ends are retried a quarter later; transient failures within the week.
 ENRICH_NOT_FOUND_TTL_DAYS = 90
 ENRICH_ERROR_TTL_DAYS = 7
 
@@ -105,6 +111,7 @@ SMTP_PORT = 587
 TAB_ALL = "All Productions"
 TAB_NEW = "New Today"
 TAB_ORGS = "Organizations"
+TAB_CONTACTS = "Contacts"
 TAB_LOG = "Run Log"
 
 EMAIL_TABLE_LIMIT = 15

@@ -139,12 +139,24 @@ def main(argv=None) -> int:
         cov = orgs_mod.coverage(registry)
         log.info("orgs: %s", cov)
 
+        # The Contacts tab is the authoritative cache. Read it before
+        # enrichment so an organization already listed there costs zero
+        # requests, and so hand-edited rows are honoured rather than clobbered.
+        book = None
+        cache = {}
+        if not args.dry_run:
+            import sheets
+            book = sheets.open_sheet(sheets.client())
+            cache = sheets.read_contacts(book)
+        if not cache:
+            # Local fallback for dry runs and first-ever runs.
+            cache = state_mod.load_org_cache()
+
         if args.no_enrich:
             enrich_stats = {"orgs_seen": len(registry), "orgs_fetched": 0,
-                            "cache_hits": 0, "with_contact": 0,
-                            "pct_with_contact": 0.0}
+                            "cache_hits": 0, "manual_hits": 0,
+                            "with_contact": 0, "pct_with_contact": 0.0}
         else:
-            cache = state_mod.load_org_cache()
             enrich_stats = enrich_mod.enrich(
                 registry, cache, today, force=args.force_enrich
             )
@@ -187,13 +199,15 @@ def main(argv=None) -> int:
             len(scoped), len(new_today), len(registry),
             enrich_stats.get("orgs_fetched", 0),
             enrich_stats.get("cache_hits", 0),
+            enrich_stats.get("manual_hits", 0),
             enrich_stats.get("with_contact", 0),
             enrich_stats.get("pct_with_contact", 0.0),
             duration, "ok", "",
         ]
 
         import sheets
-        sheets.publish(scoped, new_today, registry, log_entry)
+        sheets.publish(scoped, new_today, registry, log_entry,
+                       cache=cache, book=book)
         state_mod.save_seen(seen)
 
         if not args.sheet_only:

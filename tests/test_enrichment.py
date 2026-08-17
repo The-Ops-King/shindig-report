@@ -199,6 +199,113 @@ def test_address_match_shares_website_across_licensors():
     assert sites["Murphey School Auditorium"] == "http://burningcoal.org"
 
 
+# --- the Contacts tab as the authoritative cache ---------------------------
+
+def test_org_already_in_contacts_is_never_refetched(monkeypatch):
+    """If the contact already exists, use it -- no HTTP at all."""
+    registry = build_registry(
+        [make_production("mti:1", "Some Theatre", website="http://example.org")]
+    )
+    key = next(iter(registry))
+    cache = {key: {"email": "boxoffice@some.org", "phone": "", "facebook": "",
+                   "instagram": "", "status": "found", "checked": "2020-01-01",
+                   "manual": False}}
+
+    monkeypatch.setattr(enrich_mod, "enrich_one",
+                        lambda o, s, t: pytest.fail("re-fetched a cached org"))
+    stats = enrich_mod.enrich(registry, cache, TODAY)
+
+    assert stats["orgs_fetched"] == 0
+    assert registry[key].email == "boxoffice@some.org"
+
+
+def test_found_contacts_do_not_expire():
+    """A hit years old is still reused; an org is visited once in its life."""
+    entry = {"status": "found", "checked": "2019-01-01", "manual": False}
+    assert state_mod.is_fresh(entry, TODAY)
+    assert state_mod.is_fresh(entry, TODAY + timedelta(days=3650))
+
+
+def test_manual_row_is_never_refetched_or_overwritten(monkeypatch):
+    """Someone fixing an email by hand must have that stick, permanently."""
+    registry = build_registry(
+        [make_production("mti:1", "Some Theatre", website="http://example.org")]
+    )
+    key = next(iter(registry))
+    cache = {key: {"email": "artistic.director@some.org", "phone": "",
+                   "facebook": "", "instagram": "", "status": "found",
+                   "checked": "2019-01-01", "manual": True,
+                   "website": "http://hand-typed.org"}}
+
+    monkeypatch.setattr(enrich_mod, "enrich_one",
+                        lambda o, s, t: pytest.fail("re-fetched a manual row"))
+    stats = enrich_mod.enrich(registry, cache, TODAY)
+
+    assert stats["manual_hits"] == 1
+    assert registry[key].email == "artistic.director@some.org"
+    assert cache[key]["email"] == "artistic.director@some.org"
+
+
+def test_manual_row_survives_force_enrich(monkeypatch):
+    """--force-enrich re-checks automatic rows, but must not clobber manual ones."""
+    registry = build_registry(
+        [make_production("mti:1", "Some Theatre", website="http://example.org")]
+    )
+    key = next(iter(registry))
+    cache = {key: {"email": "hand@typed.org", "phone": "", "facebook": "",
+                   "instagram": "", "status": "found", "checked": "2019-01-01",
+                   "manual": True}}
+
+    monkeypatch.setattr(enrich_mod, "enrich_one",
+                        lambda o, s, t: pytest.fail("clobbered a manual row"))
+    enrich_mod.enrich(registry, cache, TODAY, force=True)
+    assert cache[key]["email"] == "hand@typed.org"
+
+
+def test_only_brand_new_orgs_are_fetched(monkeypatch):
+    """The steady-state case: one new company among many known ones."""
+    prods = [make_production(f"mti:{i}", f"Theatre {i}",
+                             website="http://example.org") for i in range(5)]
+    registry = build_registry(prods)
+    known = list(registry)[:4]
+    cache = {k: {"email": "a@b.org", "phone": "", "facebook": "",
+                 "instagram": "", "status": "found", "checked": "2024-01-01",
+                 "manual": False} for k in known}
+
+    fetched = []
+    monkeypatch.setattr(enrich_mod, "enrich_one", lambda o, s, t: (
+        fetched.append(o.key) or {"email": "new@org.org", "phone": "",
+                                  "facebook": "", "instagram": "",
+                                  "status": "found",
+                                  "checked": t.isoformat(), "requests": 1}
+    ))
+    stats = enrich_mod.enrich(registry, cache, TODAY)
+
+    assert len(fetched) == 1
+    assert stats["cache_hits"] == 4
+    assert len(cache) == 5, "the new org was not added to the cache"
+
+
+def test_contact_round_trips_through_sheet_rows():
+    """A cache entry must survive being written to the Contacts tab and read
+    back, or manual edits would silently reset on the next run."""
+    import sheets
+    entry = {"email": "info@x.org", "phone": "(919) 834-4001",
+             "facebook": "https://facebook.com/x", "instagram": "",
+             "status": "found", "checked": "2026-08-17", "manual": True,
+             "name": "X Theatre", "city": "Raleigh", "state": "NC",
+             "website": "http://x.org"}
+    row = sheets.contact_row("x|raleigh|NC", entry)
+    header = sheets.CONTACT_HEADERS
+    rebuilt = dict(zip(header, row))
+
+    assert rebuilt["Org Key"] == "x|raleigh|NC"
+    assert rebuilt["Email"] == "info@x.org"
+    assert rebuilt["Source"] == "manual"
+    assert rebuilt["Organization"] == "X Theatre"
+    assert len(row) == len(header)
+
+
 # --- malformed licensor data must not take down a run ----------------------
 
 @pytest.mark.parametrize("bad", [

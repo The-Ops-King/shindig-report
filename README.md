@@ -42,11 +42,15 @@ scrape  →  geo-resolve  →  scope filter  →  organizations  →  enrich  �
 
 Two guarantees, both enforced in code and covered by tests:
 
-**One organization is enriched once.** Enrichment only ever receives the
-collapsed organization set — it has no access to the production list and
-structurally cannot fetch a company once per show. Plano Children's Theatre
-has 26 productions in the current data and costs exactly one fetch. Results
-persist in `state/org_cache.json`, so tomorrow it costs zero.
+**One organization is enriched once — ever.** Enrichment only ever receives
+the collapsed organization set; it has no access to the production list and
+structurally cannot fetch a company once per show. Plano Children's Theatre has
+26 productions in the current data and costs exactly one fetch.
+
+That result is then stored in the **Contacts tab** of the Sheet, which is the
+authoritative cache. Every run reads it first, so an organization already
+listed there costs **zero requests** — not tomorrow, not next year. Only
+organizations never seen before are looked up.
 
 **A cursory pass, then we stop.** Per organization, forever:
 
@@ -55,7 +59,8 @@ persist in `state/org_cache.json`, so tomorrow it costs zero.
 - 8s timeout, no retries
 - stop on the first email found
 - no headless browser, no JS rendering, no search fallback, no paid API
-- a miss is cached for **90 days**, so a dead end costs 3 requests per quarter
+- a hit is cached **permanently**; a miss for **90 days**, so a dead end costs
+  3 requests per quarter rather than 3 per day
 
 ### Cross-source website fill
 
@@ -77,7 +82,20 @@ organizations; adding address matching takes it to ~980.
 | **All Productions** | Every live production. Show, Venue, Organization, Address lead the sheet. |
 | **New Today** | Only today's additions, rewritten each run. |
 | **Organizations** | Deduped org view with contact info — shaped for a Go High Level import. |
+| **Contacts** | The enrichment cache, one row per organization. Read before every run; only orgs missing here are looked up. Hand-editable — see below. |
 | **Run Log** | One row per run: counts, enrichment hit rate, duration. Makes silent breakage visible. |
+
+### Fixing a contact by hand
+
+The Contacts tab is meant to be edited. If a lookup found the wrong address, or
+found nothing and you tracked one down yourself:
+
+1. type the correct value into the **Email** (or Phone) cell
+2. set that row's **Source** column to `manual`
+
+That row is then frozen: it is never re-fetched and never overwritten, even
+under `--force-enrich`. Automatic rows stay marked `auto` and follow the normal
+rules. Deleting a row simply makes the organization eligible for lookup again.
 
 ## Setup
 
@@ -136,9 +154,10 @@ python -m pytest tests/ -q
 | LLM / AI calls | **None.** Every parser is deterministic. |
 
 Steady-state runtime is roughly 25 minutes/day, nearly all of it TRW's polite
-2s crawl delay. The one-time bootstrap adds ~12 minutes for the initial
+2s crawl delay. The one-time bootstrap adds ~15 minutes for the initial
 enrichment of ~5,000 organizations; every run after that enriches only
-organizations never seen before.
+organizations that are not already in the Contacts tab, which is typically a
+handful.
 
 If the budget ever tightens, the cheapest lever is dropping TRW to twice
 weekly — it is the smallest dataset and by far the slowest scrape.

@@ -85,11 +85,26 @@ def _ttl_days(status: str) -> int:
 
 
 def is_fresh(entry: dict, today: date) -> bool:
-    """A cached result is reusable until its status-specific TTL expires.
+    """Whether a cached contact can be reused without re-fetching.
 
-    Misses live for 90 days on purpose: a dead end costs three requests per
-    quarter, not three per day.
+    Three cases, in priority order:
+
+    * **Manual** -- a row someone edited by hand in the Contacts tab. Always
+      reusable, never re-fetched, never overwritten, regardless of age.
+    * **Found** -- reusable forever by default (ENRICH_REFRESH_FOUND=False), so
+      an organization we already have a contact for is visited exactly once in
+      its lifetime. That is the point of the Contacts tab.
+    * **Miss / error** -- reusable until its TTL expires: 90 days for a dead
+      end, 7 for a transient failure. A dead end therefore costs three requests
+      per quarter, not three per day.
     """
+    if entry.get("manual"):
+        return True
+
+    status = entry.get("status", "")
+    if status in ("found", "no_website") and not config.ENRICH_REFRESH_FOUND:
+        return True
+
     checked = entry.get("checked")
     if not checked:
         return False
@@ -97,4 +112,4 @@ def is_fresh(entry: dict, today: date) -> bool:
         when = datetime.strptime(checked, "%Y-%m-%d").date()
     except ValueError:
         return False
-    return today - when < timedelta(days=_ttl_days(entry.get("status", "")))
+    return today - when < timedelta(days=_ttl_days(status))

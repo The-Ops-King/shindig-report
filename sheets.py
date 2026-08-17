@@ -40,9 +40,19 @@ ORG_HEADERS = [
     "Productions", "Licensors", "Contact Status", "Last Checked",
 ]
 
+# The Contacts tab is the authoritative enrichment cache. It is deliberately
+# visible and hand-editable: put a real address in the Email column, set Source
+# to "manual", and the pipeline will use it and never overwrite or re-fetch it.
+CONTACT_HEADERS = [
+    "Org Key", "Organization", "City", "State", "Website",
+    "Email", "Phone", "Facebook", "Instagram",
+    "Status", "Last Checked", "Source",
+]
+
 LOG_HEADERS = [
     "Run At (UTC)", "MTI", "Concord", "TRW", "In Scope", "New Today",
-    "Orgs", "Orgs Fetched", "Cache Hits", "With Contact", "Pct Contact",
+    "Orgs", "Orgs Fetched", "Cache Hits", "Manual", "With Contact",
+    "Pct Contact",
     "Duration (s)", "Status", "Notes",
 ]
 
@@ -146,6 +156,91 @@ def write_orgs(book, registry: dict):
     log.info("wrote %d organizations", len(rows) - 1)
 
 
+def read_contacts(book) -> dict:
+    """Load the Contacts tab into the cache shape enrich.py expects.
+
+    Rows the user has edited by hand (Source = "manual") come back flagged so
+    nothing downstream re-fetches or overwrites them.
+    """
+    try:
+        ws = book.worksheet(config.TAB_CONTACTS)
+    except gspread.WorksheetNotFound:
+        log.info("no %r tab yet; starting with an empty cache",
+                 config.TAB_CONTACTS)
+        return {}
+
+    values = ws.get_all_values()
+    if len(values) < 2:
+        return {}
+
+    header = [h.strip() for h in values[0]]
+    try:
+        idx = {name: header.index(name) for name in CONTACT_HEADERS}
+    except ValueError:
+        log.warning("%r tab headers do not match; ignoring it",
+                    config.TAB_CONTACTS)
+        return {}
+
+    def cell(row, name):
+        i = idx[name]
+        return row[i].strip() if i < len(row) else ""
+
+    cache = {}
+    for row in values[1:]:
+        key = cell(row, "Org Key")
+        if not key:
+            continue
+        source = (cell(row, "Source") or "auto").lower()
+        cache[key] = {
+            "email": cell(row, "Email"),
+            "phone": cell(row, "Phone"),
+            "facebook": cell(row, "Facebook"),
+            "instagram": cell(row, "Instagram"),
+            "status": cell(row, "Status") or "found",
+            "checked": cell(row, "Last Checked"),
+            "website": cell(row, "Website"),
+            "name": cell(row, "Organization"),
+            "city": cell(row, "City"),
+            "state": cell(row, "State"),
+            "manual": source == "manual",
+            "requests": 0,
+        }
+    log.info("loaded %d cached contacts from %r", len(cache),
+             config.TAB_CONTACTS)
+    return cache
+
+
+def contact_row(key: str, entry: dict) -> list:
+    return [
+        key,
+        entry.get("name", ""), entry.get("city", ""), entry.get("state", ""),
+        entry.get("website", ""),
+        entry.get("email", ""), entry.get("phone", ""),
+        entry.get("facebook", ""), entry.get("instagram", ""),
+        entry.get("status", ""), entry.get("checked", ""),
+        "manual" if entry.get("manual") else "auto",
+    ]
+
+
+def write_contacts(book, cache: dict):
+    """Rewrite the Contacts tab from the merged cache.
+
+    Manual rows are carried through untouched -- enrichment never queues them,
+    so their values arrive here exactly as they were read.
+    """
+    rows = [CONTACT_HEADERS]
+    for key in sorted(cache, key=lambda k: (cache[k].get("name") or "").lower()):
+        rows.append(contact_row(key, cache[key]))
+
+    ws = _tab(book, config.TAB_CONTACTS, len(rows) + 10, len(CONTACT_HEADERS))
+    ws.clear()
+    _write_rows(ws, rows)
+    ws.freeze(rows=1)
+    manual = sum(1 for e in cache.values() if e.get("manual"))
+    log.info("wrote %d contacts (%d manual) to %r", len(rows) - 1, manual,
+             config.TAB_CONTACTS)
+
+
 def append_log(book, entry: list):
     ws = _tab(book, config.TAB_LOG, 200, len(LOG_HEADERS))
     if not ws.get_values("A1:A1"):
@@ -155,9 +250,11 @@ def append_log(book, entry: list):
 
 
 def publish(productions: list, new_today: list, registry: dict,
-            log_entry: list) -> None:
-    book = open_sheet(client())
+            log_entry: list, cache: dict | None = None, book=None) -> None:
+    book = book or open_sheet(client())
     write_productions(book, config.TAB_ALL, productions, registry)
     write_productions(book, config.TAB_NEW, new_today, registry)
     write_orgs(book, registry)
+    if cache is not None:
+        write_contacts(book, cache)
     append_log(book, log_entry)
