@@ -2,9 +2,9 @@ name: Daily production scrape
 
 on:
   schedule:
-    # 10:00 UTC ~ 6am US Eastern (5am when EST is in effect -- GitHub cron is
-    # UTC and does not follow DST, so this drifts an hour seasonally).
-    - cron: '0 10 * * *'
+    # 7am Arizona (MST, UTC-7). Arizona does not observe DST and GitHub cron is
+    # always UTC, so unlike most US timezones this stays at 7am all year.
+    - cron: '0 14 * * *'
   workflow_dispatch:
     inputs:
       dry_run:

@@ -15,10 +15,11 @@ an email or phone number.
 |---|---|---|---|
 | **MTI** | One request to `map-search-ajax.php` returns the entire worldwide catalogue (~17.4k productions) | 1 request, ~4s | show, venue, organization, full street address, dates, venue website |
 | **Concord** | One request to `NowPlayingMarkersSource` at zoom 16 returns all of North America (~9.4k markers) | 1 request, ~3s | show, producer, street address, city, coordinates, professional/amateur |
-| **TRW** | 381 show pages from the sitemap, each carrying an "Upcoming Productions" block | 381 requests, ~13 min | show, organization, city/state, dates |
+| **TRW** | 381 show pages from the sitemap, each carrying an "Upcoming Productions" block | 381 requests, ~12.8 min | show, organization, city/state, dates |
 
-After scoping to US + Canada and dropping finished runs: **~22,600 productions
-across ~14,900 organizations**.
+Measured against live data: MTI 17,434 raw / Concord 7,778 / TRW 1,082. After
+scoping to US + Canada and dropping finished runs: **~23,700 productions across
+~15,700 organizations**.
 
 ## How it works
 
@@ -103,8 +104,9 @@ With 2FA enabled on the sending account, create an app password at
 
 ### 4. Schedule
 
-`.github/workflows/daily.yml` runs at 10:00 UTC (~6am US Eastern). GitHub cron
-is UTC and does not follow DST, so adjust seasonally if the hour matters.
+`.github/workflows/daily.yml` runs at 14:00 UTC — **7am Arizona (MST)**.
+Arizona does not observe DST and GitHub cron is always UTC, so this stays at
+7am year-round with no seasonal drift.
 
 ## Running it
 
@@ -127,14 +129,14 @@ python -m pytest tests/ -q
 
 | Component | Cost |
 |---|---|
-| GitHub Actions | Free (unlimited on public repos; ~750 of 2,000 free private-repo minutes) |
+| GitHub Actions | Free — the repo is public, so Actions minutes are unlimited |
 | Google Sheets API | Free — no billing tier; ~10 batched requests per run |
 | Gmail SMTP | Free — 500 sends/day allowance, we send 1 |
 | Scraping | Free — all endpoints public and unauthenticated |
 | LLM / AI calls | **None.** Every parser is deterministic. |
 
 Steady-state runtime is roughly 25 minutes/day, nearly all of it TRW's polite
-2s crawl delay. The one-time bootstrap adds ~15 minutes for the initial
+2s crawl delay. The one-time bootstrap adds ~12 minutes for the initial
 enrichment of ~5,000 organizations; every run after that enriches only
 organizations never seen before.
 
