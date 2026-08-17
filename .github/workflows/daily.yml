@@ -19,6 +19,14 @@ on:
         description: 'Limit TRW to N show pages (0 = all 381, ~13 min)'
         type: string
         default: '0'
+  push:
+    # Committing a change to this one file requests a run. This exists because
+    # automation without `actions: write` cannot dispatch a workflow, but can
+    # push a commit -- and it leaves a record in git of why each ad-hoc run
+    # happened. Scoped to the single path, so ordinary code pushes never
+    # trigger a run.
+    paths:
+      - '.github/run-request.json'
 
 # Never let a slow run overlap the next day's.
 concurrency:
@@ -51,6 +59,34 @@ jobs:
           pip install pytest
           python -m pytest tests/ -q
 
+      - name: Resolve run parameters
+        id: params
+        env:
+          # Interpolated into the environment, never into the script body.
+          INPUT_DRY_RUN: ${{ inputs.dry_run }}
+          INPUT_SAMPLE: ${{ inputs.sample }}
+          INPUT_TRW_PAGES: ${{ inputs.trw_pages }}
+        run: |
+          if [ "${GITHUB_EVENT_NAME}" = "push" ] && [ -f .github/run-request.json ]; then
+            DRY_RUN=$(jq -r '.dry_run // false' .github/run-request.json)
+            SAMPLE=$(jq -r '.sample // 0' .github/run-request.json)
+            TRW_PAGES=$(jq -r '.trw_pages // 0' .github/run-request.json)
+            echo "source: .github/run-request.json"
+            jq -r '.note // "(no note)"' .github/run-request.json
+          else
+            # Dispatch inputs, or -- on the 7am schedule, where inputs are
+            # empty -- the defaults, which mean a full production run.
+            DRY_RUN="${INPUT_DRY_RUN:-false}"
+            SAMPLE="${INPUT_SAMPLE:-0}"
+            TRW_PAGES="${INPUT_TRW_PAGES:-0}"
+            echo "source: ${GITHUB_EVENT_NAME} (${DRY_RUN}/${SAMPLE}/${TRW_PAGES})"
+          fi
+          {
+            echo "dry_run=${DRY_RUN}"
+            echo "sample=${SAMPLE}"
+            echo "trw_pages=${TRW_PAGES}"
+          } >> "$GITHUB_OUTPUT"
+
       - name: Scrape and publish
         env:
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
@@ -60,9 +96,9 @@ jobs:
           REPORT_TO: ${{ secrets.REPORT_TO }}
           # Passed through the environment rather than interpolated into the
           # script, so a value can never be spliced into the shell command.
-          DRY_RUN: ${{ inputs.dry_run }}
-          SAMPLE: ${{ inputs.sample }}
-          TRW_PAGES: ${{ inputs.trw_pages }}
+          DRY_RUN: ${{ steps.params.outputs.dry_run }}
+          SAMPLE: ${{ steps.params.outputs.sample }}
+          TRW_PAGES: ${{ steps.params.outputs.trw_pages }}
         # Steps run under `bash -e`, so a bare `[ test ] && assign` would abort
         # the step whenever the test is false. Use explicit ifs.
         run: |
@@ -82,7 +118,7 @@ jobs:
       - name: Commit state
         # seen.json is what makes "new today" meaningful tomorrow; org_cache
         # is what stops the same organization being re-scraped every morning.
-        if: ${{ inputs.dry_run != true }}
+        if: ${{ steps.params.outputs.dry_run != 'true' }}
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -95,7 +131,7 @@ jobs:
           fi
 
       - name: Upload preview on dry run
-        if: ${{ inputs.dry_run == true }}
+        if: ${{ steps.params.outputs.dry_run == 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: preview
