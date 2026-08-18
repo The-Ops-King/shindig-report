@@ -88,6 +88,8 @@ organizations; adding address matching takes it to ~980.
 | **New Today** | Only today's additions, rewritten each run. |
 | **Organizations** | Deduped org view with contact info — shaped for a Go High Level import. |
 | **Contacts** | The enrichment cache, one row per organization. Read before every run; only orgs missing here are looked up. Hand-editable — see below. |
+| **Show Links** | Show title → your sample playbill URL. **You fill this in.** Pre-seeded with every title in the outreach window, ranked by production count. |
+| **Outreach Log** | Append-only record of every send: who, which show, which link, GHL contact id. |
 | **Run Log** | One row per run: counts, enrichment hit rate, duration. Makes silent breakage visible. |
 
 ### Fixing a contact by hand
@@ -101,6 +103,65 @@ found nothing and you tracked one down yourself:
 That row is then frozen: it is never re-fetched and never overwritten, even
 under `--force-enrich`. Automatic rows stay marked `auto` and follow the normal
 rules. Deleting a row simply makes the organization eligible for lookup again.
+
+## Outreach
+
+Turns the report into pipeline: work out the show each contact is doing next,
+attach your sample playbill for that title, push it to Go High Level, and enrol
+them in a workflow that sends the intro and reminds them up to the show date.
+
+**Outreach never runs unless asked for.** The daily scrape leaves it off; set
+`"outreach": "dry"` or `"live"` in `.github/run-request.json`, or pass
+`--outreach-dry-run` / `--outreach` locally.
+
+### The guarantees
+
+**One email per person, not per organization.** 416 addresses in the live data
+are shared across several organizations — keying on the org would send 643
+duplicate emails, and `mail@haletheater.org` alone covers five. Addresses are
+deduped and the soonest-opening show wins, so one inbox hears about one show.
+
+**Junk is never emailed.** 189 of 2,851 scraped addresses are unusable: 143
+website-template placeholders (`user@domain.com` sits on **98** organizations),
+25 Google Calendar feed ids, 13 malformed, plus placeholder and unattended
+mailboxes. Those hard-bounce, which is what wrecks a cold sending domain.
+
+**No sample link, no send.** The pitch is "here's what *your* playbill could
+look like". Without a real sample for their show it falls flat, so they wait for
+a future run instead.
+
+### Show lifecycle
+
+Each address has a *current show*. When it passes, the contact rolls forward:
+
+| State | What happens |
+|---|---|
+| No record | Upsert, enrol, send |
+| Same show | Nothing |
+| Show changed, new one in window + has link + gap ok | Update fields, re-enrol, sequence restarts |
+| Show changed, out of window or no link | **GHL updated, no email** — the CRM stays truthful |
+| No upcoming show | Show fields cleared |
+
+A **45-day floor** between sends stops a company with a packed season being
+emailed every fortnight; 24% of consecutive-show gaps are under 30 days.
+
+**Enrolment removes before it adds.** GoHighLevel's *Allow Re-Entry* does not
+admit a contact still **active** in a workflow — it skips the request silently,
+with no error. This workflow keeps people active right up to their show date, so
+without the remove every rollover would quietly fail to send.
+
+### Before the first send — do these in GHL
+
+1. Create seven custom fields: `next_show_title`, `next_show_start`,
+   `next_show_end`, `next_show_venue`, `next_show_city`, `sample_playbill_url`,
+   `licensor`.
+2. Build the workflow (intro email + reminders keyed off `next_show_start`).
+3. Enable **Allow Re-Entry** on it.
+4. Set the unsubscribe link and physical postal address CAN-SPAM requires.
+5. Fill in the **Show Links** tab — the top 100 titles cover 54% of volume.
+
+Canada is excluded from outreach by default (`OUTREACH_COUNTRIES = {"US"}`):
+CASL is materially stricter than CAN-SPAM. Canadian data is still collected.
 
 ## Setup
 
@@ -124,6 +185,9 @@ With 2FA enabled on the sending account, create an app password at
 | `GMAIL_USER` | Sending Gmail address |
 | `GMAIL_APP_PASSWORD` | The app password from step 2 |
 | `REPORT_TO` | Where the digest goes |
+| `GHL_API_KEY` | GHL private integration token (outreach only) |
+| `GHL_LOCATION_ID` | GHL location/sub-account id |
+| `GHL_WORKFLOW_ID` | The workflow to enrol contacts into |
 
 ### 4. Schedule
 
@@ -142,6 +206,8 @@ python main.py --no-enrich            # skip contact lookup
 python main.py --sheet-only           # write the Sheet, send no email
 python main.py                        # full run
 python notify.py --test               # send a sample digest
+python main.py --outreach-dry-run     # build the send queue, touch no GHL
+python main.py --outreach --outreach-limit 1   # one real send
 
 python -m pytest tests/ -q
 ```

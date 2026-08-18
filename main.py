@@ -133,6 +133,19 @@ def write_preview(productions, registry, path):
     log.info("wrote %s (%d rows)", path, len(productions))
 
 
+def title_counts(productions, today) -> dict:
+    """Show title -> how many productions of it open in the outreach window.
+
+    Drives the ordering of the Show Links tab: filling the top 100 rows covers
+    over half the sendable volume.
+    """
+    counts = {}
+    for p in productions:
+        if outreach_mod.in_window(p, today) and p.date_type != "license window":
+            counts[p.show_title] = counts.get(p.show_title, 0) + 1
+    return counts
+
+
 def run_outreach(productions, registry, book, today, args):
     """Select who to contact, push them to GHL, and record it.
 
@@ -335,6 +348,13 @@ def main(argv=None) -> int:
         import sheets
         sheets.publish(scoped, new_today, registry, log_entry,
                        cache=cache, book=book)
+        # Keep the Show Links tab stocked with every title in the window,
+        # ranked by production count, so the rows worth filling are on top.
+        # Never rewrites a URL someone has typed.
+        try:
+            sheets.seed_show_links(book, title_counts(scoped, today))
+        except Exception as exc:
+            log.warning("could not seed %r: %s", config.TAB_SHOW_LINKS, exc)
         if outreach_rows:
             sheets.append_outreach(book, outreach_rows)
         state_mod.save_seen(seen)

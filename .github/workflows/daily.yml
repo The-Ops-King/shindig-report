@@ -71,6 +71,7 @@ jobs:
             DRY_RUN=$(jq -r '.dry_run // false' .github/run-request.json)
             SAMPLE=$(jq -r '.sample // 0' .github/run-request.json)
             TRW_PAGES=$(jq -r '.trw_pages // 0' .github/run-request.json)
+            OUTREACH=$(jq -r '.outreach // "off"' .github/run-request.json)
             echo "source: .github/run-request.json"
             jq -r '.note // "(no note)"' .github/run-request.json
           else
@@ -79,12 +80,14 @@ jobs:
             DRY_RUN="${INPUT_DRY_RUN:-false}"
             SAMPLE="${INPUT_SAMPLE:-0}"
             TRW_PAGES="${INPUT_TRW_PAGES:-0}"
+            OUTREACH="off"
             echo "source: ${GITHUB_EVENT_NAME} (${DRY_RUN}/${SAMPLE}/${TRW_PAGES})"
           fi
           {
             echo "dry_run=${DRY_RUN}"
             echo "sample=${SAMPLE}"
             echo "trw_pages=${TRW_PAGES}"
+            echo "outreach=${OUTREACH}"
           } >> "$GITHUB_OUTPUT"
 
       - name: Scrape and publish
@@ -102,6 +105,8 @@ jobs:
           DRY_RUN: ${{ steps.params.outputs.dry_run }}
           SAMPLE: ${{ steps.params.outputs.sample }}
           TRW_PAGES: ${{ steps.params.outputs.trw_pages }}
+          # off | dry | live -- outreach never runs unless asked for.
+          OUTREACH: ${{ steps.params.outputs.outreach }}
         # Steps run under `bash -e`, so a bare `[ test ] && assign` would abort
         # the step whenever the test is false. Use explicit ifs.
         run: |
@@ -114,6 +119,11 @@ jobs:
           fi
           if [ -n "${TRW_PAGES}" ] && [ "${TRW_PAGES}" != "0" ]; then
             ARGS="$ARGS --trw-pages ${TRW_PAGES}"
+          fi
+          if [ "${OUTREACH}" = "dry" ]; then
+            ARGS="$ARGS --outreach-dry-run"
+          elif [ "${OUTREACH}" = "live" ]; then
+            ARGS="$ARGS --outreach"
           fi
           echo "running: python main.py$ARGS"
           python main.py $ARGS
