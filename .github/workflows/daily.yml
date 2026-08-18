@@ -116,8 +116,12 @@ jobs:
           python main.py $ARGS
 
       - name: Commit state
-        # seen.json is what makes "new today" meaningful tomorrow; org_cache
-        # is what stops the same organization being re-scraped every morning.
+        # seen.json is what makes "new today" meaningful tomorrow, org_cache is
+        # what stops organizations being re-scraped, and outreach.json is what
+        # stops the same person being emailed twice. Losing any of them is
+        # worse than a failed run, so the push retries against a moved remote
+        # rather than giving up: a plain `git push` here already lost a full
+        # run's state when a commit landed mid-run.
         if: ${{ steps.params.outputs.dry_run != 'true' }}
         run: |
           git config user.name  "github-actions[bot]"
@@ -125,10 +129,28 @@ jobs:
           git add state/
           if git diff --staged --quiet; then
             echo "no state changes"
-          else
-            git commit -m "chore: update scrape state $(date -u +%Y-%m-%d)"
-            git push
+            exit 0
           fi
+          git commit -m "chore: update scrape state $(date -u +%Y-%m-%d)"
+          for attempt in 1 2 3 4 5; do
+            if git push origin "HEAD:${GITHUB_REF_NAME}"; then
+              echo "state pushed on attempt ${attempt}"
+              exit 0
+            fi
+            echo "push rejected; rebasing onto the moved remote (attempt ${attempt})"
+            # State files are generated wholesale, so a conflict has no
+            # meaningful merge -- this run's freshly written state wins.
+            git fetch origin "${GITHUB_REF_NAME}"
+            git rebase "origin/${GITHUB_REF_NAME}" -X ours || {
+              git rebase --abort || true
+              git reset --soft "origin/${GITHUB_REF_NAME}"
+              git add state/
+              git commit -m "chore: update scrape state $(date -u +%Y-%m-%d)" || true
+            }
+            sleep $(( attempt * 3 ))
+          done
+          echo "::error::could not push state after 5 attempts"
+          exit 1
 
       - name: Upload preview on dry run
         if: ${{ steps.params.outputs.dry_run == 'true' }}
