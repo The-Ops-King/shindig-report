@@ -1,0 +1,52 @@
+name: GHL setup
+
+# Creates the pipeline and custom fields in GoHighLevel, using the repo's own
+# GHL_API_KEY secret -- so the key is never shared or pasted anywhere.
+#
+# Defaults to a dry run: it reports what exists and what is missing and creates
+# nothing. Set apply=true to actually create.
+on:
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: 'Actually create the pipeline and fields (otherwise dry run)'
+        type: boolean
+        default: false
+  push:
+    # Same request-file trick as the daily run, since dispatching a workflow
+    # needs a permission this repo's automation does not have.
+    paths:
+      - '.github/ghl-setup-request.json'
+
+permissions:
+  contents: read
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Create pipeline and custom fields
+        env:
+          GHL_API_KEY: ${{ secrets.GHL_API_KEY }}
+          GHL_LOCATION_ID: ${{ secrets.GHL_LOCATION_ID }}
+          INPUT_APPLY: ${{ inputs.apply }}
+        run: |
+          APPLY="${INPUT_APPLY:-false}"
+          if [ "${GITHUB_EVENT_NAME}" = "push" ] && [ -f .github/ghl-setup-request.json ]; then
+            APPLY=$(jq -r '.apply // false' .github/ghl-setup-request.json)
+          fi
+          if [ "${APPLY}" = "true" ]; then
+            python setup_ghl.py --apply
+          else
+            python setup_ghl.py
+          fi
