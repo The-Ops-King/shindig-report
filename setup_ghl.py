@@ -15,12 +15,35 @@ from __future__ import annotations
 
 import argparse
 import logging
+import os
 import sys
 
 import config
 from ghl import GHLClient, GHLError
 
 log = logging.getLogger("setup")
+
+_SUMMARY: list[str] = []
+
+
+def say(fmt: str, *args) -> None:
+    """Log, and also collect for the run summary.
+
+    Actions collapses step logs by default, so a report nobody expands is a
+    report nobody reads. Everything here is also written to the run summary
+    page, where it shows without clicking into anything.
+    """
+    line = fmt % args if args else fmt
+    log.info(line)
+    _SUMMARY.append(line)
+
+
+def flush_summary() -> None:
+    path = os.environ.get("GITHUB_STEP_SUMMARY")
+    if not path:
+        return
+    with open(path, "a", encoding="utf-8") as fh:
+        fh.write("## GHL setup\n\n```\n" + "\n".join(_SUMMARY) + "\n```\n")
 
 PIPELINE_NAME = "Playbill Outreach"
 
@@ -94,7 +117,7 @@ def main(argv=None) -> int:
         log.error("need GHL_API_KEY and GHL_LOCATION_ID (missing: %s)", missing)
         return 1
 
-    log.info("=== pipelines ===")
+    say("=== pipelines ===")
     try:
         pipelines = get_pipelines(client)
     except GHLError as exc:
@@ -107,28 +130,28 @@ def main(argv=None) -> int:
         None,
     )
     if existing:
-        log.info("pipeline %r already exists", PIPELINE_NAME)
+        say("pipeline %r already exists", PIPELINE_NAME)
     elif args.apply:
         existing = create_pipeline(client)
-        log.info("created pipeline %r", PIPELINE_NAME)
+        say("created pipeline %r", PIPELINE_NAME)
     else:
-        log.info("would create pipeline %r with stages: %s",
+        say("would create pipeline %r with stages: %s",
                  PIPELINE_NAME, ", ".join(STAGES))
 
     if existing:
         stages = existing.get("stages") or []
-        log.info("")
-        log.info("  GHL_PIPELINE_ID       = %s", existing.get("id", "?"))
+        say("")
+        say("  GHL_PIPELINE_ID       = %s", existing.get("id", "?"))
         if stages:
             first = stages[0]
-            log.info("  GHL_PIPELINE_STAGE_ID = %s   (%r)",
+            say("  GHL_PIPELINE_STAGE_ID = %s   (%r)",
                      first.get("id", "?"), first.get("name", "?"))
-        log.info("")
+        say("")
         for s in stages:
-            log.info("    stage: %-18s %s", s.get("name"), s.get("id"))
+            say("    stage: %-18s %s", s.get("name"), s.get("id"))
 
-    log.info("")
-    log.info("=== custom fields ===")
+    say("")
+    say("=== custom fields ===")
     try:
         fields = get_custom_fields(client)
     except GHLError as exc:
@@ -139,22 +162,23 @@ def main(argv=None) -> int:
             for f in fields}
     for name, data_type in FIELDS:
         if name.lower() in have:
-            log.info("  ok      %s", name)
+            say("  ok      %s", name)
         elif args.apply:
             try:
                 create_custom_field(client, name, data_type)
-                log.info("  created %-22s (%s)", name, data_type)
+                say("  created %-22s (%s)", name, data_type)
             except GHLError as exc:
                 log.error("  FAILED  %-22s %s", name, exc)
         else:
-            log.info("  missing %-22s (%s)", name, data_type)
+            say("  missing %-22s (%s)", name, data_type)
 
-    log.info("")
+    say("")
     if not args.apply:
-        log.info("dry run -- nothing was created. Re-run with --apply.")
+        say("DRY RUN -- nothing was created. Re-run with apply=true.")
     else:
-        log.info("Done. Copy the two ids above into repo secrets:")
-        log.info("  GHL_PIPELINE_ID, GHL_PIPELINE_STAGE_ID")
+        say("Done. Copy the two ids above into repo secrets:")
+        say("  GHL_PIPELINE_ID, GHL_PIPELINE_STAGE_ID")
+    flush_summary()
     return 0
 
 
