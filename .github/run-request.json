@@ -2,5 +2,6 @@
   "sample": 0,
   "trw_pages": 0,
   "dry_run": false,
-  "note": "first full production run: all sources, all US+CA productions"
+  "outreach": "dry",
+  "note": "full run + seed Show Links tab + outreach DRY RUN (no GHL calls)"
 }
