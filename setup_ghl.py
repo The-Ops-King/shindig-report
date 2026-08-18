@@ -77,9 +77,9 @@ def get_pipelines(client: GHLClient) -> list:
     return data.get("pipelines") or []
 
 
-def create_pipeline(client: GHLClient) -> dict:
+def create_pipeline(client: GHLClient, name: str = PIPELINE_NAME) -> dict:
     payload = {
-        "name": PIPELINE_NAME,
+        "name": name,
         "locationId": client.location_id,
         "stages": [
             {"name": name, "position": i} for i, name in enumerate(STAGES)
@@ -124,19 +124,51 @@ def main(argv=None) -> int:
         log.error("could not read pipelines: %s", exc)
         return 1
 
-    existing = next(
-        (p for p in pipelines
-         if (p.get("name") or "").strip().lower() == PIPELINE_NAME.lower()),
-        None,
-    )
+    # Show every pipeline with its ids, whatever it is called. If the pipeline
+    # was built by hand in the UI, this is how you get its ids without copying
+    # anything out of the browser -- and without guessing our own name for it.
+    if pipelines:
+        say("found %d existing pipeline(s):", len(pipelines))
+        for pl in pipelines:
+            say("")
+            say("  %r", pl.get("name", "?"))
+            say("    GHL_PIPELINE_ID       = %s", pl.get("id", "?"))
+            for i, st in enumerate(pl.get("stages") or []):
+                marker = "  <- GHL_PIPELINE_STAGE_ID" if i == 0 else ""
+                say("    stage %-20s %s%s",
+                    st.get("name", "?"), st.get("id", "?"), marker)
+        say("")
+    else:
+        say("no pipelines exist in this location yet")
+
+    # Match on the configured id first, then on our own default name. If you
+    # built the pipeline by hand, set GHL_PIPELINE_ID and this will adopt it
+    # rather than creating a second one alongside it.
+    wanted_name = (os.environ.get("GHL_PIPELINE_NAME") or PIPELINE_NAME).strip()
+    existing = None
+    if config.GHL_PIPELINE_ID:
+        existing = next(
+            (p for p in pipelines if p.get("id") == config.GHL_PIPELINE_ID), None
+        )
+        if existing:
+            say("adopting the pipeline named by GHL_PIPELINE_ID")
+        else:
+            say("WARNING: GHL_PIPELINE_ID is set but no pipeline has that id")
+    if existing is None:
+        existing = next(
+            (p for p in pipelines
+             if (p.get("name") or "").strip().lower() == wanted_name.lower()),
+            None,
+        )
     if existing:
-        say("pipeline %r already exists", PIPELINE_NAME)
+        say("using existing pipeline %r -- nothing to create",
+            existing.get("name", wanted_name))
     elif args.apply:
-        existing = create_pipeline(client)
-        say("created pipeline %r", PIPELINE_NAME)
+        existing = create_pipeline(client, wanted_name)
+        say("created pipeline %r", wanted_name)
     else:
         say("would create pipeline %r with stages: %s",
-                 PIPELINE_NAME, ", ".join(STAGES))
+            wanted_name, ", ".join(STAGES))
 
     if existing:
         stages = existing.get("stages") or []
