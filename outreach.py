@@ -54,6 +54,7 @@ class Candidate:
     action: str = "none"               # send | rollover | update_only | clear | none
     reason: str = ""                   # why, when not sending
     ghl_contact_id: str = ""
+    ghl_opportunity_id: str = ""
     sends: int = 0
 
     @property
@@ -106,14 +107,25 @@ def gap_ok(record: dict, today: date) -> bool:
 
 def build_candidates(productions: list, registry: dict, show_links: dict,
                      outreach_state: dict, today: date) -> list[Candidate]:
-    """One Candidate per sendable address, with its decided action."""
+    """One Candidate per organization that has a contact and an upcoming show.
+
+    Two different units of identity, deliberately:
+
+      * the **organization** is the unit of pipeline -- each company buys its
+        own playbills, so each gets its own opportunity card;
+      * the **address** is the unit of email -- 416 addresses are shared across
+        several organizations, so only one of them may actually send.
+
+    So every eligible organization becomes a candidate, and then exactly one
+    candidate per address is allowed to send: the one whose show opens soonest.
+    The rest are update_only, which still keeps their card and custom fields
+    current in GHL.
+    """
     by_org: dict[str, list] = {}
     for p in productions:
         by_org.setdefault(p.org_key, []).append(p)
 
-    # Collapse organizations onto addresses; the soonest-opening org wins the
-    # address, so a shared inbox hears about one show, not five.
-    per_address: dict[str, tuple] = {}
+    candidates = []
     for org_key, rows in by_org.items():
         org = registry.get(org_key)
         if not org or not emails.is_sendable(org.email):
@@ -121,23 +133,31 @@ def build_candidates(productions: list, registry: dict, show_links: dict,
         nxt = true_next_show(rows, today)
         if nxt is None:
             continue
-        addr = emails.normalize(org.email)
-        current = per_address.get(addr)
-        if current is None or nxt.start_date < current[1].start_date:
-            per_address[addr] = (org, nxt)
 
-    candidates = []
-    for addr, (org, production) in per_address.items():
+        addr = emails.normalize(org.email)
         record = outreach_state.get(addr) or {}
         cand = Candidate(
-            address=addr, org_key=org.key, org_name=org.name,
-            production=production,
+            address=addr, org_key=org_key, org_name=org.name, production=nxt,
             ghl_contact_id=record.get("ghl_contact_id", ""),
             sends=int(record.get("sends") or 0),
         )
-        cand.sample_url = show_links.get(normalize_title(production.show_title), "")
-        cand.action, cand.reason = _decide(cand, record, production, today)
+        cand.sample_url = show_links.get(normalize_title(nxt.show_title), "")
         candidates.append(cand)
+
+    # One sender per address: soonest opening wins the inbox.
+    winners: dict[str, Candidate] = {}
+    for cand in candidates:
+        held = winners.get(cand.address)
+        if held is None or cand.production.start_date < held.production.start_date:
+            winners[cand.address] = cand
+
+    for cand in candidates:
+        record = outreach_state.get(cand.address) or {}
+        if winners.get(cand.address) is not cand:
+            cand.action = "update_only"
+            cand.reason = "another organization shares this inbox"
+            continue
+        cand.action, cand.reason = _decide(cand, record, cand.production, today)
 
     return candidates
 
@@ -186,6 +206,28 @@ def summarize(candidates: list[Candidate]) -> dict:
             reasons[c.reason] = reasons.get(c.reason, 0) + 1
     counts["reasons"] = reasons
     return counts
+
+
+def load_opportunity_ids(cands: list, opportunities: dict) -> None:
+    """Attach each organization's existing card id, so we update not duplicate."""
+    for cand in cands:
+        cand.ghl_opportunity_id = (
+            opportunities.get(cand.org_key, {}).get("opportunity_id", "")
+        )
+
+
+def record_opportunity(opportunities: dict, cand: Candidate, today: date) -> None:
+    """One record per organization -- the pipeline's unit of identity."""
+    if not cand.ghl_opportunity_id:
+        return
+    opportunities[cand.org_key] = {
+        "opportunity_id": cand.ghl_opportunity_id,
+        "contact_id": cand.ghl_contact_id,
+        "org_name": cand.org_name,
+        "show_key": cand.production.key,
+        "show_title": cand.production.show_title,
+        "updated": today.isoformat(),
+    }
 
 
 def record_send(outreach_state: dict, cand: Candidate, today: date) -> None:

@@ -114,6 +114,32 @@ them in a workflow that sends the intro and reminds them up to the show date.
 `"outreach": "dry"` or `"live"` in `.github/run-request.json`, or pass
 `--outreach-dry-run` / `--outreach` locally.
 
+### What it does in GHL
+
+Exactly four endpoints, nothing else — no tasks, no notes, no SMS, no sending:
+
+| Call | When |
+|---|---|
+| `POST /contacts/upsert` | Every organization we touch |
+| `POST /opportunities/` or `PUT /opportunities/{id}` | Every organization — one card each |
+| `DELETE` then `POST /contacts/{id}/workflow/{id}` | Only the ones actually being emailed |
+
+The contact carries **what** they are doing next and **when**:
+`next_show_title`, `next_show_start`, `next_show_end`, `next_show_venue`,
+`next_show_city`, `sample_playbill_url`, `licensor` — plus tags recording where
+the lead came from: `mass-ingestion` and `MTI` / `Concord` / `TRW`.
+
+**Two different units of identity, on purpose:**
+
+- the **organization** is the unit of *pipeline* — each company buys its own
+  playbills, so each gets one opportunity card, refreshed as its show rolls
+  forward rather than a new card per season;
+- the **address** is the unit of *email* — a shared inbox receives one message
+  no matter how many companies sit behind it.
+
+Live numbers: 2,511 organizations, 2,030 distinct inboxes. So 481 companies
+share an inbox with another — each still tracked, only one emailed.
+
 ### The guarantees
 
 **One email per person, not per organization.** 416 addresses in the live data
@@ -152,13 +178,15 @@ without the remove every rollover would quietly fail to send.
 
 ### Before the first send — do these in GHL
 
-1. Create seven custom fields: `next_show_title`, `next_show_start`,
+1. Create the pipeline and note its id and first stage id (optional — without
+   them contacts and workflows still work, just no cards).
+2. Create seven custom fields: `next_show_title`, `next_show_start`,
    `next_show_end`, `next_show_venue`, `next_show_city`, `sample_playbill_url`,
    `licensor`.
-2. Build the workflow (intro email + reminders keyed off `next_show_start`).
-3. Enable **Allow Re-Entry** on it.
-4. Set the unsubscribe link and physical postal address CAN-SPAM requires.
-5. Fill in the **Show Links** tab — the top 100 titles cover 54% of volume.
+3. Build the workflow (intro email + reminders keyed off `next_show_start`).
+4. Enable **Allow Re-Entry** on it.
+5. Set the unsubscribe link and physical postal address CAN-SPAM requires.
+6. Fill in the **Show Links** tab — the top 100 titles cover 54% of volume.
 
 Canada is excluded from outreach by default (`OUTREACH_COUNTRIES = {"US"}`):
 CASL is materially stricter than CAN-SPAM. Canadian data is still collected.
@@ -188,6 +216,8 @@ With 2FA enabled on the sending account, create an app password at
 | `GHL_API_KEY` | GHL private integration token (outreach only) |
 | `GHL_LOCATION_ID` | GHL location/sub-account id |
 | `GHL_WORKFLOW_ID` | The workflow to enrol contacts into |
+| `GHL_PIPELINE_ID` | Pipeline the opportunity cards live in (optional) |
+| `GHL_PIPELINE_STAGE_ID` | Stage new cards enter at (optional) |
 
 ### 4. Schedule
 

@@ -15,6 +15,7 @@ FIXTURE_DIR = ROOT / "tests" / "fixtures"
 SEEN_PATH = STATE_DIR / "seen.json"
 ORG_CACHE_PATH = STATE_DIR / "org_cache.json"
 OUTREACH_PATH = STATE_DIR / "outreach.json"
+OPPORTUNITIES_PATH = STATE_DIR / "opportunities.json"
 
 # --- Scope -----------------------------------------------------------------
 # US + Canada. MTI accepts a `country` param but silently ignores it, so this
@@ -143,7 +144,14 @@ GHL_API_VERSION = "2021-07-28"
 GHL_API_KEY = os.environ.get("GHL_API_KEY", "")
 GHL_LOCATION_ID = os.environ.get("GHL_LOCATION_ID", "")
 GHL_WORKFLOW_ID = os.environ.get("GHL_WORKFLOW_ID", "")
+GHL_PIPELINE_ID = os.environ.get("GHL_PIPELINE_ID", "")
+GHL_PIPELINE_STAGE_ID = os.environ.get("GHL_PIPELINE_STAGE_ID", "")
 GHL_TIMEOUT = 20
+
+# Where the lead came from. "mass-ingestion" separates these from contacts who
+# arrived by any other route; the licensor tag says which catalogue found them.
+GHL_SOURCE_TAG = "mass-ingestion"
+GHL_LICENSOR_TAGS = {"mti": "MTI", "concord": "Concord", "trw": "TRW"}
 
 # Custom fields the GHL workflow's merge tags read. Create these in GHL first.
 GHL_FIELDS = (

@@ -157,6 +157,7 @@ def run_outreach(productions, registry, book, today, args):
 
     dry = args.outreach_dry_run
     outreach_state = state_mod.load_outreach()
+    opportunities = state_mod.load_opportunities()
 
     show_links = sheets.read_show_links(book) if book else {}
     if not show_links:
@@ -165,6 +166,7 @@ def run_outreach(productions, registry, book, today, args):
     candidates = outreach_mod.build_candidates(
         productions, registry, show_links, outreach_state, today
     )
+    outreach_mod.load_opportunity_ids(candidates, opportunities)
     sending = outreach_mod.select(candidates, args.outreach_limit)
     stats = outreach_mod.summarize(candidates)
     stats["selected"] = len(sending)
@@ -185,20 +187,24 @@ def run_outreach(productions, registry, book, today, args):
         pushed, err = client.push(cand)
         if pushed:
             outreach_mod.record_send(outreach_state, cand, today)
+            outreach_mod.record_opportunity(opportunities, cand, today)
             sent += 1
             rows.append(sheets.outreach_row(cand, today, "sent"))
         else:
             rows.append(sheets.outreach_row(cand, today, "failed", err))
 
-    # Keep GHL truthful for people we are not emailing -- their next show
-    # still changed, and the CRM should say so.
+    # Every other organization still gets its card and custom fields refreshed:
+    # the pipeline tracks companies, and their next show changed even though we
+    # are not emailing about it.
     if not dry and ok:
         for cand in candidates:
             if cand.action == "update_only" and cand.ghl_contact_id:
-                client.push(cand)
+                if client.push(cand)[0]:
+                    outreach_mod.record_opportunity(opportunities, cand, today)
 
     if not dry:
         state_mod.save_outreach(outreach_state)
+        state_mod.save_opportunities(opportunities)
     stats["sent"] = sent if not dry else 0
     stats["dry_run"] = dry
     log.info("outreach: %d sent, %d queued rows", stats["sent"], len(rows))

@@ -32,10 +32,13 @@ class GHLError(RuntimeError):
 
 class GHLClient:
     def __init__(self, api_key: str = "", location_id: str = "",
-                 workflow_id: str = "", session: requests.Session | None = None):
+                 workflow_id: str = "", pipeline_id: str = "",
+                 stage_id: str = "", session: requests.Session | None = None):
         self.api_key = api_key or config.GHL_API_KEY
         self.location_id = location_id or config.GHL_LOCATION_ID
         self.workflow_id = workflow_id or config.GHL_WORKFLOW_ID
+        self.pipeline_id = pipeline_id or config.GHL_PIPELINE_ID
+        self.stage_id = stage_id or config.GHL_PIPELINE_STAGE_ID
         self.session = session or requests.Session()
 
     def configured(self) -> tuple[bool, str]:
@@ -45,6 +48,10 @@ class GHLClient:
             ("GHL_WORKFLOW_ID", self.workflow_id),
         ) if not v]
         return (not missing), ", ".join(missing)
+
+    def pipeline_configured(self) -> bool:
+        """Opportunities are optional: without ids we still upsert and enrol."""
+        return bool(self.pipeline_id and self.stage_id)
 
     def _headers(self) -> dict:
         return {
@@ -116,7 +123,10 @@ class GHLClient:
             "postalCode": p.postal,
             "country": p.country or "US",
             "source": "Shindig Report",
-            "tags": ["shindig-report", f"licensor-{p.source}"],
+            "tags": [
+                config.GHL_SOURCE_TAG,
+                config.GHL_LICENSOR_TAGS.get(p.source, p.source.upper()),
+            ],
             "customFields": self.custom_fields(cand),
         }
         data = self._request("POST", "/contacts/upsert", payload)
@@ -154,6 +164,57 @@ class GHLClient:
         self.remove_from_workflow(contact_id)
         self.add_to_workflow(contact_id)
 
+    # --- opportunities ------------------------------------------------------
+
+    @staticmethod
+    def opportunity_name(cand) -> str:
+        p = cand.production
+        when = p.start_date.strftime("%b %Y") if p.start_date else "TBD"
+        return f"{cand.org_name} - {p.show_title} ({when})"
+
+    def create_opportunity(self, cand) -> str:
+        payload = {
+            "pipelineId": self.pipeline_id,
+            "pipelineStageId": self.stage_id,
+            "locationId": self.location_id,
+            "contactId": cand.ghl_contact_id,
+            "name": self.opportunity_name(cand),
+            "status": "open",
+            "monetaryValue": 0,
+            "source": "Shindig Report",
+        }
+        data = self._request("POST", "/opportunities/", payload)
+        opp = data.get("opportunity") or data
+        return opp.get("id") or opp.get("_id") or ""
+
+    def update_opportunity(self, opportunity_id: str, cand) -> None:
+        """Rename to the new show and put the card back at the first stage.
+
+        One open opportunity per contact, refreshed on rollover, rather than a
+        new card per show -- otherwise a company with a full season leaves a
+        trail of dead cards in the pipeline.
+        """
+        self._request("PUT", f"/opportunities/{opportunity_id}", {
+            "pipelineId": self.pipeline_id,
+            "pipelineStageId": self.stage_id,
+            "name": self.opportunity_name(cand),
+            "status": "open",
+        })
+
+    def sync_opportunity(self, cand) -> str:
+        """Create or refresh, returning the opportunity id ("" if disabled)."""
+        if not self.pipeline_configured():
+            return cand.ghl_opportunity_id
+        if cand.ghl_opportunity_id:
+            try:
+                self.update_opportunity(cand.ghl_opportunity_id, cand)
+                return cand.ghl_opportunity_id
+            except GHLError as exc:
+                # Card deleted in the UI, most likely. Make a fresh one.
+                log.info("opportunity %s not updatable (%s); recreating",
+                         cand.ghl_opportunity_id, exc)
+        return self.create_opportunity(cand)
+
     # --- the whole operation for one candidate ------------------------------
 
     def push(self, cand) -> tuple[bool, str]:
@@ -161,6 +222,9 @@ class GHLClient:
         try:
             contact_id = self.upsert_contact(cand)
             cand.ghl_contact_id = contact_id
+            # Every organization gets a card, whether or not it is the one
+            # sending today -- the pipeline tracks companies, not emails.
+            cand.ghl_opportunity_id = self.sync_opportunity(cand)
             if cand.sending:
                 self.enrol(contact_id)
             return True, ""

@@ -59,8 +59,11 @@ LINKS = {outreach.normalize_title("Annie"): "https://shindig.test/annie"}
 # --- one email per person ---------------------------------------------------
 
 def test_five_orgs_sharing_an_address_produce_one_send():
-    """mail@haletheater.org really does cover 5 organizations in the live
-    data. Deduping by organization would send that person five emails."""
+    """mail@haletheater.org really does cover 5 organizations in the live data.
+
+    Five organizations, so five pipeline cards -- but one inbox, so exactly one
+    email. Those are deliberately different units.
+    """
     shared = "mail@haletheater.org"
     prods = [
         (prod(f"mti:{i}", f"Hale Theatre Venue {i}",
@@ -68,9 +71,10 @@ def test_five_orgs_sharing_an_address_produce_one_send():
         for i in range(5)
     ]
     cands = build(prods, LINKS)
-    assert len(cands) == 1
-    assert cands[0].address == shared
-    assert len(outreach.select(cands)) == 1
+    assert len(cands) == 5, "each organization is still tracked"
+    assert len(outreach.select(cands)) == 1, "but only one email goes out"
+    held = [c for c in cands if not c.sending]
+    assert all("shares this inbox" in c.reason for c in held)
 
 
 def test_shared_address_hears_about_the_soonest_show():
@@ -78,8 +82,9 @@ def test_shared_address_hears_about_the_soonest_show():
     late = prod("mti:1", "Hale A", IN_WINDOW + timedelta(days=20), title="Elf")
     soon = prod("mti:2", "Hale B", IN_WINDOW, title="Annie", city="Other")
     cands = build([(late, shared), (soon, shared)], LINKS)
-    assert len(cands) == 1
-    assert cands[0].production.show_title == "Annie"
+    sending = outreach.select(cands)
+    assert len(sending) == 1
+    assert sending[0].production.show_title == "Annie"
 
 
 def test_distinct_addresses_are_separate_sends():
@@ -241,3 +246,203 @@ def test_record_send_advances_the_counter():
     # A second run for the same show now finds it current and stays quiet.
     again = build([(p, "a@t.org")], LINKS, state)
     assert again[0].action == "none"
+
+
+# --- GHL: contact, tags, pipeline -------------------------------------------
+
+class FakeGHL:
+    """Records calls instead of making them."""
+
+    def __init__(self, **kw):
+        import ghl
+        self.client = ghl.GHLClient(
+            api_key="k", location_id="loc", workflow_id="wf",
+            pipeline_id=kw.get("pipeline_id", "pipe"),
+            stage_id=kw.get("stage_id", "stage"),
+        )
+        self.calls = []
+        self.client._request = self._request
+
+    def _request(self, method, path, payload=None, retries=3):
+        self.calls.append((method, path, payload))
+        if path == "/contacts/upsert":
+            return {"contact": {"id": "contact-1"}}
+        if path == "/opportunities/":
+            return {"opportunity": {"id": "opp-1"}}
+        return {}
+
+    def paths(self):
+        return [f"{m} {p}" for m, p, _ in self.calls]
+
+    def payload_for(self, path):
+        for _, p, body in self.calls:
+            if p == path:
+                return body
+        return None
+
+
+def a_candidate(**kw):
+    p = prod("mti:1", "Old Courthouse Theatre", IN_WINDOW, title="Annie")
+    cands = build([(p, "info@oct.org")], LINKS)
+    c = cands[0]
+    for k, v in kw.items():
+        setattr(c, k, v)
+    return c
+
+
+def test_contact_is_tagged_with_source_and_licensor():
+    fake = FakeGHL()
+    fake.client.push(a_candidate())
+    tags = fake.payload_for("/contacts/upsert")["tags"]
+    assert config.GHL_SOURCE_TAG in tags
+    assert "MTI" in tags
+
+
+@pytest.mark.parametrize("source,tag", [
+    ("mti", "MTI"), ("concord", "Concord"), ("trw", "TRW"),
+])
+def test_licensor_tag_per_source(source, tag):
+    p = prod("x:1", "T", IN_WINDOW, source=source)
+    cand = build([(p, "a@t.org")], LINKS)[0]
+    fake = FakeGHL()
+    fake.client.push(cand)
+    assert tag in fake.payload_for("/contacts/upsert")["tags"]
+
+
+def test_contact_carries_next_show_and_date():
+    """'What's the next play' and 'when's the next play' on the contact."""
+    fake = FakeGHL()
+    fake.client.push(a_candidate())
+    fields = {f["key"]: f["field_value"]
+              for f in fake.payload_for("/contacts/upsert")["customFields"]}
+    assert fields["next_show_title"] == "Annie"
+    assert fields["next_show_start"] == IN_WINDOW.isoformat()
+    assert fields["sample_playbill_url"].endswith("/annie")
+
+
+def test_sending_creates_an_opportunity_in_the_pipeline():
+    fake = FakeGHL()
+    cand = a_candidate()
+    fake.client.push(cand)
+    assert "POST /opportunities/" in fake.paths()
+    opp = fake.payload_for("/opportunities/")
+    assert opp["pipelineId"] == "pipe"
+    assert opp["pipelineStageId"] == "stage"
+    assert opp["contactId"] == "contact-1"
+    assert opp["status"] == "open"
+    assert "Annie" in opp["name"]
+    assert cand.ghl_opportunity_id == "opp-1"
+
+
+def test_rollover_updates_the_existing_card_instead_of_making_another():
+    """A company with a full season must not leave a trail of dead cards."""
+    fake = FakeGHL()
+    cand = a_candidate(ghl_opportunity_id="opp-existing")
+    fake.client.push(cand)
+    assert "PUT /opportunities/opp-existing" in fake.paths()
+    assert "POST /opportunities/" not in fake.paths()
+
+
+def test_pipeline_is_optional():
+    """No pipeline ids configured: contact and workflow still work."""
+    fake = FakeGHL(pipeline_id="", stage_id="")
+    fake.client.push(a_candidate())
+    assert not any("/opportunities" in p for p in fake.paths())
+    assert "POST /contacts/upsert" in fake.paths()
+
+
+def test_enrolment_removes_before_it_adds():
+    """GHL silently refuses to re-enrol a contact still active in a workflow,
+    and this workflow keeps people active until their show date."""
+    fake = FakeGHL()
+    fake.client.push(a_candidate())
+    paths = fake.paths()
+    assert paths.index("DELETE /contacts/contact-1/workflow/wf") < \
+        paths.index("POST /contacts/contact-1/workflow/wf")
+
+
+def test_update_only_org_is_carded_but_never_enrolled():
+    """Their show changed but is out of window: the pipeline card and the
+    contact fields stay current, and no email goes."""
+    cand = a_candidate()
+    cand.action, cand.reason = "update_only", "outside window (too far out)"
+    fake = FakeGHL()
+    fake.client.push(cand)
+    assert "POST /contacts/upsert" in fake.paths()
+    assert "POST /opportunities/" in fake.paths()
+    assert not any("workflow" in p for p in fake.paths())
+
+
+def test_one_failure_does_not_raise():
+    import ghl
+    fake = FakeGHL()
+
+    def boom(*a, **k):
+        raise ghl.GHLError("upstream exploded")
+
+    fake.client._request = boom
+    ok, err = fake.client.push(a_candidate())
+    assert ok is False and "exploded" in err
+
+
+# --- one opportunity per organization ---------------------------------------
+
+def test_every_organization_gets_a_card_even_when_not_emailed():
+    """Five venues on one inbox: five pipeline cards, one email."""
+    shared = "mail@haletheater.org"
+    prods = [
+        (prod(f"mti:{i}", f"Hale Venue {i}", IN_WINDOW + timedelta(days=i),
+              city=f"City{i}"), shared)
+        for i in range(3)
+    ]
+    cands = build(prods, LINKS)
+    fakes = [FakeGHL() for _ in cands]
+    for fake, cand in zip(fakes, cands):
+        fake.client.push(cand)
+    assert all("POST /opportunities/" in f.paths() for f in fakes)
+    enrolled = [f for f in fakes if any("workflow" in p for p in f.paths())]
+    assert len(enrolled) == 1, "only the sending candidate is enrolled"
+
+
+def test_opportunity_id_is_keyed_on_the_organization():
+    cands = build([
+        (prod("mti:1", "Theatre A", IN_WINDOW), "shared@x.org"),
+        (prod("mti:2", "Theatre B", IN_WINDOW + timedelta(days=5),
+              city="Durham"), "shared@x.org"),
+    ], LINKS)
+    a, b = sorted(cands, key=lambda c: c.org_name)
+    opportunities = {}
+    a.ghl_opportunity_id, b.ghl_opportunity_id = "opp-a", "opp-b"
+    outreach.record_opportunity(opportunities, a, TODAY)
+    outreach.record_opportunity(opportunities, b, TODAY)
+    assert len(opportunities) == 2
+    assert opportunities[a.org_key]["opportunity_id"] == "opp-a"
+    assert opportunities[b.org_key]["opportunity_id"] == "opp-b"
+
+    # A later run reattaches them rather than creating duplicates.
+    again = build([
+        (prod("mti:1", "Theatre A", IN_WINDOW), "shared@x.org"),
+        (prod("mti:2", "Theatre B", IN_WINDOW + timedelta(days=5),
+              city="Durham"), "shared@x.org"),
+    ], LINKS)
+    outreach.load_opportunity_ids(again, opportunities)
+    assert {c.ghl_opportunity_id for c in again} == {"opp-a", "opp-b"}
+
+
+def test_one_card_per_org_across_seasons_not_one_per_show():
+    """Rolling forward refreshes the existing card."""
+    opportunities = {}
+    first = build([(prod("mti:1", "T", IN_WINDOW, title="Annie"), "a@t.org")],
+                  LINKS)[0]
+    first.ghl_opportunity_id = "opp-1"
+    outreach.record_opportunity(opportunities, first, TODAY)
+
+    later = build([(prod("mti:2", "T", IN_WINDOW, title="Elf"), "a@t.org")],
+                  LINKS)[0]
+    outreach.load_opportunity_ids([later], opportunities)
+    assert later.ghl_opportunity_id == "opp-1"
+
+    fake = FakeGHL()
+    fake.client.push(later)
+    assert "PUT /opportunities/opp-1" in fake.paths()
+    assert "POST /opportunities/" not in fake.paths()

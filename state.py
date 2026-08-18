@@ -129,3 +129,17 @@ def load_outreach() -> dict:
 
 def save_outreach(records: dict) -> None:
     _save(config.OUTREACH_PATH, records)
+
+
+def load_opportunities() -> dict:
+    """Organization key -> its GHL opportunity.
+
+    Keyed on the organization, not the address: several organizations can share
+    one inbox, and each is still a separate company that buys its own playbills,
+    so each gets its own card.
+    """
+    return _load(config.OPPORTUNITIES_PATH, {})
+
+
+def save_opportunities(records: dict) -> None:
+    _save(config.OPPORTUNITIES_PATH, records)
