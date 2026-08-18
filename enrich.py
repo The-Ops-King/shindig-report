@@ -26,6 +26,7 @@ import requests
 from bs4 import BeautifulSoup
 
 import config
+import emails
 import state
 from orgs import Organization
 
@@ -65,12 +66,15 @@ class Budget:
 
 
 def _valid_email(addr: str) -> bool:
-    low = addr.lower()
-    if any(bad in low for bad in config.EMAIL_BLOCKLIST_SUBSTRINGS):
+    """Reject before caching, so junk never reaches the Contacts tab.
+
+    Shared with outreach via emails.rejection_reason, which also catches
+    website-template placeholders -- "user@domain.com" was sitting on 98
+    organizations, and placeholder domains hard-bounce.
+    """
+    if len(addr) > 100:
         return False
-    if len(low) > 100:
-        return False
-    return True
+    return emails.is_sendable(addr)
 
 
 def _rank_email(addr: str) -> int:

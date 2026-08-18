@@ -113,3 +113,19 @@ def is_fresh(entry: dict, today: date) -> bool:
     except ValueError:
         return False
     return today - when < timedelta(days=_ttl_days(status))
+
+
+# --- outreach --------------------------------------------------------------
+
+def load_outreach() -> dict:
+    """Address -> what we last told that person, and when.
+
+    Keyed on the email address rather than the organization: 416 addresses in
+    the live data are shared by several organizations, so an org-keyed record
+    would let the same person be emailed once per organization.
+    """
+    return _load(config.OUTREACH_PATH, {})
+
+
+def save_outreach(records: dict) -> None:
+    _save(config.OUTREACH_PATH, records)

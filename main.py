@@ -22,6 +22,7 @@ import config
 import enrich as enrich_mod
 import geo
 import orgs as orgs_mod
+import outreach as outreach_mod
 import state as state_mod
 from normalize import in_scope
 from scrapers import concord, mti, trw
@@ -132,6 +133,65 @@ def write_preview(productions, registry, path):
     log.info("wrote %s (%d rows)", path, len(productions))
 
 
+def run_outreach(productions, registry, book, today, args):
+    """Select who to contact, push them to GHL, and record it.
+
+    Returns (stats, sheet rows). A dry run does everything except touch GHL,
+    which is the only safe way to look at a cold-email queue before it sends.
+    """
+    import ghl
+    import sheets
+
+    dry = args.outreach_dry_run
+    outreach_state = state_mod.load_outreach()
+
+    show_links = sheets.read_show_links(book) if book else {}
+    if not show_links:
+        log.warning("no sample links available; nothing can be sent")
+
+    candidates = outreach_mod.build_candidates(
+        productions, registry, show_links, outreach_state, today
+    )
+    sending = outreach_mod.select(candidates, args.outreach_limit)
+    stats = outreach_mod.summarize(candidates)
+    stats["selected"] = len(sending)
+    log.info("outreach: %s", stats)
+
+    client = ghl.GHLClient()
+    ok, missing = client.configured()
+    if not dry and not ok:
+        log.error("outreach skipped: %s not set", missing)
+        stats["error"] = f"missing {missing}"
+        return stats, []
+
+    rows, sent = [], 0
+    for cand in sending:
+        if dry:
+            rows.append(sheets.outreach_row(cand, today, "DRY RUN"))
+            continue
+        pushed, err = client.push(cand)
+        if pushed:
+            outreach_mod.record_send(outreach_state, cand, today)
+            sent += 1
+            rows.append(sheets.outreach_row(cand, today, "sent"))
+        else:
+            rows.append(sheets.outreach_row(cand, today, "failed", err))
+
+    # Keep GHL truthful for people we are not emailing -- their next show
+    # still changed, and the CRM should say so.
+    if not dry and ok:
+        for cand in candidates:
+            if cand.action == "update_only" and cand.ghl_contact_id:
+                client.push(cand)
+
+    if not dry:
+        state_mod.save_outreach(outreach_state)
+    stats["sent"] = sent if not dry else 0
+    stats["dry_run"] = dry
+    log.info("outreach: %d sent, %d queued rows", stats["sent"], len(rows))
+    return stats, rows
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true",
@@ -151,6 +211,14 @@ def main(argv=None) -> int:
                     help="keep only N organizations (and their productions). "
                          "A real run end to end -- Sheet and email included -- "
                          "just small enough to eyeball before the full one.")
+    ap.add_argument("--outreach", action="store_true",
+                    help="run the outreach stage: push contacts to GHL and "
+                         "enrol them in the workflow")
+    ap.add_argument("--outreach-dry-run", action="store_true",
+                    help="build the send queue and log it, but touch no GHL "
+                         "endpoint. Run this first.")
+    ap.add_argument("--outreach-limit", type=int, default=None, metavar="N",
+                    help="override the daily send cap for this run")
     ap.add_argument("--trw-pages", type=int, default=0, metavar="N",
                     help="fetch only N TRW show pages; TRW's full sweep takes "
                          "~13 minutes, which is a long wait for a smoke test")
@@ -215,6 +283,14 @@ def main(argv=None) -> int:
             if not args.dry_run or args.save_cache:
                 state_mod.save_org_cache(cache)
 
+        # --- outreach ------------------------------------------------------
+        outreach_stats = {}
+        outreach_rows = []
+        if args.outreach or args.outreach_dry_run:
+            outreach_stats, outreach_rows = run_outreach(
+                scoped, registry, book, today, args
+            )
+
         seen = state_mod.load_seen()
         was_empty = not seen
         new_today = state_mod.diff_new(scoped, seen, today)
@@ -259,6 +335,8 @@ def main(argv=None) -> int:
         import sheets
         sheets.publish(scoped, new_today, registry, log_entry,
                        cache=cache, book=book)
+        if outreach_rows:
+            sheets.append_outreach(book, outreach_rows)
         state_mod.save_seen(seen)
 
         if not args.sheet_only:

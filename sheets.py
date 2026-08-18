@@ -49,6 +49,16 @@ CONTACT_HEADERS = [
     "Status", "Last Checked", "Source",
 ]
 
+# Hand-filled: paste a sample playbill URL next to a title and the pipeline
+# starts using it on the next run. Pre-seeded with every title in the outreach
+# window, ranked by production count, so the highest-value rows sit at the top.
+SHOW_LINK_HEADERS = ["Show Title", "Sample URL", "Productions", "Notes"]
+
+OUTREACH_HEADERS = [
+    "Date", "Email", "Organization", "Show", "Show Start", "Show End",
+    "Sample URL", "Action", "Send #", "GHL Contact", "Status", "Detail",
+]
+
 LOG_HEADERS = [
     "Run At (UTC)", "MTI", "Concord", "TRW", "In Scope", "New Today",
     "Orgs", "Orgs Fetched", "Cache Hits", "Manual", "With Contact",
@@ -249,6 +259,111 @@ def write_contacts(book, cache: dict):
     manual = sum(1 for e in cache.values() if e.get("manual"))
     log.info("wrote %d contacts (%d manual) to %r", len(rows) - 1, manual,
              config.TAB_CONTACTS)
+
+
+def read_show_links(book) -> dict:
+    """Normalised title -> sample URL, for titles that have one.
+
+    Blank URLs are simply absent from the mapping, which is what makes
+    "no link, no send" work without any extra flag.
+    """
+    import outreach
+    try:
+        ws = book.worksheet(config.TAB_SHOW_LINKS)
+    except gspread.WorksheetNotFound:
+        log.info("no %r tab yet; no sample links available",
+                 config.TAB_SHOW_LINKS)
+        return {}
+
+    values = ws.get_all_values()
+    if len(values) < 2:
+        return {}
+    header = [h.strip() for h in values[0]]
+    try:
+        t_i, u_i = header.index("Show Title"), header.index("Sample URL")
+    except ValueError:
+        log.warning("%r headers do not match; ignoring", config.TAB_SHOW_LINKS)
+        return {}
+
+    links = {}
+    for row in values[1:]:
+        title = row[t_i].strip() if t_i < len(row) else ""
+        url = row[u_i].strip() if u_i < len(row) else ""
+        if title and url:
+            links[outreach.normalize_title(title)] = url
+    log.info("loaded %d sample links from %r", len(links), config.TAB_SHOW_LINKS)
+    return links
+
+
+def seed_show_links(book, title_counts: dict) -> int:
+    """Add any title we have never listed, keeping every URL already typed in.
+
+    Rewriting the tab wholesale would erase hand-entered links, so existing
+    rows are read back and preserved verbatim; only genuinely new titles are
+    appended. Ordered by production count so the rows worth filling come first.
+    """
+    try:
+        ws = book.worksheet(config.TAB_SHOW_LINKS)
+        existing = ws.get_all_values()
+    except gspread.WorksheetNotFound:
+        ws, existing = None, []
+
+    kept, seen = {}, set()
+    if len(existing) >= 2 and existing[0]:
+        header = [h.strip() for h in existing[0]]
+        idx = {n: header.index(n) for n in SHOW_LINK_HEADERS if n in header}
+        for row in existing[1:]:
+            def cell(name):
+                i = idx.get(name)
+                return row[i].strip() if i is not None and i < len(row) else ""
+            title = cell("Show Title")
+            if not title:
+                continue
+            kept[title] = [title, cell("Sample URL"),
+                           title_counts.get(title, cell("Productions")),
+                           cell("Notes")]
+            seen.add(title)
+
+    added = 0
+    for title, count in sorted(title_counts.items(), key=lambda kv: (-kv[1], kv[0])):
+        if title not in seen:
+            kept[title] = [title, "", count, ""]
+            added += 1
+
+    rows = [SHOW_LINK_HEADERS] + sorted(
+        kept.values(), key=lambda r: (-int(r[2] or 0), r[0].lower())
+    )
+    ws = _tab(book, config.TAB_SHOW_LINKS, len(rows) + 10, len(SHOW_LINK_HEADERS))
+    ws.clear()
+    _write_rows(ws, rows)
+    ws.freeze(rows=1)
+    filled = sum(1 for r in kept.values() if r[1])
+    log.info("%r: %d titles (%d added, %d with links)",
+             config.TAB_SHOW_LINKS, len(kept), added, filled)
+    return added
+
+
+def append_outreach(book, rows: list) -> None:
+    """Append sends to the log; never rewrite, this is the audit trail."""
+    if not rows:
+        return
+    ws = _tab(book, config.TAB_OUTREACH, 200, len(OUTREACH_HEADERS))
+    if not ws.get_values("A1:A1"):
+        ws.update([OUTREACH_HEADERS], "A1")
+        ws.freeze(rows=1)
+    ws.append_rows(rows, value_input_option="RAW")
+    log.info("appended %d rows to %r", len(rows), config.TAB_OUTREACH)
+
+
+def outreach_row(cand, today, status: str, detail: str = "") -> list:
+    p = cand.production
+    return [
+        today.isoformat(), cand.address, cand.org_name, p.show_title,
+        p.start_date.isoformat() if p.start_date else "",
+        p.end_date.isoformat() if p.end_date else "",
+        cand.sample_url, cand.action, cand.sends + 1,
+        cand.ghl_contact_id, status, detail,
+    ]
 
 
 def append_log(book, entry: list):

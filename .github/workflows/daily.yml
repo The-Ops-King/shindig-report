@@ -94,6 +94,9 @@ jobs:
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
           REPORT_TO: ${{ secrets.REPORT_TO }}
+          GHL_API_KEY: ${{ secrets.GHL_API_KEY }}
+          GHL_LOCATION_ID: ${{ secrets.GHL_LOCATION_ID }}
+          GHL_WORKFLOW_ID: ${{ secrets.GHL_WORKFLOW_ID }}
           # Passed through the environment rather than interpolated into the
           # script, so a value can never be spliced into the shell command.
           DRY_RUN: ${{ steps.params.outputs.dry_run }}

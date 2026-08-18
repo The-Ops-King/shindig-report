@@ -14,6 +14,7 @@ FIXTURE_DIR = ROOT / "tests" / "fixtures"
 
 SEEN_PATH = STATE_DIR / "seen.json"
 ORG_CACHE_PATH = STATE_DIR / "org_cache.json"
+OUTREACH_PATH = STATE_DIR / "outreach.json"
 
 # --- Scope -----------------------------------------------------------------
 # US + Canada. MTI accepts a `country` param but silently ignores it, so this
@@ -98,6 +99,58 @@ EMAIL_BLOCKLIST_SUBSTRINGS = (
     ".gif", ".webp", ".svg", ".css", ".js",
 )
 
+# Placeholder addresses left in website templates. Measured on the live cache:
+# 151 of 2,831 scraped addresses (5.3%) are these -- "user@domain.com" alone
+# appears on 98 organizations. They are not merely useless: placeholder domains
+# hard-bounce, and hard bounces are what destroy a cold sending domain.
+PLACEHOLDER_DOMAINS = (
+    "domain.com", "mysite.com", "website.com", "example.com", "example.org",
+    "yourdomain.com", "yoursite.com", "email.com", "address.com",
+    "yourcompany.com", "company.com", "test.com",
+)
+PLACEHOLDER_MAILBOXES = (
+    "user", "example", "email", "yourname", "youremail", "your-email",
+    "firstname", "firstname.lastname", "name", "test", "sample", "someone",
+    "username", "myemail",
+)
+# Unattended mailboxes -- a reply goes nowhere, so outreach there is wasted.
+UNATTENDED_MAILBOXES = ("noreply", "no-reply", "donotreply", "do-not-reply")
+# Machine-generated addresses scraped from embedded widgets. 19 Google Calendar
+# feed ids were sitting in the cache looking like contacts.
+MACHINE_DOMAIN_SUFFIXES = ("group.calendar.google.com", "calendar.google.com")
+
+# --- Outreach --------------------------------------------------------------
+# Emailing Canada is deliberately off by default: CASL is materially stricter
+# than CAN-SPAM and carries real penalties. Canadian data is still collected --
+# this only governs who gets contacted. Flip when you have made that call.
+OUTREACH_COUNTRIES = {"US"}
+
+# A show must be far enough out that playbills are not ordered yet, and close
+# enough to be real and budgeted.
+OUTREACH_WINDOW_MIN_DAYS = 30
+OUTREACH_WINDOW_MAX_DAYS = 120
+
+# A cold domain sending thousands on day one loses the channel outright.
+OUTREACH_DAILY_CAP = 25
+
+# Minimum days between any two sends to one address. The median gap between an
+# organization's consecutive shows is 63 days, but 24% of gaps are under 30 --
+# without a floor, a company with a packed season gets an email every week.
+OUTREACH_MIN_GAP_DAYS = 45
+
+GHL_BASE = "https://services.leadconnectorhq.com"
+GHL_API_VERSION = "2021-07-28"
+GHL_API_KEY = os.environ.get("GHL_API_KEY", "")
+GHL_LOCATION_ID = os.environ.get("GHL_LOCATION_ID", "")
+GHL_WORKFLOW_ID = os.environ.get("GHL_WORKFLOW_ID", "")
+GHL_TIMEOUT = 20
+
+# Custom fields the GHL workflow's merge tags read. Create these in GHL first.
+GHL_FIELDS = (
+    "next_show_title", "next_show_start", "next_show_end",
+    "next_show_venue", "next_show_city", "sample_playbill_url", "licensor",
+)
+
 # --- Delivery --------------------------------------------------------------
 SHEET_ID = os.environ.get("SHEET_ID", "")
 GOOGLE_SERVICE_ACCOUNT_JSON = os.environ.get("GOOGLE_SERVICE_ACCOUNT_JSON", "")
@@ -112,6 +165,8 @@ TAB_ALL = "All Productions"
 TAB_NEW = "New Today"
 TAB_ORGS = "Organizations"
 TAB_CONTACTS = "Contacts"
+TAB_SHOW_LINKS = "Show Links"
+TAB_OUTREACH = "Outreach Log"
 TAB_LOG = "Run Log"
 
 EMAIL_TABLE_LIMIT = 15
