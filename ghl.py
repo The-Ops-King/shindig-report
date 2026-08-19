@@ -143,8 +143,6 @@ class GHLClient:
         payload = {
             "locationId": self.location_id,
             "email": cand.address,
-            "name": cand.org_name,
-            "companyName": cand.org_name,
             "source": "Shindig Report",
             # Provenance only. The outreach tag is deliberately NOT set here:
             # upsert merges tags, so a tag already present stays present and
@@ -152,6 +150,12 @@ class GHLClient:
             "tags": [config.GHL_SOURCE_TAG],
             "customFields": self.custom_fields(cand),
         }
+        # Never blank a name we do not have. A clear is built from the stored
+        # outreach record, and an early record may not carry one -- sending ""
+        # would overwrite whatever is in GHL with nothing.
+        if cand.org_name:
+            payload["name"] = cand.org_name
+            payload["companyName"] = cand.org_name
         if p is not None:
             payload.update({
                 "address1": p.street,

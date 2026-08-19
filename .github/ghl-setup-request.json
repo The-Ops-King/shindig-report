@@ -1,4 +1,4 @@
 {
-  "apply": false,
-  "note": "inventory v2: full untruncated keys and ids, alias matching"
+  "apply": true,
+  "note": "adopt the existing next-play field, create the six that are genuinely missing"
 }

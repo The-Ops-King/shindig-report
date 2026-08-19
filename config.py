@@ -167,7 +167,17 @@ GHL_FIELDS = (
 #
 # This is also how you adopt a field that already exists under a different name
 # instead of creating a near-duplicate beside it.
-GHL_FIELD_IDS: dict[str, str] = {}
+GHL_FIELD_IDS: dict[str, str] = {
+    # Adopted: the field already in the location, "What's the next play you are
+    # doing?" (contact.what_is_the_next_play_you_are_doing).
+    "next_show_title": "XW5c99K5MZaogICyK9kd",
+}
+# Deliberately NOT adopted, though the setup report flags both as similar:
+#   "What is the date of your next performance" is MULTIPLE_OPTIONS -- a
+#   dropdown cannot anchor a reminder sequence, so next_show_start is its own
+#   DATE field.
+#   "School/ Theater" says what kind of institution the contact is, not which
+#   venue this particular show is in. Different question, same-looking name.
 
 # The tag that puts someone into the outreach sequence. The GHL workflow
 # triggers on this tag being *added*, which is what lets you add or remove

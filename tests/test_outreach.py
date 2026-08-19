@@ -557,3 +557,14 @@ def test_clear_stops_the_sequence_and_leaves_the_card_alone():
     # Every show field is blanked, so a hand re-add cannot render a past show.
     fields = fake.payload_for("/contacts/upsert")["customFields"]
     assert all(f["field_value"] == "" for f in fields)
+
+
+def test_a_clear_without_a_stored_name_does_not_blank_it():
+    """Clears are built from the outreach record. An early record may carry no
+    org name, and sending an empty one would wipe what is in GHL."""
+    cand = a_candidate()
+    cand.action, cand.production, cand.org_name = "clear", None, ""
+    fake = FakeGHL()
+    fake.client.push(cand)
+    payload = fake.payload_for("/contacts/upsert")
+    assert "name" not in payload and "companyName" not in payload
