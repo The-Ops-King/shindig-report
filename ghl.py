@@ -123,8 +123,15 @@ class GHLClient:
                 "sample_playbill_url": cand.sample_url,
                 "licensor": p.source.upper(),
             }
-        return [{"key": config.GHL_FIELD_KEYS.get(k, k), "field_value": v}
-                for k, v in values.items()]
+        out = []
+        for name, value in values.items():
+            field_id = config.GHL_FIELD_IDS.get(name)
+            # Prefer the id. A fieldKey that matches nothing is not an error in
+            # GHL -- it is accepted and dropped, so the merge tag renders empty
+            # with nothing anywhere to say why.
+            ref = {"id": field_id} if field_id else {"key": name}
+            out.append({**ref, "field_value": value})
+        return out
 
     def upsert_contact(self, cand) -> str:
         """Create or update, returning the GHL contact id.

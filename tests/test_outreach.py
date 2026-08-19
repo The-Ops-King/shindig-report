@@ -470,13 +470,19 @@ def test_upsert_does_not_carry_the_outreach_tag():
     assert config.GHL_OUTREACH_TAG not in fake.payload_for("/contacts/upsert")["tags"]
 
 
-def test_field_keys_can_adopt_an_existing_ghl_field(monkeypatch):
-    monkeypatch.setattr(config, "GHL_FIELD_KEYS",
-                        {"next_show_title": "contact.next_show"})
+def test_a_mapped_field_is_addressed_by_id_not_by_name(monkeypatch):
+    """Adopting the field you already have called "What's the next play you
+    are doing". A fieldKey that matches nothing is accepted and dropped, so
+    the id is the only reference that fails loudly when it is wrong."""
+    monkeypatch.setattr(config, "GHL_FIELD_IDS",
+                        {"next_show_title": "XW5c99K5MZaogICyK9kd"})
     import ghl
-    keys = [f["key"] for f in ghl.GHLClient.custom_fields(a_candidate())]
-    assert "contact.next_show" in keys
-    assert "next_show_title" not in keys
+    fields = {f.get("id") or f.get("key"): f["field_value"]
+              for f in ghl.GHLClient.custom_fields(a_candidate())}
+    assert fields["XW5c99K5MZaogICyK9kd"] == "Annie"
+    assert "next_show_title" not in fields
+    # Unmapped fields still fall back to the name.
+    assert "licensor" in fields
 
 
 # --- clearing when the show is over ------------------------------------------

@@ -117,6 +117,24 @@ def _tokens(value: str) -> set:
     return {t for t in re.split(r"[^a-z0-9]+", _tail(value).lower()) if t}
 
 
+# What each field would plausibly be called if someone built it by hand. Token
+# overlap alone is not enough: "What's the next play you are doing" shares only
+# the word "next" with next_show_title, and would otherwise be reported missing
+# right next to the field that already holds exactly that.
+ALIASES = {
+    "next_show_title": ("next play", "next show", "upcoming play",
+                        "upcoming show", "current show", "next production"),
+    "next_show_start": ("next performance date", "show date", "next show date",
+                        "opening night", "performance date", "show start"),
+    "next_show_end": ("closing night", "show end", "last performance"),
+    "next_show_venue": ("venue", "theater", "theatre", "performance space"),
+    "next_show_city": ("city", "show city"),
+    "sample_playbill_url": ("playbill sample", "sample playbill",
+                            "playbill link", "sample link"),
+    "licensor": ("licensor", "licensing house", "rights holder"),
+}
+
+
 def looks_similar(wanted: str, field: dict) -> bool:
     """Whether an existing field is plausibly the one we were about to create.
 
@@ -124,14 +142,18 @@ def looks_similar(wanted: str, field: dict) -> bool:
     close but whose meaning is not (say a "Show Date" that holds the date of a
     *past* show) would silently mis-fill a merge tag, and a wrong date in a
     reminder sequence is worse than no date at all. So this prints candidates
-    for a human to judge; adoption is an explicit entry in GHL_FIELD_KEYS.
+    for a human to judge; adoption is an explicit entry in GHL_FIELD_IDS.
     """
-    want = _tokens(wanted)
     have = _tokens(field.get("fieldKey") or "") | _tokens(field.get("name") or "")
-    if not want or not have:
+    if not have:
         return False
-    shared = want & have
-    return len(shared) >= 2 or want <= have or have <= want
+    for phrase in (wanted,) + ALIASES.get(wanted, ()):
+        want = _tokens(phrase.replace(" ", "_"))
+        if not want:
+            continue
+        if len(want & have) >= 2 or want <= have or have <= want:
+            return True
+    return False
 
 
 def main(argv=None) -> int:
@@ -227,28 +249,39 @@ def main(argv=None) -> int:
     if fields:
         say("%d contact field(s) already exist:", len(fields))
         say("")
-        say("  %-32s %-34s %-10s %s", "NAME", "KEY", "TYPE", "ID")
+        # Nothing is truncated: the key and the id are what you actually paste
+        # somewhere, and a key clipped to fit a column is worse than useless.
         for f in sorted(fields, key=lambda x: (x.get("name") or "").lower()):
-            say("  %-32s %-34s %-10s %s",
-                (f.get("name") or "?")[:32],
-                (f.get("fieldKey") or "?")[:34],
-                f.get("dataType") or "?",
+            say("  %s", f.get("name") or "?")
+            say("      key=%s  type=%s  id=%s",
+                f.get("fieldKey") or "?", f.get("dataType") or "?",
                 f.get("id") or "?")
         say("")
     else:
         say("no contact custom fields exist in this location yet")
         say("")
 
-    have = {_tail(f.get("fieldKey") or f.get("name") or "").lower()
-            for f in fields}
+    by_key = {}
+    by_id = {}
+    for f in fields:
+        by_key.setdefault(_tail(f.get("fieldKey") or f.get("name") or "").lower(), f)
+        if f.get("id"):
+            by_id[f["id"]] = f
+
+    resolved: dict[str, dict] = {}
     say("wanted:")
     for name, data_type in FIELDS:
-        adopted = config.GHL_FIELD_KEYS.get(name)
+        adopted = config.GHL_FIELD_IDS.get(name)
         if adopted:
-            say("  adopted %-22s -> %s", name, adopted)
+            field = by_id.get(adopted)
+            say("  adopted %-22s -> %s (%s)", name, adopted,
+                (field or {}).get("name", "NOT FOUND IN THIS LOCATION"))
+            if field:
+                resolved[name] = field
             continue
-        if name.lower() in have:
-            say("  ok      %s", name)
+        if name.lower() in by_key:
+            resolved[name] = by_key[name.lower()]
+            say("  ok      %-22s id=%s", name, by_key[name.lower()].get("id", "?"))
             continue
         near = [f for f in fields if looks_similar(name, f)]
         if near:
@@ -257,16 +290,42 @@ def main(argv=None) -> int:
                 say("            %r  key=%s  type=%s",
                     f.get("name", "?"), f.get("fieldKey", "?"),
                     f.get("dataType", "?"))
-            say("            map it in GHL_FIELD_KEYS to adopt it, or apply to")
+            say("            map it in GHL_FIELD_IDS to adopt it, or apply to")
             say("            create a separate field beside it")
         if args.apply:
             try:
-                create_custom_field(client, name, data_type)
-                say("  created %-22s (%s)", name, data_type)
+                made = create_custom_field(client, name, data_type)
+                resolved[name] = made
+                say("  created %-22s (%s) id=%s", name, data_type,
+                    made.get("id", "?"))
             except GHLError as exc:
                 log.error("  FAILED  %-22s %s", name, exc)
         elif not near:
             say("  missing %-22s (%s)", name, data_type)
+
+    # The two dates are the one thing that is painful to fix later: a reminder
+    # sequence cannot be scheduled off a text box or a dropdown, and changing a
+    # field's type means recreating it and re-syncing every contact.
+    for name, data_type in FIELDS:
+        field = resolved.get(name)
+        if field and data_type == "DATE" and field.get("dataType") != "DATE":
+            say("  WARNING %-22s resolves to a %s field, not DATE -- reminders",
+                name, field.get("dataType"))
+            say("          cannot be scheduled off it")
+
+    say("")
+    if resolved:
+        say("Paste into config.GHL_FIELD_IDS:")
+        say("")
+        say("GHL_FIELD_IDS = {")
+        for name, _ in FIELDS:
+            field = resolved.get(name)
+            if field:
+                say('    %-24s %r,   # %s', f'"{name}":', field.get("id", ""),
+                    field.get("name", ""))
+            else:
+                say('    # %-22s still missing', name)
+        say("}")
 
     say("")
     if not args.apply:

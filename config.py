@@ -159,11 +159,15 @@ GHL_FIELDS = (
     "next_show_venue", "next_show_city", "sample_playbill_url", "licensor",
 )
 
-# Adopt a field that already exists in GHL under a different name, instead of
-# creating a near-duplicate beside it. Logical name -> the real fieldKey to
-# write. Run `python setup_ghl.py` (dry) to see the full inventory first; the
-# report flags anything that looks similar but never adopts on its own.
-GHL_FIELD_KEYS: dict[str, str] = {}
+# Logical name -> the GHL custom field id to write into. Ids are unambiguous in
+# a way names are not: a fieldKey has to be guessed exactly right, and a key
+# that matches nothing is accepted and silently dropped, so the merge tag comes
+# out blank with no error anywhere. `python setup_ghl.py` (dry) prints a
+# paste-ready block of these.
+#
+# This is also how you adopt a field that already exists under a different name
+# instead of creating a near-duplicate beside it.
+GHL_FIELD_IDS: dict[str, str] = {}
 
 # The tag that puts someone into the outreach sequence. The GHL workflow
 # triggers on this tag being *added*, which is what lets you add or remove

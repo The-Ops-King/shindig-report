@@ -130,12 +130,19 @@ The contact carries **what** they are doing next and **when**:
 `next_show_city`, `sample_playbill_url`, `licensor` — plus tags recording where
 the lead came from: `mass-ingestion` and `MTI` / `Concord` / `TRW`.
 
-If a field already exists in your location under another name, map it in
-`GHL_FIELD_KEYS` rather than creating a near-duplicate beside it.
-`python setup_ghl.py` (no `--apply`) prints the full inventory of what you
-already have and flags anything that looks similar; it never adopts on its own,
-because a field whose name is close but whose meaning is not would silently
-mis-fill a merge tag.
+Fields are addressed **by id**, via `GHL_FIELD_IDS`. A fieldKey that matches
+nothing is not an error in GHL — it is accepted and dropped, so the merge tag
+renders empty with nothing anywhere to say why. `python setup_ghl.py` (no
+`--apply`) prints every field already in your location and a paste-ready
+`GHL_FIELD_IDS` block.
+
+That inventory is also how you adopt a field you already have under another
+name rather than creating a near-duplicate beside it. The report flags anything
+that looks similar but never adopts on its own: a field whose name is close but
+whose meaning is not would silently mis-fill a merge tag. It also warns when
+`next_show_start` or `next_show_end` resolves to something that is not a Date —
+a reminder sequence cannot be scheduled off a text box or a dropdown, and
+changing a field's type later means recreating it and re-syncing every contact.
 
 **Entry is driven by a tag, not by the API alone.** The workflow triggers on
 `shindig-outreach` being added, so you can put someone in or pull them out by
