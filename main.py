@@ -202,6 +202,18 @@ def run_outreach(productions, registry, book, today, args):
                 if client.push(cand)[0]:
                     outreach_mod.record_opportunity(opportunities, cand, today)
 
+    # Anyone whose show has been and gone with nothing booked comes back out of
+    # the sequence. Their card stays where it is -- the company has not gone
+    # away, it just has nothing on right now.
+    for cand in candidates:
+        if cand.action != "clear" or not cand.ghl_contact_id:
+            continue
+        if dry:
+            rows.append(sheets.outreach_row(cand, today, "DRY RUN"))
+        elif ok and client.push(cand)[0]:
+            outreach_mod.record_clear(outreach_state, cand, today)
+            rows.append(sheets.outreach_row(cand, today, "cleared"))
+
     if not dry:
         state_mod.save_outreach(outreach_state)
         state_mod.save_opportunities(opportunities)

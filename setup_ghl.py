@@ -16,6 +16,7 @@ from __future__ import annotations
 import argparse
 import logging
 import os
+import re
 import sys
 
 import config
@@ -107,6 +108,32 @@ def create_custom_field(client: GHLClient, name: str, data_type: str) -> dict:
     return data.get("customField") or data
 
 
+def _tail(value: str) -> str:
+    """The part of a fieldKey that identifies it: 'contact.next_show' -> 'next_show'."""
+    return (value or "").split(".")[-1]
+
+
+def _tokens(value: str) -> set:
+    return {t for t in re.split(r"[^a-z0-9]+", _tail(value).lower()) if t}
+
+
+def looks_similar(wanted: str, field: dict) -> bool:
+    """Whether an existing field is plausibly the one we were about to create.
+
+    Advisory only -- never used to adopt automatically. A field whose name is
+    close but whose meaning is not (say a "Show Date" that holds the date of a
+    *past* show) would silently mis-fill a merge tag, and a wrong date in a
+    reminder sequence is worse than no date at all. So this prints candidates
+    for a human to judge; adoption is an explicit entry in GHL_FIELD_KEYS.
+    """
+    want = _tokens(wanted)
+    have = _tokens(field.get("fieldKey") or "") | _tokens(field.get("name") or "")
+    if not want or not have:
+        return False
+    shared = want & have
+    return len(shared) >= 2 or want <= have or have <= want
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--apply", action="store_true",
@@ -193,18 +220,52 @@ def main(argv=None) -> int:
         log.error("could not read custom fields: %s", exc)
         return 1
 
-    have = {(f.get("fieldKey") or f.get("name") or "").split(".")[-1].lower()
+    # Print the whole inventory, not just what we came looking for. The wanted
+    # list below matches on the exact key, so a field you already have under
+    # another name ("Next Show", "Show Date") reads as missing and would get a
+    # near-duplicate created beside it. Seeing everything is what prevents that.
+    if fields:
+        say("%d contact field(s) already exist:", len(fields))
+        say("")
+        say("  %-32s %-34s %-10s %s", "NAME", "KEY", "TYPE", "ID")
+        for f in sorted(fields, key=lambda x: (x.get("name") or "").lower()):
+            say("  %-32s %-34s %-10s %s",
+                (f.get("name") or "?")[:32],
+                (f.get("fieldKey") or "?")[:34],
+                f.get("dataType") or "?",
+                f.get("id") or "?")
+        say("")
+    else:
+        say("no contact custom fields exist in this location yet")
+        say("")
+
+    have = {_tail(f.get("fieldKey") or f.get("name") or "").lower()
             for f in fields}
+    say("wanted:")
     for name, data_type in FIELDS:
+        adopted = config.GHL_FIELD_KEYS.get(name)
+        if adopted:
+            say("  adopted %-22s -> %s", name, adopted)
+            continue
         if name.lower() in have:
             say("  ok      %s", name)
-        elif args.apply:
+            continue
+        near = [f for f in fields if looks_similar(name, f)]
+        if near:
+            say("  similar %-22s (%s) -- already have:", name, data_type)
+            for f in near:
+                say("            %r  key=%s  type=%s",
+                    f.get("name", "?"), f.get("fieldKey", "?"),
+                    f.get("dataType", "?"))
+            say("            map it in GHL_FIELD_KEYS to adopt it, or apply to")
+            say("            create a separate field beside it")
+        if args.apply:
             try:
                 create_custom_field(client, name, data_type)
                 say("  created %-22s (%s)", name, data_type)
             except GHLError as exc:
                 log.error("  FAILED  %-22s %s", name, exc)
-        else:
+        elif not near:
             say("  missing %-22s (%s)", name, data_type)
 
     say("")

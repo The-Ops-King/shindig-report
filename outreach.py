@@ -49,7 +49,7 @@ class Candidate:
     address: str
     org_key: str
     org_name: str
-    production: object                 # normalize.Production
+    production: object = None          # normalize.Production; None on a clear
     sample_url: str = ""
     action: str = "none"               # send | rollover | update_only | clear | none
     reason: str = ""                   # why, when not sending
@@ -159,7 +159,38 @@ def build_candidates(productions: list, registry: dict, show_links: dict,
             continue
         cand.action, cand.reason = _decide(cand, record, cand.production, today)
 
+    candidates.extend(_clears(candidates, outreach_state))
     return candidates
+
+
+def _clears(candidates: list[Candidate], outreach_state: dict) -> list[Candidate]:
+    """Addresses we told about a show that now have nothing upcoming.
+
+    Without this, someone whose show has been and gone simply stops appearing
+    in the candidate list and sits in the workflow forever -- the run has no
+    way to notice, because the organization drops out of `by_org` silently.
+
+    Guarding on `current_show_key` is what keeps this cheap and idempotent.
+    Only people we actually emailed are eligible, and clearing blanks that key,
+    so a dormant organization is cleared once rather than re-cleared every
+    morning for the rest of its life.
+    """
+    live = {c.address for c in candidates}
+    out = []
+    for addr, record in outreach_state.items():
+        if addr in live or not record.get("current_show_key"):
+            continue
+        out.append(Candidate(
+            address=addr,
+            org_key=record.get("org_key", ""),
+            org_name=record.get("org_name", ""),
+            production=None,
+            action="clear",
+            reason="show has passed, nothing upcoming",
+            ghl_contact_id=record.get("ghl_contact_id", ""),
+            sends=int(record.get("sends") or 0),
+        ))
+    return out
 
 
 def _decide(cand: Candidate, record: dict, production, today: date):
@@ -228,6 +259,28 @@ def record_opportunity(opportunities: dict, cand: Candidate, today: date) -> Non
         "show_title": cand.production.show_title,
         "updated": today.isoformat(),
     }
+
+
+def record_clear(outreach_state: dict, cand: Candidate, today: date) -> None:
+    """Retire the show state without losing the history.
+
+    Emptying `current_show_key` is what makes a clear happen exactly once, and
+    what makes their next announcement a fresh send rather than a rollover.
+    `last_sent` and `sends` are deliberately kept, so gap_ok() still holds the
+    45-day floor -- clearing can never become a way to email someone twice in
+    quick succession.
+    """
+    record = dict(outreach_state.get(cand.address) or {})
+    record.update({
+        "ghl_contact_id": cand.ghl_contact_id or record.get("ghl_contact_id", ""),
+        "current_show_key": "",
+        "current_show_title": "",
+        "current_show_start": "",
+        "current_show_end": "",
+        "sample_url": "",
+        "cleared": today.isoformat(),
+    })
+    outreach_state[cand.address] = record
 
 
 def record_send(outreach_state: dict, cand: Candidate, today: date) -> None:

@@ -159,6 +159,17 @@ GHL_FIELDS = (
     "next_show_venue", "next_show_city", "sample_playbill_url", "licensor",
 )
 
+# Adopt a field that already exists in GHL under a different name, instead of
+# creating a near-duplicate beside it. Logical name -> the real fieldKey to
+# write. Run `python setup_ghl.py` (dry) to see the full inventory first; the
+# report flags anything that looks similar but never adopts on its own.
+GHL_FIELD_KEYS: dict[str, str] = {}
+
+# The tag that puts someone into the outreach sequence. The GHL workflow
+# triggers on this tag being *added*, which is what lets you add or remove
+# people by hand, or from another automation, without touching this code.
+GHL_OUTREACH_TAG = "shindig-outreach"
+
 # --- Delivery --------------------------------------------------------------
 SHEET_ID = os.environ.get("SHEET_ID", "")
 GOOGLE_SERVICE_ACCOUNT_JSON = os.environ.get("GOOGLE_SERVICE_ACCOUNT_JSON", "")

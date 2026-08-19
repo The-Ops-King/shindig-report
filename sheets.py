@@ -357,11 +357,15 @@ def append_outreach(book, rows: list) -> None:
 
 def outreach_row(cand, today, status: str, detail: str = "") -> list:
     p = cand.production
+    # A clear has no production: the show columns stay blank, and the send
+    # count is what it already was, because nothing was sent.
+    show = [p.show_title,
+            p.start_date.isoformat() if p.start_date else "",
+            p.end_date.isoformat() if p.end_date else ""] if p else ["", "", ""]
+    number = cand.sends if cand.action == "clear" else cand.sends + 1
     return [
-        today.isoformat(), cand.address, cand.org_name, p.show_title,
-        p.start_date.isoformat() if p.start_date else "",
-        p.end_date.isoformat() if p.end_date else "",
-        cand.sample_url, cand.action, cand.sends + 1,
+        today.isoformat(), cand.address, cand.org_name, *show,
+        cand.sample_url, cand.action, number,
         cand.ghl_contact_id, status, detail,
     ]
 

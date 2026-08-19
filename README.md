@@ -116,18 +116,31 @@ them in a workflow that sends the intro and reminds them up to the show date.
 
 ### What it does in GHL
 
-Exactly four endpoints, nothing else — no tasks, no notes, no SMS, no sending:
+A handful of endpoints, nothing else — no tasks, no notes, no SMS, no sending:
 
 | Call | When |
 |---|---|
 | `POST /contacts/upsert` | Every organization we touch |
 | `POST /opportunities/` or `PUT /opportunities/{id}` | Every organization — one card each |
+| `DELETE` then `POST /contacts/{id}/tags` | Whenever someone enters or leaves the sequence |
 | `DELETE` then `POST /contacts/{id}/workflow/{id}` | Only the ones actually being emailed |
 
 The contact carries **what** they are doing next and **when**:
 `next_show_title`, `next_show_start`, `next_show_end`, `next_show_venue`,
 `next_show_city`, `sample_playbill_url`, `licensor` — plus tags recording where
 the lead came from: `mass-ingestion` and `MTI` / `Concord` / `TRW`.
+
+If a field already exists in your location under another name, map it in
+`GHL_FIELD_KEYS` rather than creating a near-duplicate beside it.
+`python setup_ghl.py` (no `--apply`) prints the full inventory of what you
+already have and flags anything that looks similar; it never adopts on its own,
+because a field whose name is close but whose meaning is not would silently
+mis-fill a merge tag.
+
+**Entry is driven by a tag, not by the API alone.** The workflow triggers on
+`shindig-outreach` being added, so you can put someone in or pull them out by
+hand in the UI, or from another automation, and it behaves exactly as if this
+code had done it. The code owns show state; GHL owns the messaging.
 
 **Two different units of identity, on purpose:**
 
@@ -166,25 +179,49 @@ Each address has a *current show*. When it passes, the contact rolls forward:
 | Same show | Nothing |
 | Show changed, new one in window + has link + gap ok | Update fields, re-enrol, sequence restarts |
 | Show changed, out of window or no link | **GHL updated, no email** — the CRM stays truthful |
-| No upcoming show | Show fields cleared |
+| No upcoming show | **Cleared** — tag removed, workflow exited, show fields blanked, card left where it is |
+
+A clear is why nobody gets stranded mid-sequence. An organization whose show has
+been and gone simply stops appearing in the candidate list, so without an
+explicit sweep of the contacts we have already emailed, they would sit in the
+workflow forever. The sweep is guarded on having a current show recorded, which
+makes it both cheap and idempotent: only people we actually emailed are
+eligible, and clearing empties that record, so a dormant organization is cleared
+once rather than every morning. Their opportunity card stays exactly where it
+is — the company has not gone away, it just has nothing on right now — and the
+show fields are blanked so a hand re-add can never render a show that has
+already happened.
 
 A **45-day floor** between sends stops a company with a packed season being
 emailed every fortnight; 24% of consecutive-show gaps are under 30 days.
 
-**Enrolment removes before it adds.** GoHighLevel's *Allow Re-Entry* does not
-admit a contact still **active** in a workflow — it skips the request silently,
-with no error. This workflow keeps people active right up to their show date, so
-without the remove every rollover would quietly fail to send.
+**Enrolment removes before it adds — twice over.** Two GoHighLevel behaviours
+look exactly like success while doing nothing at all:
+
+- *Allow Re-Entry* does not admit a contact still **active** in a workflow. It
+  skips the request silently, with no error — and this workflow keeps people
+  active right up to their show date.
+- A tag trigger fires only when the tag is **newly added**. Re-adding a tag the
+  contact already carries is not an error either; it is simply nothing.
+
+So a rollover drops them from the workflow, takes the tag off, puts it back, and
+adds them directly as well. The `DELETE` is what actually stops a running
+sequence, since removing a tag does not; the direct add is what still enrols
+someone if the tag trigger is mis-wired. Whichever fires first, the other is a
+no-op, so nobody is enrolled twice.
 
 ### Before the first send — do these in GHL
 
 1. Create the pipeline and note its id and first stage id (optional — without
    them contacts and workflows still work, just no cards).
-2. Create seven custom fields: `next_show_title`, `next_show_start`,
-   `next_show_end`, `next_show_venue`, `next_show_city`, `sample_playbill_url`,
-   `licensor`.
+2. Run `python setup_ghl.py` to inventory the custom fields you already have,
+   then create whatever is genuinely missing of `next_show_title`,
+   `next_show_start`, `next_show_end`, `next_show_venue`, `next_show_city`,
+   `sample_playbill_url`, `licensor`. The two dates **must** be Date type, or
+   the reminder sequence has nothing to schedule against.
 3. Build the workflow (intro email + reminders keyed off `next_show_start`).
-4. Enable **Allow Re-Entry** on it.
+4. Trigger it on **Contact Tag added = `shindig-outreach`**, and enable
+   **Allow Re-Entry**.
 5. Set the unsubscribe link and physical postal address CAN-SPAM requires.
 6. Fill in the **Show Links** tab — the top 100 titles cover 54% of volume.
 

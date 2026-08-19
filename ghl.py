@@ -1,6 +1,12 @@
 """Go High Level client: upsert a contact, then enrol it in a workflow.
 
-Two things about GHL shape this module.
+Entry into the sequence is driven by a **tag**, not by the workflow API alone.
+That is what lets a person be added or removed by hand in the UI, or by another
+automation, and behave exactly as if this code had done it. The code owns show
+state -- which show, when it opens, which sample link -- and GHL owns the
+messaging.
+
+Three things about GHL shape this module.
 
 **Re-entry is silently skipped.** GHL's "Allow Re-Entry" setting does not let a
 contact re-enter a workflow they are still *active* in -- the request succeeds
@@ -8,6 +14,11 @@ and simply does nothing. This pipeline walks straight into that, because the
 workflow reminds people right up to their show date, so they stay active until
 it passes. Every enrolment therefore removes first and adds second, which
 guarantees a clean restart when a contact rolls forward to a new show.
+
+**A tag trigger fires only on a tag being newly added.** Re-adding a tag the
+contact already carries is not an error and not a trigger -- it is nothing. So
+the tag comes off before it goes back on, for the same reason the workflow
+membership does.
 
 **One contact must never break the run.** The same lesson as the malformed URL
 that killed a whole scrape: failures are captured per contact and returned, not
@@ -93,17 +104,27 @@ class GHLClient:
 
     @staticmethod
     def custom_fields(cand) -> list[dict]:
+        """Field values for one candidate, under whatever keys GHL uses.
+
+        A clear (no production) blanks every field rather than leaving last
+        season's values sitting there: if someone is added back to the sequence
+        by hand, stale values would render a show that has already happened.
+        """
         p = cand.production
-        values = {
-            "next_show_title": p.show_title,
-            "next_show_start": p.start_date.isoformat() if p.start_date else "",
-            "next_show_end": p.end_date.isoformat() if p.end_date else "",
-            "next_show_venue": p.venue or p.organization,
-            "next_show_city": ", ".join(x for x in (p.city, p.state) if x),
-            "sample_playbill_url": cand.sample_url,
-            "licensor": p.source.upper(),
-        }
-        return [{"key": k, "field_value": v} for k, v in values.items()]
+        if p is None:
+            values = {name: "" for name in config.GHL_FIELDS}
+        else:
+            values = {
+                "next_show_title": p.show_title,
+                "next_show_start": p.start_date.isoformat() if p.start_date else "",
+                "next_show_end": p.end_date.isoformat() if p.end_date else "",
+                "next_show_venue": p.venue or p.organization,
+                "next_show_city": ", ".join(x for x in (p.city, p.state) if x),
+                "sample_playbill_url": cand.sample_url,
+                "licensor": p.source.upper(),
+            }
+        return [{"key": config.GHL_FIELD_KEYS.get(k, k), "field_value": v}
+                for k, v in values.items()]
 
     def upsert_contact(self, cand) -> str:
         """Create or update, returning the GHL contact id.
@@ -117,18 +138,23 @@ class GHLClient:
             "email": cand.address,
             "name": cand.org_name,
             "companyName": cand.org_name,
-            "address1": p.street,
-            "city": p.city,
-            "state": p.state,
-            "postalCode": p.postal,
-            "country": p.country or "US",
             "source": "Shindig Report",
-            "tags": [
-                config.GHL_SOURCE_TAG,
-                config.GHL_LICENSOR_TAGS.get(p.source, p.source.upper()),
-            ],
+            # Provenance only. The outreach tag is deliberately NOT set here:
+            # upsert merges tags, so a tag already present stays present and
+            # the workflow's trigger never fires. enrol() owns that tag.
+            "tags": [config.GHL_SOURCE_TAG],
             "customFields": self.custom_fields(cand),
         }
+        if p is not None:
+            payload.update({
+                "address1": p.street,
+                "city": p.city,
+                "state": p.state,
+                "postalCode": p.postal,
+                "country": p.country or "US",
+            })
+            payload["tags"].append(
+                config.GHL_LICENSOR_TAGS.get(p.source, p.source.upper()))
         data = self._request("POST", "/contacts/upsert", payload)
         contact = data.get("contact") or data
         contact_id = contact.get("id") or contact.get("contactId") or ""
@@ -154,15 +180,51 @@ class GHLClient:
             "POST", f"/contacts/{contact_id}/workflow/{self.workflow_id}", {}
         )
 
+    def set_tags(self, contact_id: str, add=(), remove=()) -> None:
+        """Add and/or remove tags explicitly.
+
+        Upsert merges tags and never takes one away, so this is the only route
+        back out of the sequence. Removal is best effort -- a tag the contact
+        does not carry is not an error worth failing a run over.
+        """
+        if remove:
+            try:
+                self._request("DELETE", f"/contacts/{contact_id}/tags",
+                              {"tags": list(remove)}, retries=1)
+            except GHLError as exc:
+                log.debug("remove tags (ignored): %s", exc)
+        if add:
+            self._request("POST", f"/contacts/{contact_id}/tags",
+                          {"tags": list(add)})
+
     def enrol(self, contact_id: str) -> None:
         """Restart the sequence cleanly.
 
-        Removing first is what makes a rollover actually send. Skip it and GHL
-        silently declines to re-enrol anyone still active in the workflow, with
-        no error to notice.
+        Two separate silent no-ops have to be stepped around, and both look
+        exactly like success:
+
+        * GHL declines to re-enrol a contact still *active* in the workflow,
+          whatever "Allow Re-Entry" says -- and this sequence reminds people
+          right up to their show date, so they are always still active.
+        * A Contact-Tag trigger fires only when the tag is *newly added*.
+          Re-adding a tag someone already carries does nothing at all.
+
+        So: drop them out of the workflow, take the tag off, put it back, and
+        then add them directly as well. The two halves cover each other. The
+        DELETE is what actually stops a running sequence, since dropping a tag
+        does not; and the direct add is what still enrols someone if the tag
+        trigger is mis-wired in the UI. Whichever fires first, the other is a
+        no-op, so nobody is enrolled twice.
         """
         self.remove_from_workflow(contact_id)
+        self.set_tags(contact_id, remove=[config.GHL_OUTREACH_TAG])
+        self.set_tags(contact_id, add=[config.GHL_OUTREACH_TAG])
         self.add_to_workflow(contact_id)
+
+    def clear(self, contact_id: str) -> None:
+        """Their show has passed and nothing is booked: stop the sequence."""
+        self.remove_from_workflow(contact_id)
+        self.set_tags(contact_id, remove=[config.GHL_OUTREACH_TAG])
 
     # --- opportunities ------------------------------------------------------
 
@@ -222,6 +284,12 @@ class GHLClient:
         try:
             contact_id = self.upsert_contact(cand)
             cand.ghl_contact_id = contact_id
+            if cand.action == "clear":
+                # The card stays exactly where it is. The company has not gone
+                # away, it just has nothing on the books; only the show state
+                # is retired, so their next announcement reuses this card.
+                self.clear(contact_id)
+                return True, ""
             # Every organization gets a card, whether or not it is the one
             # sending today -- the pipeline tracks companies, not emails.
             cand.ghl_opportunity_id = self.sync_opportunity(cand)

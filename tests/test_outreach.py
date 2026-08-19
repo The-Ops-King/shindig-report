@@ -446,3 +446,108 @@ def test_one_card_per_org_across_seasons_not_one_per_show():
     fake.client.push(later)
     assert "PUT /opportunities/opp-1" in fake.paths()
     assert "POST /opportunities/" not in fake.paths()
+
+
+# --- tags drive the sequence -------------------------------------------------
+
+def test_enrolment_takes_the_tag_off_before_putting_it_back():
+    """A GHL tag trigger fires on a tag being *newly* added. Re-adding a tag
+    the contact already carries is not an error, it is simply nothing -- so a
+    rollover that skipped the removal would never send."""
+    fake = FakeGHL()
+    fake.client.push(a_candidate())
+    tag_calls = [(m, body.get("tags")) for m, path, body in fake.calls
+                 if path == "/contacts/contact-1/tags"]
+    assert tag_calls == [("DELETE", [config.GHL_OUTREACH_TAG]),
+                         ("POST", [config.GHL_OUTREACH_TAG])]
+
+
+def test_upsert_does_not_carry_the_outreach_tag():
+    """Upsert merges tags, so a tag set here would already be present on the
+    next run and the trigger would never fire again. enrol() owns it."""
+    fake = FakeGHL()
+    fake.client.push(a_candidate())
+    assert config.GHL_OUTREACH_TAG not in fake.payload_for("/contacts/upsert")["tags"]
+
+
+def test_field_keys_can_adopt_an_existing_ghl_field(monkeypatch):
+    monkeypatch.setattr(config, "GHL_FIELD_KEYS",
+                        {"next_show_title": "contact.next_show"})
+    import ghl
+    keys = [f["key"] for f in ghl.GHLClient.custom_fields(a_candidate())]
+    assert "contact.next_show" in keys
+    assert "next_show_title" not in keys
+
+
+# --- clearing when the show is over ------------------------------------------
+
+def _state_for(addr, show_key, sends=1, sent=None):
+    return {addr: {"ghl_contact_id": "contact-1", "org_key": "t|raleigh|nc",
+                   "org_name": "T", "current_show_key": show_key,
+                   "sends": sends,
+                   "last_sent": (sent or (TODAY - timedelta(days=200))).isoformat()}}
+
+
+def test_org_whose_show_has_passed_is_cleared_once():
+    """Their show has been and gone and nothing is booked. Without this they
+    stay in the sequence forever, because the organization simply stops
+    appearing in the candidate list."""
+    state = _state_for("a@t.org", "mti:9")
+    cands = build([], state=state)
+    clears = [c for c in cands if c.action == "clear"]
+    assert len(clears) == 1
+    assert clears[0].address == "a@t.org"
+    assert clears[0].production is None
+
+    outreach.record_clear(state, clears[0], TODAY)
+    assert state["a@t.org"]["current_show_key"] == ""
+    assert state["a@t.org"]["cleared"] == TODAY.isoformat()
+    # Second run: nothing left to clear.
+    assert not [c for c in build([], state=state) if c.action == "clear"]
+
+
+def test_an_org_we_never_emailed_is_not_cleared():
+    state = {"a@t.org": {"ghl_contact_id": "c", "current_show_key": ""}}
+    assert not [c for c in build([], state=state) if c.action == "clear"]
+
+
+def test_a_next_show_rolls_forward_rather_than_clearing():
+    p = prod("mti:10", "T", IN_WINDOW)
+    state = _state_for("a@t.org", "mti:9")
+    cands = build([(p, "a@t.org")], LINKS, state)
+    assert [c.action for c in cands] == ["rollover"]
+
+
+def test_shared_inbox_is_not_cleared_while_one_org_still_has_a_show():
+    """Two organizations share the inbox: one has gone quiet, the other opens
+    in sixty days. The person must not be pulled out of the sequence."""
+    live = prod("mti:11", "Live Co", IN_WINDOW)
+    state = _state_for("shared@t.org", "mti:9")
+    cands = build([(live, "shared@t.org")], LINKS, state)
+    assert not [c for c in cands if c.action == "clear"]
+
+
+def test_clearing_keeps_the_gap_floor():
+    """Clearing must not become a way to email someone twice in a fortnight."""
+    state = _state_for("a@t.org", "mti:9", sent=TODAY - timedelta(days=5))
+    clears = [c for c in build([], state=state) if c.action == "clear"]
+    outreach.record_clear(state, clears[0], TODAY)
+    p = prod("mti:12", "T", IN_WINDOW)
+    cand = build([(p, "a@t.org")], LINKS, state)[0]
+    assert cand.action == "update_only"
+    assert cand.reason == "too soon since last send"
+
+
+def test_clear_stops_the_sequence_and_leaves_the_card_alone():
+    cand = a_candidate()
+    cand.action, cand.production, cand.ghl_contact_id = "clear", None, "contact-1"
+    fake = FakeGHL()
+    assert fake.client.push(cand)[0]
+    paths = fake.paths()
+    assert "DELETE /contacts/contact-1/workflow/wf" in paths
+    assert ("DELETE", "/contacts/contact-1/tags",
+            {"tags": [config.GHL_OUTREACH_TAG]}) in fake.calls
+    assert not any("/opportunities" in p for p in paths)
+    # Every show field is blanked, so a hand re-add cannot render a past show.
+    fields = fake.payload_for("/contacts/upsert")["customFields"]
+    assert all(f["field_value"] == "" for f in fields)
