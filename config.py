@@ -168,9 +168,16 @@ GHL_FIELDS = (
 # This is also how you adopt a field that already exists under a different name
 # instead of creating a near-duplicate beside it.
 GHL_FIELD_IDS: dict[str, str] = {
-    # Adopted: the field already in the location, "What's the next play you are
-    # doing?" (contact.what_is_the_next_play_you_are_doing).
+    # Adopted: already in the location as "What's the next play you are doing?"
+    # (contact.what_is_the_next_play_you_are_doing).
     "next_show_title": "XW5c99K5MZaogICyK9kd",
+    # Created by setup_ghl.py --apply on 2026-08-19.
+    "next_show_start": "MdpZ0o9QR7MO5JusJAob",     # DATE
+    "next_show_end": "BpZiOEQj5OBWobgKCRXZ",       # DATE
+    "next_show_venue": "J9fIUnAu0uG25bCXokfQ",
+    "next_show_city": "nKiyDtuNR0lWxLf4LaAF",
+    "sample_playbill_url": "LNHn3iVSE67jluJzEz9E",
+    "licensor": "IZXgAWBlmeZ2WoeslmzO",
 }
 # Deliberately NOT adopted, though the setup report flags both as similar:
 #   "What is the date of your next performance" is MULTIPLE_OPTIONS -- a

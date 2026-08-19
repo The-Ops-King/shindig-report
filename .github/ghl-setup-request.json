@@ -1,4 +1,4 @@
 {
-  "apply": true,
-  "note": "adopt the existing next-play field, create the six that are genuinely missing"
+  "apply": false,
+  "note": "verify: every field should now report ok or adopted, and no DATE warnings"
 }
