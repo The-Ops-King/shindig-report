@@ -45,14 +45,17 @@ def flush_summary() -> None:
     with open(path, "a", encoding="utf-8") as fh:
         fh.write("## GHL setup\n\n```\n" + "\n".join(_SUMMARY) + "\n```\n")
 
-PIPELINE_NAME = "Playbill Outreach"
+# The pipeline built by hand in GHL. Matching the name here means the script
+# adopts it rather than creating a second one beside it. Override with
+# GHL_PIPELINE_NAME, or pin it exactly with the GHL_PIPELINE_ID secret.
+PIPELINE_NAME = "Mass Ingestion"
 
-# Mirrors the life of one lead, so a card's position tells you where it is.
+# Only used if the pipeline has to be created from scratch; an existing one is
+# left exactly as it is. First stage matches the one already in GHL.
 STAGES = [
-    "Show Detected",      # scraped, not yet contacted
-    "Sample Sent",        # the intro email went out
-    "Engaged",            # opened, clicked, or replied
-    "In Conversation",    # a real thread with a human
+    "Newly Ingested / no response",   # scraped and emailed, nothing back yet
+    "Engaged",                        # opened, clicked, or replied
+    "In Conversation",                # a real thread with a human
     "Won",
     "Lost",
 ]

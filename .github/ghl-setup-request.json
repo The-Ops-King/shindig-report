@@ -1,4 +1,4 @@
 {
   "apply": false,
-  "note": "dry run: report which GHL pipeline and custom fields exist"
+  "note": "read back the ids for the hand-built 'Mass Ingestion' pipeline"
 }
