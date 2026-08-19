@@ -310,10 +310,15 @@ def test_licensor_tag_per_source(source, tag):
 
 
 def sent_fields(fake):
-    """Field values keyed by whichever reference was used -- id when the field
-    is adopted from GHL, name when it is one of ours."""
-    return {f.get("id") or f.get("key"): f["field_value"]
-            for f in fake.payload_for("/contacts/upsert")["customFields"]}
+    """Field values back under their logical names.
+
+    The wire payload references a field by GHL id wherever we have one, so the
+    tests read through the same mapping rather than restating it.
+    """
+    by_ref = {f.get("id") or f.get("key"): f["field_value"]
+              for f in fake.payload_for("/contacts/upsert")["customFields"]}
+    return {name: by_ref[config.GHL_FIELD_IDS.get(name, name)]
+            for name in config.GHL_FIELDS}
 
 
 def test_contact_carries_next_show_and_date():
@@ -321,8 +326,7 @@ def test_contact_carries_next_show_and_date():
     fake = FakeGHL()
     fake.client.push(a_candidate())
     fields = sent_fields(fake)
-    title_ref = config.GHL_FIELD_IDS.get("next_show_title", "next_show_title")
-    assert fields[title_ref] == "Annie"
+    assert fields["next_show_title"] == "Annie"
     assert fields["next_show_start"] == IN_WINDOW.isoformat()
     assert fields["sample_playbill_url"].endswith("/annie")
 
