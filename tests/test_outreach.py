@@ -309,15 +309,34 @@ def test_licensor_tag_per_source(source, tag):
     assert tag in fake.payload_for("/contacts/upsert")["tags"]
 
 
+def sent_fields(fake):
+    """Field values keyed by whichever reference was used -- id when the field
+    is adopted from GHL, name when it is one of ours."""
+    return {f.get("id") or f.get("key"): f["field_value"]
+            for f in fake.payload_for("/contacts/upsert")["customFields"]}
+
+
 def test_contact_carries_next_show_and_date():
     """'What's the next play' and 'when's the next play' on the contact."""
     fake = FakeGHL()
     fake.client.push(a_candidate())
-    fields = {f["key"]: f["field_value"]
-              for f in fake.payload_for("/contacts/upsert")["customFields"]}
-    assert fields["next_show_title"] == "Annie"
+    fields = sent_fields(fake)
+    title_ref = config.GHL_FIELD_IDS.get("next_show_title", "next_show_title")
+    assert fields[title_ref] == "Annie"
     assert fields["next_show_start"] == IN_WINDOW.isoformat()
     assert fields["sample_playbill_url"].endswith("/annie")
+
+
+def test_every_wanted_field_is_sent_exactly_once():
+    """Whatever the mix of adopted ids and our own names, all seven go and
+    none goes twice -- a duplicate reference is how one silently wins."""
+    fake = FakeGHL()
+    fake.client.push(a_candidate())
+    refs = [f.get("id") or f.get("key")
+            for f in fake.payload_for("/contacts/upsert")["customFields"]]
+    assert len(refs) == len(config.GHL_FIELDS) == len(set(refs))
+    for name in config.GHL_FIELDS:
+        assert config.GHL_FIELD_IDS.get(name, name) in refs
 
 
 def test_sending_creates_an_opportunity_in_the_pipeline():
