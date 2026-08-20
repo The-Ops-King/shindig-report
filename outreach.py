@@ -51,15 +51,26 @@ class Candidate:
     org_name: str
     production: object = None          # normalize.Production; None on a clear
     sample_url: str = ""
-    action: str = "none"               # send | rollover | update_only | clear | none
+    action: str = "none"      # send | rollover | hold | update_only | clear | none
     reason: str = ""                   # why, when not sending
     ghl_contact_id: str = ""
     ghl_opportunity_id: str = ""
     sends: int = 0
+    was_ready: bool = False            # carried the ready tag as of last run
 
     @property
     def sending(self) -> bool:
         return self.action in ("send", "rollover")
+
+    @property
+    def ready(self) -> bool:
+        """Would be emailed right now if the sequence were running.
+
+        `hold` is a send that was withheld only because the workflow does not
+        exist yet, so it counts: the point of the ready tag is to name the set
+        that is safe to start by hand.
+        """
+        return self.action in ("send", "rollover", "hold")
 
 
 def true_next_show(productions: list, today: date):
@@ -106,7 +117,8 @@ def gap_ok(record: dict, today: date) -> bool:
 
 
 def build_candidates(productions: list, registry: dict, show_links: dict,
-                     outreach_state: dict, today: date) -> list[Candidate]:
+                     outreach_state: dict, today: date,
+                     hold: bool = False) -> list[Candidate]:
     """One Candidate per organization that has a contact and an upcoming show.
 
     Two different units of identity, deliberately:
@@ -158,6 +170,13 @@ def build_candidates(productions: list, registry: dict, show_links: dict,
             cand.reason = "another organization shares this inbox"
             continue
         cand.action, cand.reason = _decide(cand, record, cand.production, today)
+        if hold and cand.sending:
+            # Ingest mode: everything is written to GHL, nothing is enrolled.
+            # Withholding here rather than at the push keeps record_send out of
+            # the picture entirely -- stamping a send now would mark all 2,500
+            # as already told, and _decide would answer "already current"
+            # forever after, so they could never be emailed at all.
+            cand.action, cand.reason = "hold", "workflow not live yet"
 
     candidates.extend(_clears(candidates, outreach_state))
     return candidates
@@ -240,11 +259,31 @@ def summarize(candidates: list[Candidate]) -> dict:
 
 
 def load_opportunity_ids(cands: list, opportunities: dict) -> None:
-    """Attach each organization's existing card id, so we update not duplicate."""
+    """Attach what GHL already knows about each organization.
+
+    The card id so we update rather than duplicate, and the ready flag so the
+    ready tag is only written on a transition instead of on every run.
+    """
     for cand in cands:
-        cand.ghl_opportunity_id = (
-            opportunities.get(cand.org_key, {}).get("opportunity_id", "")
-        )
+        record = opportunities.get(cand.org_key) or {}
+        cand.ghl_opportunity_id = record.get("opportunity_id", "")
+        cand.was_ready = bool(record.get("ready"))
+
+
+def needs_ingest(cand: Candidate, opportunities: dict) -> bool:
+    """Whether this organization has anything new to write to GHL.
+
+    The opportunities file doubles as the ingest ledger: it is already keyed by
+    organization and already records the show. So the bootstrap writes ~2,500
+    contacts once, and every run after it writes only what actually changed --
+    the same bargain the enrichment cache makes.
+    """
+    record = opportunities.get(cand.org_key)
+    if not record:
+        return True
+    show_key = cand.production.key if cand.production else ""
+    return (record.get("show_key") != show_key
+            or bool(record.get("ready")) != cand.ready)
 
 
 def record_opportunity(opportunities: dict, cand: Candidate, today: date) -> None:
@@ -257,6 +296,7 @@ def record_opportunity(opportunities: dict, cand: Candidate, today: date) -> Non
         "org_name": cand.org_name,
         "show_key": cand.production.key,
         "show_title": cand.production.show_title,
+        "ready": cand.ready,
         "updated": today.isoformat(),
     }
 

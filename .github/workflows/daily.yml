@@ -72,6 +72,7 @@ jobs:
             SAMPLE=$(jq -r '.sample // 0' .github/run-request.json)
             TRW_PAGES=$(jq -r '.trw_pages // 0' .github/run-request.json)
             OUTREACH=$(jq -r '.outreach // "off"' .github/run-request.json)
+            OUTREACH_LIMIT=$(jq -r '.outreach_limit // 0' .github/run-request.json)
             echo "source: .github/run-request.json"
             jq -r '.note // "(no note)"' .github/run-request.json
           else
@@ -81,6 +82,7 @@ jobs:
             SAMPLE="${INPUT_SAMPLE:-0}"
             TRW_PAGES="${INPUT_TRW_PAGES:-0}"
             OUTREACH="off"
+            OUTREACH_LIMIT=0
             echo "source: ${GITHUB_EVENT_NAME} (${DRY_RUN}/${SAMPLE}/${TRW_PAGES})"
           fi
           {
@@ -88,6 +90,7 @@ jobs:
             echo "sample=${SAMPLE}"
             echo "trw_pages=${TRW_PAGES}"
             echo "outreach=${OUTREACH}"
+            echo "outreach_limit=${OUTREACH_LIMIT}"
           } >> "$GITHUB_OUTPUT"
 
       - name: Scrape and publish
@@ -100,13 +103,18 @@ jobs:
           GHL_API_KEY: ${{ secrets.GHL_API_KEY }}
           GHL_LOCATION_ID: ${{ secrets.GHL_LOCATION_ID }}
           GHL_WORKFLOW_ID: ${{ secrets.GHL_WORKFLOW_ID }}
+          # Without these two the run still writes contacts, tags and fields --
+          # it just silently creates no pipeline cards at all.
+          GHL_PIPELINE_ID: ${{ secrets.GHL_PIPELINE_ID }}
+          GHL_PIPELINE_STAGE_ID: ${{ secrets.GHL_PIPELINE_STAGE_ID }}
           # Passed through the environment rather than interpolated into the
           # script, so a value can never be spliced into the shell command.
           DRY_RUN: ${{ steps.params.outputs.dry_run }}
           SAMPLE: ${{ steps.params.outputs.sample }}
           TRW_PAGES: ${{ steps.params.outputs.trw_pages }}
-          # off | dry | live -- outreach never runs unless asked for.
+          # off | ingest | dry | live -- outreach never runs unless asked for.
           OUTREACH: ${{ steps.params.outputs.outreach }}
+          OUTREACH_LIMIT: ${{ steps.params.outputs.outreach_limit }}
         # Steps run under `bash -e`, so a bare `[ test ] && assign` would abort
         # the step whenever the test is false. Use explicit ifs.
         run: |
@@ -122,8 +130,15 @@ jobs:
           fi
           if [ "${OUTREACH}" = "dry" ]; then
             ARGS="$ARGS --outreach-dry-run"
+          elif [ "${OUTREACH}" = "ingest" ]; then
+            # Writes every organization to GHL and enrols nobody. Needs no
+            # GHL_WORKFLOW_ID, because the workflow does not exist yet.
+            ARGS="$ARGS --outreach-ingest"
           elif [ "${OUTREACH}" = "live" ]; then
             ARGS="$ARGS --outreach"
+          fi
+          if [ -n "${OUTREACH_LIMIT}" ] && [ "${OUTREACH_LIMIT}" != "0" ]; then
+            ARGS="$ARGS --outreach-limit ${OUTREACH_LIMIT}"
           fi
           echo "running: python main.py$ARGS"
           python main.py $ARGS

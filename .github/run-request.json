@@ -2,6 +2,7 @@
   "sample": 0,
   "trw_pages": 0,
   "dry_run": false,
-  "outreach": "dry",
-  "note": "full run + seed Show Links tab + outreach DRY RUN (no GHL calls)"
+  "outreach": "ingest",
+  "outreach_limit": 5,
+  "note": "first ingest: 5 organizations only, to eyeball in GHL before the full bootstrap"
 }

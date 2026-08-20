@@ -53,12 +53,24 @@ class GHLClient:
         self.session = session or requests.Session()
 
     def configured(self) -> tuple[bool, str]:
+        """Enough to write contacts, fields, tags and cards."""
         missing = [n for n, v in (
             ("GHL_API_KEY", self.api_key),
             ("GHL_LOCATION_ID", self.location_id),
-            ("GHL_WORKFLOW_ID", self.workflow_id),
         ) if not v]
         return (not missing), ", ".join(missing)
+
+    def can_enrol(self) -> tuple[bool, str]:
+        """Enough to also put someone into the workflow.
+
+        Separate from configured() so the whole ingest is not blocked by a
+        workflow that has not been built yet: writing the CRM and starting the
+        emails are different decisions, made at different times.
+        """
+        ok, missing = self.configured()
+        if not self.workflow_id:
+            return False, ", ".join(x for x in (missing, "GHL_WORKFLOW_ID") if x)
+        return ok, missing
 
     def pipeline_configured(self) -> bool:
         """Opportunities are optional: without ids we still upsert and enrol."""
@@ -177,6 +189,8 @@ class GHLClient:
 
     def remove_from_workflow(self, contact_id: str) -> None:
         """Best effort. A contact who was never enrolled 404s, which is fine."""
+        if not self.workflow_id:
+            return
         try:
             self._request(
                 "DELETE",
@@ -187,6 +201,9 @@ class GHLClient:
             log.debug("remove from workflow (ignored): %s", exc)
 
     def add_to_workflow(self, contact_id: str) -> None:
+        if not self.workflow_id:
+            log.debug("no GHL_WORKFLOW_ID; tag alone has to carry the enrolment")
+            return
         self._request(
             "POST", f"/contacts/{contact_id}/workflow/{self.workflow_id}", {}
         )
@@ -236,6 +253,21 @@ class GHLClient:
         """Their show has passed and nothing is booked: stop the sequence."""
         self.remove_from_workflow(contact_id)
         self.set_tags(contact_id, remove=[config.GHL_OUTREACH_TAG])
+
+    def sync_ready_tag(self, cand) -> None:
+        """Add or drop the ready tag, but only when it actually changed.
+
+        Upsert merges tags and never removes one, so the tag cannot simply be
+        set from the payload -- it would stick after the show passed. Writing
+        only on a transition also keeps the cost off the ~1,800 organizations
+        that are not ready on any given day.
+        """
+        if cand.ready == cand.was_ready:
+            return
+        if cand.ready:
+            self.set_tags(cand.ghl_contact_id, add=[config.GHL_READY_TAG])
+        else:
+            self.set_tags(cand.ghl_contact_id, remove=[config.GHL_READY_TAG])
 
     # --- opportunities ------------------------------------------------------
 
@@ -295,6 +327,7 @@ class GHLClient:
         try:
             contact_id = self.upsert_contact(cand)
             cand.ghl_contact_id = contact_id
+            self.sync_ready_tag(cand)
             if cand.action == "clear":
                 # The card stays exactly where it is. The company has not gone
                 # away, it just has nothing on the books; only the show state

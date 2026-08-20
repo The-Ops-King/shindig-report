@@ -480,7 +480,8 @@ def test_enrolment_takes_the_tag_off_before_putting_it_back():
     fake = FakeGHL()
     fake.client.push(a_candidate())
     tag_calls = [(m, body.get("tags")) for m, path, body in fake.calls
-                 if path == "/contacts/contact-1/tags"]
+                 if path == "/contacts/contact-1/tags"
+                 and config.GHL_OUTREACH_TAG in (body.get("tags") or [])]
     assert tag_calls == [("DELETE", [config.GHL_OUTREACH_TAG]),
                          ("POST", [config.GHL_OUTREACH_TAG])]
 
@@ -591,3 +592,94 @@ def test_a_clear_without_a_stored_name_does_not_blank_it():
     fake.client.push(cand)
     payload = fake.payload_for("/contacts/upsert")
     assert "name" not in payload and "companyName" not in payload
+
+
+# --- ingest: write the CRM, send nothing -------------------------------------
+
+def test_ingest_holds_instead_of_sending():
+    """Everything that would have gone out is written to GHL and withheld."""
+    p = prod("mti:1", "T", IN_WINDOW)
+    cands = build([(p, "a@t.org")], LINKS)
+    assert cands[0].action == "send"
+
+    held = outreach.build_candidates(
+        [p], {p.org_key: org_for(p, "a@t.org")}, LINKS, {}, TODAY, hold=True)
+    assert held[0].action == "hold"
+    assert not held[0].sending
+    assert held[0].ready, "a hold is still what we would send today"
+
+
+def test_ingest_never_records_a_send():
+    """The trap: stamping a send here would make _decide answer 'already
+    current' forever, and these people could never be emailed at all."""
+    p = prod("mti:1", "T", IN_WINDOW)
+    registry = {p.org_key: org_for(p, "a@t.org")}
+    state = {}
+    outreach.build_candidates([p], registry, LINKS, state, TODAY, hold=True)
+    assert state == {}, "ingest leaves the outreach ledger untouched"
+
+    # And once the workflow is live, they are still a first-time send.
+    assert outreach.build_candidates(
+        [p], registry, LINKS, state, TODAY)[0].action == "send"
+
+
+def test_a_held_candidate_is_carded_but_never_enrolled():
+    cand = a_candidate()
+    cand.action, cand.reason = "hold", "workflow not live yet"
+    fake = FakeGHL()
+    assert fake.client.push(cand)[0]
+    paths = fake.paths()
+    assert "POST /contacts/upsert" in paths
+    assert "POST /opportunities/" in paths
+    assert not any("workflow" in p for p in paths)
+    tags = [t for _, path, body in fake.calls if path.endswith("/tags")
+            for t in (body.get("tags") or [])]
+    assert config.GHL_OUTREACH_TAG not in tags
+    assert config.GHL_READY_TAG in tags
+
+
+def test_ready_tag_is_only_written_when_it_changes():
+    """Upsert merges tags and never removes one, so the tag has to be set
+    explicitly -- but writing it every run would cost a call per contact."""
+    cand = a_candidate()
+    cand.action, cand.was_ready = "hold", True
+    fake = FakeGHL()
+    fake.client.push(cand)
+    assert not any(p.endswith("/tags") for p in fake.paths())
+
+    # And it comes back off once they are no longer sendable.
+    cand.action, cand.reason = "update_only", "outside window (too far out)"
+    fake = FakeGHL()
+    fake.client.push(cand)
+    assert ("DELETE", "/contacts/contact-1/tags",
+            {"tags": [config.GHL_READY_TAG]}) in fake.calls
+
+
+def test_unchanged_orgs_are_not_written_again():
+    """The opportunities file doubles as the ingest ledger, so the bootstrap
+    happens once rather than every morning."""
+    p = prod("mti:1", "T", IN_WINDOW)
+    registry = {p.org_key: org_for(p, "a@t.org")}
+    cand = outreach.build_candidates(
+        [p], registry, LINKS, {}, TODAY, hold=True)[0]
+    opportunities = {}
+    assert outreach.needs_ingest(cand, opportunities)
+
+    cand.ghl_opportunity_id = "opp-1"
+    outreach.record_opportunity(opportunities, cand, TODAY)
+    assert not outreach.needs_ingest(cand, opportunities)
+
+    # A new show is a change. So is falling out of the ready set.
+    later = prod("mti:2", "T", IN_WINDOW + timedelta(days=90))
+    fresh = outreach.build_candidates(
+        [later], registry, LINKS, {}, TODAY, hold=True)[0]
+    assert outreach.needs_ingest(fresh, opportunities)
+
+
+def test_ingest_needs_no_workflow_id():
+    """The whole point: the CRM fills up before the workflow exists."""
+    import ghl
+    client = ghl.GHLClient(api_key="k", location_id="loc", workflow_id="")
+    assert client.configured()[0]
+    enrol_ok, missing = client.can_enrol()
+    assert not enrol_ok and missing == "GHL_WORKFLOW_ID"

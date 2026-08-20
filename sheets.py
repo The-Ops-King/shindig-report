@@ -362,7 +362,7 @@ def outreach_row(cand, today, status: str, detail: str = "") -> list:
     show = [p.show_title,
             p.start_date.isoformat() if p.start_date else "",
             p.end_date.isoformat() if p.end_date else ""] if p else ["", "", ""]
-    number = cand.sends if cand.action == "clear" else cand.sends + 1
+    number = cand.sends if cand.action in ("clear", "hold") else cand.sends + 1
     return [
         today.isoformat(), cand.address, cand.org_name, *show,
         cand.sample_url, cand.action, number,

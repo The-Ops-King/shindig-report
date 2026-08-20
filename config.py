@@ -153,6 +153,20 @@ GHL_TIMEOUT = 20
 GHL_SOURCE_TAG = "mass-ingestion"
 GHL_LICENSOR_TAGS = {"mti": "MTI", "concord": "Concord", "trw": "TRW"}
 
+# Marks a contact who would be emailed right now if the sequence were running:
+# next show inside the window, in an enabled country, and with a sample link.
+# It exists so that bulk-tagging by hand in the GHL UI is safe -- filter on
+# mass-ingestion + this, and everyone you get has a working sample link. Without
+# it the pitch ("here is what YOUR playbill could look like") arrives with its
+# one asset missing.
+GHL_READY_TAG = "shindig-ready"
+
+# Organizations written to GHL in a single ingest run. The first pass is ~2,500
+# contacts and about as many cards, roughly 5,000 sequential calls; bounding it
+# keeps that run observable next to the 13-minute TRW scrape, and the
+# opportunities ledger makes the next run pick up exactly where it stopped.
+OUTREACH_INGEST_CAP = 1000
+
 # Custom fields the GHL workflow's merge tags read. Create these in GHL first.
 GHL_FIELDS = (
     "next_show_title", "next_show_start", "next_show_end",

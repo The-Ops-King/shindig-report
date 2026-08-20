@@ -111,8 +111,63 @@ attach your sample playbill for that title, push it to Go High Level, and enrol
 them in a workflow that sends the intro and reminds them up to the show date.
 
 **Outreach never runs unless asked for.** The daily scrape leaves it off; set
-`"outreach": "dry"` or `"live"` in `.github/run-request.json`, or pass
-`--outreach-dry-run` / `--outreach` locally.
+`"outreach"` in `.github/run-request.json`, or pass the matching flag locally.
+
+| Mode | What it does |
+|---|---|
+| `off` | Default. Nothing touches GHL. |
+| `dry` | Selects and reports, calls nothing. The only safe way to look at a cold-email queue before it sends. |
+| `ingest` | Writes **every** organization to GHL — contact, tags, custom fields, pipeline card — and enrols **nobody**. |
+| `live` | The full thing: 25 a day, tagged and enrolled. |
+
+`"outreach_limit": N` caps a run: the daily send in `live`, the number of
+organizations written in `ingest`.
+
+### Ingest — fill the CRM before the workflow exists
+
+Building the workflow is a person's job: the email copy and the reminder timing
+are yours. `ingest` decouples that from the data, so the CRM can fill up while
+the sequence is still being written.
+
+It needs **no `GHL_WORKFLOW_ID`** — that is the whole point. `configured()`
+covers what writing contacts needs; `can_enrol()` adds the workflow id and is
+only checked when something is actually about to be enrolled.
+
+The load-bearing detail is that ingest **never records a send**. `record_send`
+stamps `current_show_key`, and `_decide` answers `"none", "already current"` for
+a show it believes is covered — so ingesting through the normal path would mark
+all ~2,500 organizations as already told and none of them could ever be emailed.
+Instead, anything that would have sent becomes a `hold`, which is written and
+withheld.
+
+`opportunities.json` doubles as the ingest ledger. An organization is written
+when it is new, when its next show changes, or when its ready state flips —
+otherwise it is skipped. So the bootstrap is ~2,500 contacts once
+(`OUTREACH_INGEST_CAP` bounds a single run at 1,000, and the run logs what it
+deferred), then a handful a day forever.
+
+**Two tags, doing different jobs:**
+
+- `shindig-outreach` — starts the sequence. Only ever set by a real send.
+- `shindig-ready` — *would* be sendable right now: next show in the window, in
+  an enabled country, and with a sample link. Ingest sets this one.
+
+`shindig-ready` exists so that bulk-tagging by hand is safe. Starting people
+from the GHL UI bypasses every guard the code applies — the daily cap, the
+window, the 45-day gap, and the sample link. That last one matters most: the
+pitch is "here's what *your* playbill could look like", and an email whose one
+asset is missing is worse than no email. Filter on `mass-ingestion` +
+`shindig-ready` and everyone you get has a working link.
+
+Because upsert merges tags and never removes one, `shindig-ready` is stored on
+the opportunity record and written only on a transition — no tag call for the
+~1,800 organizations that are not ready on a given day.
+
+**One consequence of tagging by hand:** it is invisible to `outreach.json`. If
+you bulk-tag 300 people and later switch to `live`, the code still considers
+those 300 un-contacted and may email them again. Either keep sending manual, or
+reconcile first by reading contacts carrying `shindig-outreach` back out of GHL
+and stamping them as contacted.
 
 ### What it does in GHL
 
@@ -262,6 +317,9 @@ With 2FA enabled on the sending account, create an app password at
 | `GHL_WORKFLOW_ID` | The workflow to enrol contacts into |
 | `GHL_PIPELINE_ID` | Pipeline the opportunity cards live in (optional) |
 | `GHL_PIPELINE_STAGE_ID` | Stage new cards enter at (optional) |
+
+`GHL_WORKFLOW_ID` is only needed for `live`. Without the two pipeline ids the
+run still writes contacts, tags and fields — it just creates no cards, silently.
 
 ### 4. Schedule
 

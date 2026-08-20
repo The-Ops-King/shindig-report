@@ -156,6 +156,7 @@ def run_outreach(productions, registry, book, today, args):
     import sheets
 
     dry = args.outreach_dry_run
+    ingest = args.outreach_ingest
     outreach_state = state_mod.load_outreach()
     opportunities = state_mod.load_opportunities()
 
@@ -164,16 +165,19 @@ def run_outreach(productions, registry, book, today, args):
         log.warning("no sample links available; nothing can be sent")
 
     candidates = outreach_mod.build_candidates(
-        productions, registry, show_links, outreach_state, today
+        productions, registry, show_links, outreach_state, today, hold=ingest
     )
     outreach_mod.load_opportunity_ids(candidates, opportunities)
-    sending = outreach_mod.select(candidates, args.outreach_limit)
+    # Ingest writes the CRM and sends nothing, so there is nobody to select.
+    sending = [] if ingest else outreach_mod.select(candidates, args.outreach_limit)
     stats = outreach_mod.summarize(candidates)
     stats["selected"] = len(sending)
+    stats["mode"] = "ingest" if ingest else "outreach"
     log.info("outreach: %s", stats)
 
     client = ghl.GHLClient()
-    ok, missing = client.configured()
+    # Ingest needs no workflow id -- that is the whole point of the mode.
+    ok, missing = client.configured() if ingest else client.can_enrol()
     if not dry and not ok:
         log.error("outreach skipped: %s not set", missing)
         stats["error"] = f"missing {missing}"
@@ -193,10 +197,46 @@ def run_outreach(productions, registry, book, today, args):
         else:
             rows.append(sheets.outreach_row(cand, today, "failed", err))
 
+    if ingest:
+        # New organizations, and ones whose next show or ready state moved.
+        # Everything else is already correct in GHL and is not written again.
+        todo = [c for c in candidates
+                if c.action != "clear"
+                and outreach_mod.needs_ingest(c, opportunities)]
+        # Ready first: under a cap, the organizations you could actually start
+        # today are the ones worth having landed.
+        todo.sort(key=lambda c: (not c.ready, c.production.start_date
+                                 if c.production else date.max, c.org_name))
+        # --outreach-limit doubles as the ingest cap, so a first run can be
+        # held to a handful and eyeballed in GHL before the full bootstrap.
+        cap = (args.outreach_limit if args.outreach_limit is not None
+               else config.OUTREACH_INGEST_CAP)
+        deferred = max(0, len(todo) - cap) if cap else 0
+        if deferred:
+            log.info("ingest: %d organizations deferred to the next run "
+                     "(cap %d)", deferred, cap)
+        stats["ingest_pending"] = len(todo)
+        stats["ingest_deferred"] = deferred
+        written = 0
+        for cand in (todo[:cap] if cap else todo):
+            if dry:
+                rows.append(sheets.outreach_row(cand, today, "DRY RUN"))
+                continue
+            pushed, err = client.push(cand)
+            if pushed:
+                outreach_mod.record_opportunity(opportunities, cand, today)
+                written += 1
+                rows.append(sheets.outreach_row(cand, today, "ingested"))
+            else:
+                rows.append(sheets.outreach_row(cand, today, "failed", err))
+        stats["ingested"] = written
+        log.info("ingest: %d written, %d pending, %d deferred",
+                 written, len(todo), deferred)
+
     # Every other organization still gets its card and custom fields refreshed:
     # the pipeline tracks companies, and their next show changed even though we
     # are not emailing about it.
-    if not dry and ok:
+    if not dry and ok and not ingest:
         for cand in candidates:
             if cand.action == "update_only" and cand.ghl_contact_id:
                 if client.push(cand)[0]:
@@ -245,6 +285,10 @@ def main(argv=None) -> int:
     ap.add_argument("--outreach", action="store_true",
                     help="run the outreach stage: push contacts to GHL and "
                          "enrol them in the workflow")
+    ap.add_argument("--outreach-ingest", action="store_true",
+                    help="write every organization to GHL -- contact, tags, "
+                         "fields, card -- and enrol nobody. For before the "
+                         "workflow exists.")
     ap.add_argument("--outreach-dry-run", action="store_true",
                     help="build the send queue and log it, but touch no GHL "
                          "endpoint. Run this first.")
@@ -317,7 +361,7 @@ def main(argv=None) -> int:
         # --- outreach ------------------------------------------------------
         outreach_stats = {}
         outreach_rows = []
-        if args.outreach or args.outreach_dry_run:
+        if args.outreach or args.outreach_dry_run or args.outreach_ingest:
             outreach_stats, outreach_rows = run_outreach(
                 scoped, registry, book, today, args
             )
