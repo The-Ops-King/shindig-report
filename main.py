@@ -200,9 +200,14 @@ def run_outreach(productions, registry, book, today, args):
     if ingest:
         # New organizations, and ones whose next show or ready state moved.
         # Everything else is already correct in GHL and is not written again.
+        want_card = client.pipeline_configured()
+        if not want_card:
+            log.warning("no GHL_PIPELINE_ID/STAGE_ID: writing contacts with no "
+                        "pipeline cards. Adding the secrets later re-writes "
+                        "each organization once to create its card.")
         todo = [c for c in candidates
                 if c.action != "clear"
-                and outreach_mod.needs_ingest(c, opportunities)]
+                and outreach_mod.needs_ingest(c, opportunities, want_card)]
         # Ready first: under a cap, the organizations you could actually start
         # today are the ones worth having landed.
         todo.sort(key=lambda c: (not c.ready, c.production.start_date

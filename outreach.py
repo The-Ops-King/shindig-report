@@ -270,16 +270,24 @@ def load_opportunity_ids(cands: list, opportunities: dict) -> None:
         cand.was_ready = bool(record.get("ready"))
 
 
-def needs_ingest(cand: Candidate, opportunities: dict) -> bool:
+def needs_ingest(cand: Candidate, opportunities: dict,
+                 want_card: bool = False) -> bool:
     """Whether this organization has anything new to write to GHL.
 
     The opportunities file doubles as the ingest ledger: it is already keyed by
     organization and already records the show. So the bootstrap writes ~2,500
     contacts once, and every run after it writes only what actually changed --
     the same bargain the enrichment cache makes.
+
+    `want_card` is what makes adding the pipeline secrets self-healing. An
+    ingest run without them writes contacts and no cards; once the ids arrive,
+    every organization whose record has no card is written once more to get
+    one, and then goes quiet again.
     """
     record = opportunities.get(cand.org_key)
     if not record:
+        return True
+    if want_card and not record.get("opportunity_id"):
         return True
     show_key = cand.production.key if cand.production else ""
     return (record.get("show_key") != show_key
@@ -287,15 +295,23 @@ def needs_ingest(cand: Candidate, opportunities: dict) -> bool:
 
 
 def record_opportunity(opportunities: dict, cand: Candidate, today: date) -> None:
-    """One record per organization -- the pipeline's unit of identity."""
-    if not cand.ghl_opportunity_id:
+    """One record per organization -- the pipeline's unit of identity, and the
+    ledger of what GHL already holds.
+
+    Recorded even when there is no card. Without the pipeline ids configured
+    GHL creates no opportunity, and bailing out here on the empty id left the
+    ledger empty after a successful ingest -- so the same organizations were
+    re-pushed every single morning, forever. The contact was written; that is
+    the fact worth remembering, card or no card.
+    """
+    if not cand.ghl_contact_id:
         return
     opportunities[cand.org_key] = {
         "opportunity_id": cand.ghl_opportunity_id,
         "contact_id": cand.ghl_contact_id,
         "org_name": cand.org_name,
-        "show_key": cand.production.key,
-        "show_title": cand.production.show_title,
+        "show_key": cand.production.key if cand.production else "",
+        "show_title": cand.production.show_title if cand.production else "",
         "ready": cand.ready,
         "updated": today.isoformat(),
     }

@@ -435,6 +435,7 @@ def test_opportunity_id_is_keyed_on_the_organization():
     ], LINKS)
     a, b = sorted(cands, key=lambda c: c.org_name)
     opportunities = {}
+    a.ghl_contact_id, b.ghl_contact_id = "c-a", "c-b"
     a.ghl_opportunity_id, b.ghl_opportunity_id = "opp-a", "opp-b"
     outreach.record_opportunity(opportunities, a, TODAY)
     outreach.record_opportunity(opportunities, b, TODAY)
@@ -457,7 +458,7 @@ def test_one_card_per_org_across_seasons_not_one_per_show():
     opportunities = {}
     first = build([(prod("mti:1", "T", IN_WINDOW, title="Annie"), "a@t.org")],
                   LINKS)[0]
-    first.ghl_opportunity_id = "opp-1"
+    first.ghl_contact_id, first.ghl_opportunity_id = "contact-1", "opp-1"
     outreach.record_opportunity(opportunities, first, TODAY)
 
     later = build([(prod("mti:2", "T", IN_WINDOW, title="Elf"), "a@t.org")],
@@ -665,7 +666,7 @@ def test_unchanged_orgs_are_not_written_again():
     opportunities = {}
     assert outreach.needs_ingest(cand, opportunities)
 
-    cand.ghl_opportunity_id = "opp-1"
+    cand.ghl_contact_id, cand.ghl_opportunity_id = "contact-1", "opp-1"
     outreach.record_opportunity(opportunities, cand, TODAY)
     assert not outreach.needs_ingest(cand, opportunities)
 
@@ -683,3 +684,27 @@ def test_ingest_needs_no_workflow_id():
     assert client.configured()[0]
     enrol_ok, missing = client.can_enrol()
     assert not enrol_ok and missing == "GHL_WORKFLOW_ID"
+
+
+def test_a_contact_written_without_a_card_is_still_remembered():
+    """The live failure: with no pipeline ids configured GHL creates no
+    opportunity, and bailing on the empty card id left the ledger empty after
+    a successful ingest -- so the same organizations were re-pushed every
+    morning forever."""
+    p = prod("mti:1", "T", IN_WINDOW)
+    registry = {p.org_key: org_for(p, "a@t.org")}
+    cand = outreach.build_candidates(
+        [p], registry, LINKS, {}, TODAY, hold=True)[0]
+    cand.ghl_contact_id, cand.ghl_opportunity_id = "contact-1", ""
+
+    opportunities = {}
+    outreach.record_opportunity(opportunities, cand, TODAY)
+    assert opportunities[cand.org_key]["contact_id"] == "contact-1"
+    assert not outreach.needs_ingest(cand, opportunities)
+
+    # ...and adding the pipeline secrets later re-writes it exactly once,
+    # so the card it never got gets created.
+    assert outreach.needs_ingest(cand, opportunities, want_card=True)
+    cand.ghl_opportunity_id = "opp-1"
+    outreach.record_opportunity(opportunities, cand, TODAY)
+    assert not outreach.needs_ingest(cand, opportunities, want_card=True)

@@ -4,5 +4,5 @@
   "dry_run": false,
   "outreach": "ingest",
   "outreach_limit": 5,
-  "note": "first ingest: 5 organizations only, to eyeball in GHL before the full bootstrap"
+  "note": "re-ingest the same 5: the ledger bug meant the first run wrote contacts but recorded nothing"
 }
