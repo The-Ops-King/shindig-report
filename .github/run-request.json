@@ -2,7 +2,7 @@
   "sample": 0,
   "trw_pages": 0,
   "dry_run": false,
-  "outreach": "live",
+  "outreach": "ingest",
   "outreach_limit": 0,
-  "note": "brake test: asks for live outreach on purpose. OUTREACH_ENABLED is unset, so this must write contacts and email nobody."
+  "note": "back to ingest after the brake test: contacts and tags into GHL, no outreach"
 }
