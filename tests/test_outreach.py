@@ -777,3 +777,67 @@ def test_a_shared_inbox_with_no_upcoming_show_does_not_break_the_winner_pass():
         [running, upcoming], registry, LINKS, {}, TODAY, hold=True)
     assert len(cands) == 2
     assert sorted(c.action for c in cands) == ["hold", "update_only"]
+
+
+# --- the brake ---------------------------------------------------------------
+
+class Args:
+    """The subset of the CLI namespace run_outreach reads."""
+    def __init__(self, **kw):
+        self.outreach_dry_run = kw.get("dry", False)
+        self.outreach_ingest = kw.get("ingest", False)
+        self.outreach_limit = kw.get("limit", None)
+
+
+def _run(monkeypatch, enabled, **kw):
+    """run_outreach against a fake GHL, returning (stats, calls)."""
+    import main, ghl, sheets
+    fake = FakeGHL()
+    monkeypatch.setattr(config, "OUTREACH_ENABLED", enabled)
+    # run_outreach imports ghl and sheets inside the function, so patching the
+    # modules themselves is what it actually picks up.
+    monkeypatch.setattr(ghl, "GHLClient", lambda *a, **k: fake.client)
+    monkeypatch.setattr(sheets, "read_show_links", lambda book: LINKS)
+    for name in ("load_outreach", "load_opportunities"):
+        monkeypatch.setattr(main.state_mod, name, lambda: {})
+    for name in ("save_outreach", "save_opportunities"):
+        monkeypatch.setattr(main.state_mod, name, lambda *a: None)
+
+    p = prod("mti:1", "Old Courthouse Theatre", IN_WINDOW)
+    registry = {p.org_key: org_for(p, "info@oct.org")}
+    stats, _ = main.run_outreach([p], registry, object(), TODAY, Args(**kw))
+    return stats, fake
+
+
+def test_a_live_run_emails_nobody_while_the_switch_is_off(monkeypatch):
+    """One word in a JSON file should not be able to cold-email 2,700 people."""
+    stats, fake = _run(monkeypatch, enabled=False)
+    assert stats["mode"] == "ingest"
+    assert "refused" in stats
+    assert stats.get("sent", 0) == 0
+    assert not any("workflow" in path for path in fake.paths())
+    tags = [t for _, path, body in fake.calls if path.endswith("/tags")
+            for t in ((body or {}).get("tags") or [])]
+    assert config.GHL_OUTREACH_TAG not in tags
+
+
+def test_the_refusal_still_writes_the_contact(monkeypatch):
+    """Refusing to send must not become refusing to do the rest of the job."""
+    stats, fake = _run(monkeypatch, enabled=False)
+    assert "POST /contacts/upsert" in fake.paths()
+    assert stats["ingested"] == 1
+
+
+def test_with_the_switch_on_a_live_run_enrols(monkeypatch):
+    stats, fake = _run(monkeypatch, enabled=True)
+    assert stats["mode"] == "outreach"
+    assert "refused" not in stats
+    assert "POST /contacts/contact-1/workflow/wf" in fake.paths()
+
+
+def test_ingest_needs_no_switch(monkeypatch):
+    """Ingest cannot enrol by construction, so it is not gated."""
+    stats, fake = _run(monkeypatch, enabled=False, ingest=True)
+    assert "refused" not in stats
+    assert stats["ingested"] == 1
+    assert not any("workflow" in path for path in fake.paths())

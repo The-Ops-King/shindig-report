@@ -157,6 +157,17 @@ def run_outreach(productions, registry, book, today, args):
 
     dry = args.outreach_dry_run
     ingest = args.outreach_ingest
+    refused = ""
+    if not ingest and not dry and not config.OUTREACH_ENABLED:
+        # Downgrade rather than abort. Bailing out here would also skip the
+        # contact and card writes that ARE wanted, so GHL would quietly stop
+        # being kept current -- a refusal to send should not become a refusal
+        # to do the rest of the job.
+        refused = ("live outreach requested but OUTREACH_ENABLED is not set; "
+                   "writing contacts only, emailing nobody")
+        log.warning("outreach: %s", refused)
+        ingest = True
+
     outreach_state = state_mod.load_outreach()
     opportunities = state_mod.load_opportunities()
 
@@ -173,6 +184,10 @@ def run_outreach(productions, registry, book, today, args):
     stats = outreach_mod.summarize(candidates)
     stats["selected"] = len(sending)
     stats["mode"] = "ingest" if ingest else "outreach"
+    if refused:
+        # Surfaced in the morning digest, not just a collapsed Actions log: a
+        # live request that was declined is exactly the thing worth noticing.
+        stats["refused"] = refused
     log.info("outreach: %s", stats)
 
     client = ghl.GHLClient()

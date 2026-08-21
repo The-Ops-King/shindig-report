@@ -2,7 +2,7 @@
   "sample": 0,
   "trw_pages": 0,
   "dry_run": false,
-  "outreach": "ingest",
+  "outreach": "live",
   "outreach_limit": 0,
-  "note": "full bootstrap: every organization with a usable email into GHL, ~2699 expected"
+  "note": "brake test: asks for live outreach on purpose. OUTREACH_ENABLED is unset, so this must write contacts and email nobody."
 }

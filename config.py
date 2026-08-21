@@ -121,6 +121,17 @@ UNATTENDED_MAILBOXES = ("noreply", "no-reply", "donotreply", "do-not-reply")
 MACHINE_DOMAIN_SUFFIXES = ("group.calendar.google.com", "calendar.google.com")
 
 # --- Outreach --------------------------------------------------------------
+# Master switch, and the reason it exists: "outreach": "live" is a one-word
+# edit in a JSON file, GHL_WORKFLOW_ID is already a repo secret, and the next
+# run would email 25 people who have never heard of us. Nothing is emailed
+# while this is false, whatever the run request or the CLI asks for, so sending
+# takes two deliberate changes in two places rather than one.
+#
+# Env-sourced rather than a constant so turning it on is a repository settings
+# change with its own audit trail, not something an edit to this file can do
+# by accident.
+OUTREACH_ENABLED = os.environ.get("OUTREACH_ENABLED", "").strip().lower() == "true"
+
 # Emailing Canada is deliberately off by default: CASL is materially stricter
 # than CAN-SPAM and carries real penalties. Canadian data is still collected --
 # this only governs who gets contacted. Flip when you have made that call.

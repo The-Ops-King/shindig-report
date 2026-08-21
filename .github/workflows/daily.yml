@@ -111,6 +111,11 @@ jobs:
           # it just silently creates no pipeline cards at all.
           GHL_PIPELINE_ID: ${{ secrets.GHL_PIPELINE_ID }}
           GHL_PIPELINE_STAGE_ID: ${{ secrets.GHL_PIPELINE_STAGE_ID }}
+          # The brake. Until this repository variable is literally "true", a
+          # live outreach run writes contacts and emails nobody, whatever the
+          # run request asks for. Set it in Settings -> Variables when you are
+          # ready to start sending.
+          OUTREACH_ENABLED: ${{ vars.OUTREACH_ENABLED }}
           # Passed through the environment rather than interpolated into the
           # script, so a value can never be spliced into the shell command.
           DRY_RUN: ${{ steps.params.outputs.dry_run }}

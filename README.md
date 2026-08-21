@@ -110,8 +110,22 @@ Turns the report into pipeline: work out the show each contact is doing next,
 attach your sample playbill for that title, push it to Go High Level, and enrol
 them in a workflow that sends the intro and reminds them up to the show date.
 
-**Outreach never runs unless asked for.** The daily scrape leaves it off; set
-`"outreach"` in `.github/run-request.json`, or pass the matching flag locally.
+**Two gates, and both must be open before anything is emailed.**
+
+1. `OUTREACH_ENABLED` must be literally `true` — a repository variable, set in
+   Settings → Variables. Until then a live run writes contacts and emails
+   nobody, whatever the run request says. It does not abort: refusing to send
+   should not become refusing to keep GHL current, so the run downgrades to
+   `ingest` and reports the refusal in the morning digest.
+2. `"outreach": "live"` must be asked for in `.github/run-request.json`.
+
+That is deliberate. `"live"` is a one-word edit in a JSON file, and the people
+on the other end have never heard of us — a mistaken send is not a mistake you
+can take back. Two changes, in two places, one of them a settings change with
+its own audit trail.
+
+Set `"outreach"` in `.github/run-request.json`, or pass the matching flag
+locally.
 
 | Mode | What it does |
 |---|---|
