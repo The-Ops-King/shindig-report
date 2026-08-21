@@ -39,7 +39,7 @@ permissions:
 jobs:
   scrape:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
 
     steps:
       - uses: actions/checkout@v4
@@ -81,7 +81,11 @@ jobs:
             DRY_RUN="${INPUT_DRY_RUN:-false}"
             SAMPLE="${INPUT_SAMPLE:-0}"
             TRW_PAGES="${INPUT_TRW_PAGES:-0}"
-            OUTREACH="off"
+            # New organizations arrive every day -- 66 new productions in a
+            # single run -- so the CRM keeps filling on its own. Ingest writes
+            # contacts, tags, fields and cards; it enrols nobody and sends
+            # nothing, by construction. The ledger keeps it to a handful a day.
+            OUTREACH="ingest"
             OUTREACH_LIMIT=0
             echo "source: ${GITHUB_EVENT_NAME} (${DRY_RUN}/${SAMPLE}/${TRW_PAGES})"
           fi

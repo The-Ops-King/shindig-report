@@ -221,12 +221,21 @@ def run_outreach(productions, registry, book, today, args):
             log.info("ingest: %d organizations deferred to the next run "
                      "(cap %d)", deferred, cap)
         stats["ingest_pending"] = len(todo)
-        stats["ingest_deferred"] = deferred
         written = 0
-        for cand in (todo[:cap] if cap else todo):
+        # A run that hits the job timeout mid-ingest never reaches the state
+        # commit, so the ledger is lost and the whole bootstrap repeats.
+        # Stopping on the clock instead means whatever was written is kept.
+        deadline = time.time() + config.OUTREACH_INGEST_MAX_SECONDS
+        batch = todo[:cap] if cap else todo
+        for i, cand in enumerate(batch):
             if dry:
                 rows.append(sheets.outreach_row(cand, today, "DRY RUN"))
                 continue
+            if time.time() > deadline:
+                deferred += len(batch) - i
+                log.warning("ingest: %ds budget spent, %d left for the next run",
+                            config.OUTREACH_INGEST_MAX_SECONDS, len(batch) - i)
+                break
             pushed, err = client.push(cand)
             if pushed:
                 outreach_mod.record_opportunity(opportunities, cand, today)
@@ -235,6 +244,7 @@ def run_outreach(productions, registry, book, today, args):
             else:
                 rows.append(sheets.outreach_row(cand, today, "failed", err))
         stats["ingested"] = written
+        stats["ingest_deferred"] = deferred
         log.info("ingest: %d written, %d pending, %d deferred",
                  written, len(todo), deferred)
 

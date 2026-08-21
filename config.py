@@ -165,7 +165,13 @@ GHL_READY_TAG = "shindig-ready"
 # contacts and about as many cards, roughly 5,000 sequential calls; bounding it
 # keeps that run observable next to the 13-minute TRW scrape, and the
 # opportunities ledger makes the next run pick up exactly where it stopped.
-OUTREACH_INGEST_CAP = 1000
+OUTREACH_INGEST_CAP = 3000
+
+# The real guard on a long ingest is the clock, not the count. A run that hits
+# the job's timeout mid-ingest never reaches the "Commit state" step, so the
+# ledger is lost and the whole bootstrap repeats. Stopping cleanly instead lets
+# the run finish, commit what it wrote, and resume next time.
+OUTREACH_INGEST_MAX_SECONDS = 1800
 
 # Custom fields the GHL workflow's merge tags read. Create these in GHL first.
 GHL_FIELDS = (

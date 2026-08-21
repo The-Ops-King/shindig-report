@@ -708,3 +708,72 @@ def test_a_contact_written_without_a_card_is_still_remembered():
     cand.ghl_opportunity_id = "opp-1"
     outreach.record_opportunity(opportunities, cand, TODAY)
     assert not outreach.needs_ingest(cand, opportunities, want_card=True)
+
+
+# --- companies that are mid-run ----------------------------------------------
+
+def _mid_run(org="Still Running Rep", email="a@t.org"):
+    """A show that opened last week and is still on: no upcoming start date."""
+    p = prod("mti:1", org, TODAY - timedelta(days=7),
+             end=TODAY + timedelta(days=7))
+    return p, {p.org_key: org_for(p, email)}
+
+
+def test_a_mid_run_company_is_ingested_but_not_a_normal_candidate():
+    """true_next_show wants start_date >= today, so a company whose show is on
+    right now has no upcoming start and vanished from the run entirely -- 150
+    of them in the live data."""
+    p, registry = _mid_run()
+    assert outreach.true_next_show([p], TODAY) is None
+    assert outreach.build_candidates([p], registry, LINKS, {}, TODAY) == []
+
+    cands = outreach.build_candidates([p], registry, LINKS, {}, TODAY, hold=True)
+    assert len(cands) == 1
+    assert cands[0].production is None
+    assert cands[0].action == "update_only"
+    assert cands[0].reason == "no upcoming show"
+    assert not cands[0].ready, "nothing to pitch yet, so not safe to bulk-tag"
+
+
+def test_a_mid_run_company_still_has_no_email_no_entry():
+    """The one hard rule: nothing without a usable email reaches GHL."""
+    p, _ = _mid_run()
+    registry = {p.org_key: org_for(p, "user@domain.com")}
+    assert outreach.build_candidates(
+        [p], registry, LINKS, {}, TODAY, hold=True) == []
+
+
+def test_no_production_takes_its_address_and_licensor_from_the_registry():
+    p, registry = _mid_run()
+    org = registry[p.org_key]
+    org.street, org.sources = "12 Playhouse Row", {"mti", "trw"}
+    cand = outreach.build_candidates(
+        [p], registry, LINKS, {}, TODAY, hold=True)[0]
+
+    fake = FakeGHL()
+    assert fake.client.push(cand)[0]
+    payload = fake.payload_for("/contacts/upsert")
+    assert payload["address1"] == "12 Playhouse Row"
+    assert payload["city"] == "Raleigh"
+    assert set(payload["tags"]) == {config.GHL_SOURCE_TAG, "MTI", "TRW"}
+    assert all(f["field_value"] == "" for f in payload["customFields"])
+
+
+def test_the_card_is_named_for_the_company_when_there_is_no_show():
+    p, registry = _mid_run(org="Still Running Rep")
+    cand = outreach.build_candidates(
+        [p], registry, LINKS, {}, TODAY, hold=True)[0]
+    import ghl
+    assert ghl.GHLClient.opportunity_name(cand) == "Still Running Rep"
+
+
+def test_a_shared_inbox_with_no_upcoming_show_does_not_break_the_winner_pass():
+    """The winners pass reads production.start_date, so a candidate carrying
+    none has to sit outside it rather than crash the run."""
+    running, registry = _mid_run(org="Running Co", email="shared@t.org")
+    upcoming = prod("mti:2", "Upcoming Co", IN_WINDOW, city="Durham")
+    registry[upcoming.org_key] = org_for(upcoming, "shared@t.org")
+    cands = outreach.build_candidates(
+        [running, upcoming], registry, LINKS, {}, TODAY, hold=True)
+    assert len(cands) == 2
+    assert sorted(c.action for c in cands) == ["hold", "update_only"]

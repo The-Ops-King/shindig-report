@@ -3,6 +3,6 @@
   "trw_pages": 0,
   "dry_run": false,
   "outreach": "ingest",
-  "outreach_limit": 5,
-  "note": "re-ingest the same 5: the ledger bug meant the first run wrote contacts but recorded nothing"
+  "outreach_limit": 0,
+  "note": "full bootstrap: every organization with a usable email into GHL, ~2699 expected"
 }

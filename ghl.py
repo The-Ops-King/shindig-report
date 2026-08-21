@@ -178,6 +178,20 @@ class GHLClient:
             })
             payload["tags"].append(
                 config.GHL_LICENSOR_TAGS.get(p.source, p.source.upper()))
+        elif cand.org is not None:
+            # No production to read: a company mid-run, or one being cleared.
+            # The registry holds the same address, and `sources` records every
+            # licensor it was seen under rather than just the one show's.
+            org = cand.org
+            payload.update({
+                "address1": org.street,
+                "city": org.city,
+                "state": org.state,
+                "country": org.country or "US",
+            })
+            for source in sorted(org.sources or ()):
+                payload["tags"].append(
+                    config.GHL_LICENSOR_TAGS.get(source, source.upper()))
         data = self._request("POST", "/contacts/upsert", payload)
         contact = data.get("contact") or data
         contact_id = contact.get("id") or contact.get("contactId") or ""
@@ -274,6 +288,10 @@ class GHLClient:
     @staticmethod
     def opportunity_name(cand) -> str:
         p = cand.production
+        if p is None:
+            # Mid-run, or nothing announced. The card is the company, so its
+            # name alone is a truthful label until there is a show to add.
+            return cand.org_name
         when = p.start_date.strftime("%b %Y") if p.start_date else "TBD"
         return f"{cand.org_name} - {p.show_title} ({when})"
 

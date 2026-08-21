@@ -57,6 +57,9 @@ class Candidate:
     ghl_opportunity_id: str = ""
     sends: int = 0
     was_ready: bool = False            # carried the ready tag as of last run
+    org: object = None                 # orgs.Organization -- the fallback for
+                                       # address and licensor when production
+                                       # is None
 
     @property
     def sending(self) -> bool:
@@ -143,7 +146,7 @@ def build_candidates(productions: list, registry: dict, show_links: dict,
         if not org or not emails.is_sendable(org.email):
             continue
         nxt = true_next_show(rows, today)
-        if nxt is None:
+        if nxt is None and not hold:
             continue
 
         addr = emails.normalize(org.email)
@@ -152,18 +155,32 @@ def build_candidates(productions: list, registry: dict, show_links: dict,
             address=addr, org_key=org_key, org_name=org.name, production=nxt,
             ghl_contact_id=record.get("ghl_contact_id", ""),
             sends=int(record.get("sends") or 0),
+            org=org,
         )
+        if nxt is None:
+            # A company whose show opened last week and is still running has no
+            # *upcoming* start, so it would otherwise vanish from the run
+            # entirely -- 150 of them in the live data. They are exactly as real
+            # a lead as one opening next month, so ingest takes them with their
+            # show fields blank until they announce something.
+            cand.action, cand.reason = "update_only", "no upcoming show"
+            candidates.append(cand)
+            continue
         cand.sample_url = show_links.get(normalize_title(nxt.show_title), "")
         candidates.append(cand)
 
     # One sender per address: soonest opening wins the inbox.
     winners: dict[str, Candidate] = {}
     for cand in candidates:
+        if cand.production is None:
+            continue
         held = winners.get(cand.address)
         if held is None or cand.production.start_date < held.production.start_date:
             winners[cand.address] = cand
 
     for cand in candidates:
+        if cand.production is None:
+            continue
         record = outreach_state.get(cand.address) or {}
         if winners.get(cand.address) is not cand:
             cand.action = "update_only"

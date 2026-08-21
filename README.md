@@ -140,11 +140,30 @@ all ~2,500 organizations as already told and none of them could ever be emailed.
 Instead, anything that would have sent becomes a `hold`, which is written and
 withheld.
 
+**Companies mid-run are included.** `true_next_show` requires a start date in
+the future, so a company whose show opened last week and is still on has no
+*upcoming* show and would drop out of the run entirely — 150 of them in the
+live data. Ingest takes them anyway, with blank `next_show_*` fields, and the
+ledger refreshes them the moment they announce something. The address and
+licensor tags come from the organization registry rather than a production.
+
+**The one hard rule is the email.** `build_candidates` only ever produces a
+candidate for an organization whose address passes `emails.is_sendable()`, so
+placeholder domains, calendar-feed ids and unattended mailboxes never reach GHL.
+Of 15,899 organizations, 2,699 qualify.
+
 `opportunities.json` doubles as the ingest ledger. An organization is written
 when it is new, when its next show changes, or when its ready state flips —
 otherwise it is skipped. So the bootstrap is ~2,500 contacts once
-(`OUTREACH_INGEST_CAP` bounds a single run at 1,000, and the run logs what it
-deferred), then a handful a day forever.
+(bounded per run and logged), then a handful a day forever.
+
+The binding limit is the clock, not the count: `OUTREACH_INGEST_MAX_SECONDS`
+stops the loop cleanly at 30 minutes. A run that instead hit the job timeout
+mid-ingest would never reach the state commit, losing the ledger and repeating
+the whole bootstrap. Stopping early keeps what it wrote and resumes next run.
+
+**The 7am schedule runs `ingest`.** New organizations arrive daily, so the CRM
+keeps filling on its own. It still enrols nobody and sends nothing.
 
 **Two tags, doing different jobs:**
 
