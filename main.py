@@ -251,14 +251,20 @@ def run_outreach(productions, registry, book, today, args):
                 log.warning("ingest: %ds budget spent, %d left for the next run",
                             config.OUTREACH_INGEST_MAX_SECONDS, len(batch) - i)
                 break
-            pushed, err = client.push(cand)
+            pushed, err = client.push(
+                cand,
+                rearm_check=lambda c: outreach_mod.needs_rearm(
+                    c, opportunities, today),
+            )
             if pushed:
                 outreach_mod.record_opportunity(opportunities, cand, today)
                 written += 1
-                rows.append(sheets.outreach_row(cand, today, "ingested"))
+                rows.append(sheets.outreach_row(
+                    cand, today, "re-armed" if cand.rearmed else "ingested"))
             else:
                 rows.append(sheets.outreach_row(cand, today, "failed", err))
         stats["ingested"] = written
+        stats["rearmed"] = sum(1 for c in batch if c.rearmed)
         stats["ingest_deferred"] = deferred
         log.info("ingest: %d written, %d pending, %d deferred",
                  written, len(todo), deferred)

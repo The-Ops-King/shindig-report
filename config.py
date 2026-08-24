@@ -172,6 +172,15 @@ GHL_LICENSOR_TAGS = {"mti": "MTI", "concord": "Concord", "trw": "TRW"}
 # one asset missing.
 GHL_READY_TAG = "shindig-ready"
 
+# When a company's show rolls over -- Little Mermaid closes, Shrek is next --
+# put them back through the sequence with the new show's link. Only ever fires
+# for a contact that ALREADY carries the outreach tag, so it can continue a
+# conversation someone started and can never begin one. That is why it does not
+# sit behind OUTREACH_ENABLED. Defaults on; set to "false" to stop it without a
+# deploy.
+REARM_ON_ROLLOVER = os.environ.get(
+    "REARM_ON_ROLLOVER", "true").strip().lower() == "true"
+
 # Organizations written to GHL in a single ingest run. The first pass is ~2,500
 # contacts and about as many cards, roughly 5,000 sequential calls; bounding it
 # keeps that run observable next to the 13-minute TRW scrape, and the

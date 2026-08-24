@@ -197,7 +197,29 @@ class GHLClient:
         contact_id = contact.get("id") or contact.get("contactId") or ""
         if not contact_id:
             raise GHLError(f"upsert returned no contact id: {str(data)[:200]}")
+        cand.has_outreach_tag = self._carries_outreach_tag(contact_id, contact)
         return contact_id
+
+    def _carries_outreach_tag(self, contact_id: str, contact: dict) -> bool:
+        """Whether this contact is already in the sequence.
+
+        The upsert response normally carries `tags`, which makes this free. The
+        fallback read only happens if it does not, and only for the handful of
+        contacts whose show rolled over on a given day.
+
+        Absent is the safe answer: a missing tag means no re-arm, and no re-arm
+        means nothing is sent. A failed read must never be mistaken for "yes".
+        """
+        tags = contact.get("tags")
+        if tags is None:
+            try:
+                data = self._request("GET", f"/contacts/{contact_id}", retries=1)
+                tags = (data.get("contact") or data).get("tags") or []
+            except GHLError as exc:
+                log.debug("could not read tags for %s (%s)", contact_id, exc)
+                return False
+        wanted = config.GHL_OUTREACH_TAG.lower()
+        return any((t or "").strip().lower() == wanted for t in tags)
 
     # --- workflow ----------------------------------------------------------
 
@@ -262,6 +284,20 @@ class GHLClient:
         self.set_tags(contact_id, remove=[config.GHL_OUTREACH_TAG])
         self.set_tags(contact_id, add=[config.GHL_OUTREACH_TAG])
         self.add_to_workflow(contact_id)
+
+    def rearm(self, contact_id: str) -> None:
+        """Put someone already in the sequence back through it for a new show.
+
+        Mechanically identical to enrol(), and for the identical reasons: GHL
+        fires a tag trigger only on a tag *newly* added, and declines to
+        re-enrol a contact still active in a workflow. Both refusals look
+        exactly like success.
+
+        The difference is who it may touch. enrol() can start a conversation;
+        this can only continue one, because push() reaches it solely for a
+        contact already carrying the tag.
+        """
+        self.enrol(contact_id)
 
     def clear(self, contact_id: str) -> None:
         """Their show has passed and nothing is booked: stop the sequence."""
@@ -340,8 +376,15 @@ class GHLClient:
 
     # --- the whole operation for one candidate ------------------------------
 
-    def push(self, cand) -> tuple[bool, str]:
-        """Upsert and enrol. Returns (ok, error). Never raises."""
+    def push(self, cand, rearm_check=None) -> tuple[bool, str]:
+        """Upsert and enrol. Returns (ok, error). Never raises.
+
+        `rearm_check` is asked, after the upsert, whether a contact whose show
+        just rolled over should re-enter the sequence. It is a callback rather
+        than a field because the answer depends on the ingest ledger, which is
+        main's business, while whether the contact carries the tag is only
+        known once the upsert has answered.
+        """
         try:
             contact_id = self.upsert_contact(cand)
             cand.ghl_contact_id = contact_id
@@ -357,6 +400,13 @@ class GHLClient:
             cand.ghl_opportunity_id = self.sync_opportunity(cand)
             if cand.sending:
                 self.enrol(contact_id)
+            elif rearm_check is not None and rearm_check(cand):
+                # Their show moved and they are already in the sequence, so the
+                # new show is the next beat of a conversation someone else
+                # started. Never a first contact: rearm_check only says yes for
+                # a contact already carrying the tag.
+                self.rearm(contact_id)
+                cand.rearmed = True
             return True, ""
         except Exception as exc:            # one contact must not kill the run
             log.warning("GHL push failed for %s: %s", cand.address, exc)

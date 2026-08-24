@@ -841,3 +841,130 @@ def test_ingest_needs_no_switch(monkeypatch):
     assert "refused" not in stats
     assert stats["ingested"] == 1
     assert not any("workflow" in path for path in fake.paths())
+
+
+# --- rolling forward to the next show ----------------------------------------
+
+def _rolled(tagged, ready=True, last_armed=None, show="mti:2"):
+    """A company whose show just changed, with a ledger recording the old one."""
+    title = "Annie" if ready else "Obscure Show"
+    p = prod(show, "Old Courthouse Theatre", IN_WINDOW, title=title)
+    registry = {p.org_key: org_for(p, "info@oct.org")}
+    cand = outreach.build_candidates(
+        [p], registry, LINKS, {}, TODAY, hold=True)[0]
+    record = {"opportunity_id": "opp-1", "contact_id": "contact-1",
+              "org_name": cand.org_name, "show_key": "mti:1", "ready": True}
+    if last_armed:
+        record["last_armed"] = last_armed.isoformat()
+    opportunities = {cand.org_key: record}
+    outreach.needs_ingest(cand, opportunities)      # sets show_changed
+    cand.has_outreach_tag = tagged
+    return cand, opportunities
+
+
+def _push(cand, opportunities, contact_tags=()):
+    fake = FakeGHL()
+    upsert = {"contact": {"id": "contact-1", "tags": list(contact_tags)}}
+    inner = fake._request
+
+    def request(method, path, payload=None, retries=3):
+        inner(method, path, payload, retries)
+        return upsert if path == "/contacts/upsert" else (
+            {"opportunity": {"id": "opp-1"}} if path == "/opportunities/" else {})
+
+    fake.client._request = request
+    ok, _ = fake.client.push(
+        cand, rearm_check=lambda c: outreach.needs_rearm(c, opportunities, TODAY))
+    assert ok
+    return fake
+
+
+def test_the_show_rolling_over_is_detected():
+    """Little Mermaid closes, Shrek is next: the ledger sees the change."""
+    cand, opportunities = _rolled(tagged=True)
+    assert cand.show_changed
+    assert outreach.needs_ingest(cand, opportunities)
+
+
+def test_a_rollover_does_not_re_arm_someone_never_contacted():
+    """The whole safety property: re-arming an untagged contact would be a
+    FIRST contact, which belongs behind OUTREACH_ENABLED."""
+    cand, opportunities = _rolled(tagged=False)
+    assert not outreach.needs_rearm(cand, opportunities, TODAY)
+    fake = _push(cand, opportunities, contact_tags=[config.GHL_SOURCE_TAG])
+    assert "POST /contacts/upsert" in fake.paths()      # fields still updated
+    assert not any("workflow" in p for p in fake.paths())
+    assert not cand.rearmed
+
+
+def test_a_rollover_re_arms_someone_already_in_the_sequence():
+    cand, opportunities = _rolled(tagged=True)
+    assert outreach.needs_rearm(cand, opportunities, TODAY)
+    fake = _push(cand, opportunities,
+                 contact_tags=[config.GHL_SOURCE_TAG, config.GHL_OUTREACH_TAG])
+    assert cand.rearmed
+    paths = fake.paths()
+    # Same two no-ops as a first enrolment: the tag must come off before it
+    # goes back on, and the workflow membership with it.
+    assert paths.index("DELETE /contacts/contact-1/workflow/wf") < \
+        paths.index("POST /contacts/contact-1/workflow/wf")
+    tag_calls = [(m, (b or {}).get("tags")) for m, path, b in fake.calls
+                 if path.endswith("/tags")
+                 and config.GHL_OUTREACH_TAG in ((b or {}).get("tags") or [])]
+    assert tag_calls == [("DELETE", [config.GHL_OUTREACH_TAG]),
+                         ("POST", [config.GHL_OUTREACH_TAG])]
+
+
+def test_the_tag_is_read_off_the_contact_not_assumed():
+    """has_outreach_tag comes from what GHL actually holds, so a contact you
+    untagged by hand stops being re-armed."""
+    cand, opportunities = _rolled(tagged=True)
+    _push(cand, opportunities, contact_tags=[config.GHL_SOURCE_TAG])
+    assert not cand.has_outreach_tag
+    assert not outreach.needs_rearm(cand, opportunities, TODAY)
+
+
+def test_a_packed_season_does_not_re_enter_every_few_weeks():
+    """24% of consecutive-show gaps are under 30 days."""
+    cand, opportunities = _rolled(tagged=True,
+                                  last_armed=TODAY - timedelta(days=20))
+    assert not outreach.needs_rearm(cand, opportunities, TODAY)
+
+    cand, opportunities = _rolled(tagged=True,
+                                  last_armed=TODAY - timedelta(days=60))
+    assert outreach.needs_rearm(cand, opportunities, TODAY)
+
+
+def test_rolling_into_a_show_with_no_sample_link_does_not_re_arm():
+    """The pitch is "here is what YOUR playbill could look like"."""
+    cand, opportunities = _rolled(tagged=True, ready=False)
+    assert not cand.ready
+    assert not outreach.needs_rearm(cand, opportunities, TODAY)
+
+
+def test_re_arming_stamps_the_floor_and_the_same_show_does_not_repeat():
+    cand, opportunities = _rolled(tagged=True)
+    cand.rearmed, cand.ghl_contact_id = True, "contact-1"
+    outreach.record_opportunity(opportunities, cand, TODAY)
+    assert opportunities[cand.org_key]["last_armed"] == TODAY.isoformat()
+    # Same show again tomorrow: nothing changed, so nothing is written.
+    cand.rearmed = False
+    assert not outreach.needs_ingest(cand, opportunities)
+    assert not outreach.needs_rearm(cand, opportunities, TODAY)
+
+
+def test_the_floor_survives_a_rollover_rewriting_the_record():
+    """last_armed must not be lost when the record is rewritten for a new show,
+    or the 45-day floor resets every time a company changes shows."""
+    cand, opportunities = _rolled(tagged=True,
+                                  last_armed=TODAY - timedelta(days=10))
+    cand.rearmed, cand.ghl_contact_id = False, "contact-1"
+    outreach.record_opportunity(opportunities, cand, TODAY)
+    assert opportunities[cand.org_key]["last_armed"] == \
+        (TODAY - timedelta(days=10)).isoformat()
+
+
+def test_the_switch_turns_it_off(monkeypatch):
+    cand, opportunities = _rolled(tagged=True)
+    monkeypatch.setattr(config, "REARM_ON_ROLLOVER", False)
+    assert not outreach.needs_rearm(cand, opportunities, TODAY)

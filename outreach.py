@@ -60,6 +60,9 @@ class Candidate:
     org: object = None                 # orgs.Organization -- the fallback for
                                        # address and licensor when production
                                        # is None
+    has_outreach_tag: bool = False     # already in the sequence, per GHL
+    show_changed: bool = False         # their next show moved since last run
+    rearmed: bool = False              # put back through the sequence this run
 
     @property
     def sending(self) -> bool:
@@ -287,6 +290,34 @@ def load_opportunity_ids(cands: list, opportunities: dict) -> None:
         cand.was_ready = bool(record.get("ready"))
 
 
+def needs_rearm(cand: Candidate, opportunities: dict, today: date) -> bool:
+    """Whether a rolled-over contact should re-enter the sequence.
+
+    Four things have to be true, and the second is the one that makes this safe
+    for ingest to do at all:
+
+    * their show actually changed -- Little Mermaid closed, Shrek is next;
+    * they **already carry the outreach tag**, so a person started this
+      conversation. Re-arming someone without it would be a *first* contact,
+      which is precisely what OUTREACH_ENABLED exists to prevent;
+    * they are `ready` -- in window, enabled country, and a sample link exists.
+      Rolling into a show with no sample would otherwise send the "here is what
+      YOUR playbill could look like" pitch with the link missing;
+    * the 45-day floor has passed. 24% of consecutive-show gaps in the live data
+      are under 30 days, so without this a company with a packed season
+      re-enters the sequence every few weeks.
+    """
+    if not config.REARM_ON_ROLLOVER:
+        return False
+    if not (cand.show_changed and cand.has_outreach_tag and cand.ready):
+        return False
+    record = opportunities.get(cand.org_key) or {}
+    armed = _parse(record.get("last_armed") or "")
+    if armed is None:
+        return True
+    return (today - armed) >= timedelta(days=config.OUTREACH_MIN_GAP_DAYS)
+
+
 def needs_ingest(cand: Candidate, opportunities: dict,
                  want_card: bool = False) -> bool:
     """Whether this organization has anything new to write to GHL.
@@ -307,8 +338,8 @@ def needs_ingest(cand: Candidate, opportunities: dict,
     if want_card and not record.get("opportunity_id"):
         return True
     show_key = cand.production.key if cand.production else ""
-    return (record.get("show_key") != show_key
-            or bool(record.get("ready")) != cand.ready)
+    cand.show_changed = record.get("show_key") != show_key
+    return cand.show_changed or bool(record.get("ready")) != cand.ready
 
 
 def record_opportunity(opportunities: dict, cand: Candidate, today: date) -> None:
@@ -330,6 +361,12 @@ def record_opportunity(opportunities: dict, cand: Candidate, today: date) -> Non
         "show_key": cand.production.key if cand.production else "",
         "show_title": cand.production.show_title if cand.production else "",
         "ready": cand.ready,
+        # Preserved across rollovers: this is what the 45-day floor measures
+        # from, so it must survive a record being rewritten every time a show
+        # changes.
+        "last_armed": (today.isoformat() if cand.rearmed
+                       else (opportunities.get(cand.org_key) or {}).get(
+                           "last_armed", "")),
         "updated": today.isoformat(),
     }
 

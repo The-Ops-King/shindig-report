@@ -264,6 +264,35 @@ mailboxes. Those hard-bounce, which is what wrecks a cold sending domain.
 look like". Without a real sample for their show it falls flat, so they wait for
 a future run instead.
 
+### Rolling forward to the next show
+
+The Little Mermaid closes; Shrek is next. Two halves, and they are separate:
+
+**The data rolls itself.** `DROP_ENDED` removes any production whose end date
+has passed, so the closed show leaves the data and `true_next_show` returns the
+next one. `needs_ingest` sees the changed `show_key` and re-pushes the contact,
+moving every `next_show_*` field and the sample link to Shrek and renaming the
+card. This happens on the 7am run with no configuration at all.
+
+**The sequence is re-armed, but only for people already in it.** A contact
+whose show rolls over re-enters the workflow with the new show's link — if, and
+only if, they **already carry `shindig-outreach`**. That tag is set only by a
+real send or by you tagging someone by hand, so a re-arm can continue a
+conversation a person started and can never begin one. That is why ingest is
+allowed to do this while `OUTREACH_ENABLED` is still shut: the branch is
+unreachable for anyone who has not been contacted.
+
+The tag is read back off the contact rather than assumed, so untagging someone
+in the GHL UI stops their re-arms. Three further conditions: the candidate must
+be `ready` (in window, enabled country, sample link present — rolling into a
+show with no sample would send the "here's what *your* playbill could look
+like" pitch with its one asset missing), and at least `OUTREACH_MIN_GAP_DAYS`
+must have passed since the last re-arm, since 24% of consecutive-show gaps are
+under 30 days. `REARM_ON_ROLLOVER=false` turns it off.
+
+Mechanically it is `enrol()`: remove from the workflow, drop the tag, re-add
+it. Same two silent no-ops to step around, same fix.
+
 ### Show lifecycle
 
 Each address has a *current show*. When it passes, the contact rolls forward:
