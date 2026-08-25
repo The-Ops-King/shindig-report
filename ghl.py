@@ -126,10 +126,18 @@ class GHLClient:
         if p is None:
             values = {name: "" for name in config.GHL_FIELDS}
         else:
+            # A licence window has a start date but no opening night, so it
+            # publishes neither. true_next_show already keeps windows out of
+            # candidates; this is the second lock, because a date field is
+            # what the reminder sequence schedules against and a rights date
+            # would send "Annie opens in 30 days" about a show with no date.
+            dated = p.has_real_dates
             values = {
                 "next_show_title": p.show_title,
-                "next_show_start": p.start_date.isoformat() if p.start_date else "",
-                "next_show_end": p.end_date.isoformat() if p.end_date else "",
+                "next_show_start": (p.start_date.isoformat()
+                                    if p.start_date and dated else ""),
+                "next_show_end": (p.end_date.isoformat()
+                                  if p.end_date and dated else ""),
                 "next_show_venue": p.venue or p.organization,
                 "next_show_city": ", ".join(x for x in (p.city, p.state) if x),
                 "sample_playbill_url": cand.sample_url,

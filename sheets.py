@@ -110,8 +110,14 @@ def production_row(p, org) -> list:
         org.name if org else p.organization,
         p.address,
         p.city, p.state, p.postal, p.country,
-        p.start_date.isoformat() if p.start_date else "",
-        p.end_date.isoformat() if p.end_date else "",
+        # A licence window publishes no dates. MTI gives one start/end pair
+        # meaning "the period this licence covers", which for ~9.5% of its
+        # records is a multi-year rights window -- "2024-11-01 to 2029-01-30"
+        # reads as a fact and is worse than an empty cell, which reads as the
+        # truth: we do not know when this plays. Run Days stays, so the row
+        # still explains why its dates are blank.
+        p.start_date.isoformat() if (p.start_date and p.has_real_dates) else "",
+        p.end_date.isoformat() if (p.end_date and p.has_real_dates) else "",
         p.run_days if p.run_days is not None else "",
         p.date_type,
         p.venue_type,

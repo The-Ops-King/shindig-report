@@ -293,6 +293,47 @@ under 30 days. `REARM_ON_ROLLOVER=false` turns it off.
 Mechanically it is `enrol()`: remove from the workflow, drop the tag, re-add
 it. Same two silent no-ops to step around, same fix.
 
+### Where the dates come from, and why ~9.5% of MTI has none
+
+The pitch is *"Annie opens in 30 days — want a playbill?"*, so the only date
+worth publishing is a real opening night.
+
+Each licensor publishes **one** start/end pair, and it means "the period this
+licence covers" — usually the run, sometimes a multi-year rights window. MTI
+returns 16 fields and none of them distinguish the two; `venue_type`,
+`show_type` and `active` were all tested and none correlate (Schools have the
+*highest* long-span rate, at 13.5%, because a district buys one licence
+covering several years). Span length is the only signal that exists.
+
+| MTI span | Share | |
+|---|---|---|
+| ≤ 31 days | 88.2% | a real run — median is 3 days |
+| 32–120 days | 2.3% | still a run, professional sit-downs |
+| 121–365 days | 9.3% | rights window |
+| over a year | 0.2% | up to 3,270 days |
+
+The long ones are touring producers and rights agents — Networks
+Presentations, Running Subway, Mini Musicals On The Move — and school
+districts. **Concord and TRW are clean**: both sit near 0.3% over 120 days.
+This is an MTI-only characteristic, not a parsing bug; the values are faithful
+to what is published.
+
+So anything over 120 days is classed `license window` and **publishes no
+dates**: Start and End are empty in the Sheet, `next_show_start` is empty in
+GHL. `2024-11-01 → 2029-01-30` reads as a fact and is worse than an empty cell,
+which reads as the truth — we do not know when this plays. `Run Days` still
+carries the raw span so the row explains itself.
+
+Those organizations stay in the data and in GHL. A touring producer buys
+playbills, quite possibly more of them than a community theatre; it simply can
+never qualify for a date-driven email, because there is no opening night to key
+one to. Two locks enforce that: `true_next_show` never selects a window, and
+`custom_fields` refuses to write one's dates even if it somehow arrives.
+
+Every run reports the per-source share of rows with no usable date, so a change
+in a feed — or a heuristic that starts eating real runs — shows up immediately
+rather than being noticed in the Sheet months later.
+
 ### Show lifecycle
 
 Each address has a *current show*. When it passes, the contact rolls forward:

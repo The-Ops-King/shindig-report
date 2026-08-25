@@ -232,6 +232,17 @@ class Production:
         return (self.end_date - self.start_date).days
 
     @property
+    def has_real_dates(self) -> bool:
+        """Whether start_date is an opening night rather than a licence date.
+
+        The pitch is "Annie opens in 30 days -- want a playbill?", so a rights
+        window is not a worse date, it is not a date at all. Anything this
+        returns False for must publish no dates rather than misleading ones: a
+        confident wrong answer costs more than an admitted gap.
+        """
+        return self.date_type in ("performance run", "extended run")
+
+    @property
     def date_type(self) -> str:
         """What the start/end pair actually represents.
 

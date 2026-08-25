@@ -6,7 +6,7 @@ rather than silently emptying the Sheet.
 
 import json
 import sys
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 import pytest
@@ -261,3 +261,68 @@ def test_mti_start_end_match_its_own_date_range_text():
         assert end.isoformat() == r["end"]
         checked += 1
     assert checked, "fixture carried no parseable date_range values"
+
+
+# --- a licence window is not a date -------------------------------------------
+
+def _span(days, start=date(2026, 9, 1), source="mti"):
+    from normalize import Production
+    return Production(
+        key=f"{source}:x", source=source, show_title="The Music Man",
+        organization="Mini Musicals On The Move", venue="Touring",
+        city="Raleigh", state="NC", country="US", street="1 Main St",
+        start_date=start, end_date=start + timedelta(days=days),
+    )
+
+
+def test_a_three_thousand_day_span_publishes_no_dates():
+    """Mini Musicals On The Move really does hold The Music Man from May 2018
+    to May 2027. That is a rights window, not nine years of performances."""
+    import sheets
+    p = _span(3270, start=date(2018, 5, 18))
+    assert p.date_type == "license window"
+    assert not p.has_real_dates
+    row = sheets.production_row(p, None)
+    start_i = sheets.PRODUCTION_HEADERS.index("Start")
+    end_i = sheets.PRODUCTION_HEADERS.index("End")
+    assert row[start_i] == "" and row[end_i] == ""
+    # The row still explains itself rather than going silently blank.
+    assert row[sheets.PRODUCTION_HEADERS.index("Run Days")] == 3270
+    assert row[sheets.PRODUCTION_HEADERS.index("Date Type")] == "license window"
+
+
+@pytest.mark.parametrize("days,dated", [
+    (0, True),      # a one-night school show
+    (3, True),      # the median MTI run
+    (17, True),
+    (120, True),    # a long professional sit-down still has an opening night
+    (121, False),
+    (845, False),
+])
+def test_only_real_runs_publish_dates(days, dated):
+    import sheets
+    p = _span(days)
+    assert p.has_real_dates is dated
+    row = sheets.production_row(p, None)
+    assert bool(row[sheets.PRODUCTION_HEADERS.index("Start")]) is dated
+
+
+def test_a_licence_window_is_never_the_next_show():
+    """The guarantee that matters: GHL's next_show_start can only ever hold a
+    real opening night, so the pitch is "Annie opens in 30 days" and never
+    "you hold the rights to Annie"."""
+    import outreach
+    today = date(2026, 8, 22)
+    window = _span(1500, start=today + timedelta(days=5))   # soonest by far
+    real = _span(3, start=today + timedelta(days=60))
+    assert outreach.true_next_show([window, real], today) is real
+
+
+def test_a_window_never_reaches_the_ghl_date_field():
+    import ghl, outreach
+    cand = outreach.Candidate(address="a@t.org", org_key="k", org_name="T",
+                              production=_span(1500))
+    fields = {f.get("id") or f.get("key"): f["field_value"]
+              for f in ghl.GHLClient.custom_fields(cand)}
+    for name in ("next_show_start", "next_show_end"):
+        assert fields[config.GHL_FIELD_IDS.get(name, name)] == ""

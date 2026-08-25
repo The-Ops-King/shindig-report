@@ -146,6 +146,24 @@ def title_counts(productions, today) -> dict:
     return counts
 
 
+def date_quality(productions) -> dict:
+    """Per source, how many rows publish no usable performance date.
+
+    Licensors give one start/end pair meaning "the period this licence
+    covers". For MTI that is a rights window on roughly 9.5% of records --
+    touring producers and school districts on multi-year licences -- while
+    Concord and TRW sit near 0.3%. Reporting it each run means a change in the
+    feed, or a heuristic that starts eating real runs, shows up here rather
+    than being noticed in the Sheet months later.
+    """
+    out = {}
+    for p in productions:
+        seen, windows = out.get(p.source, (0, 0))
+        out[p.source] = (seen + 1, windows + (0 if p.has_real_dates else 1))
+    return {src: f"{w}/{n} no date ({w / n * 100:.1f}%)"
+            for src, (n, w) in sorted(out.items())}
+
+
 def run_outreach(productions, registry, book, today, args):
     """Select who to contact, push them to GHL, and record it.
 
@@ -358,6 +376,7 @@ def main(argv=None) -> int:
         ]
         log.info("scope: %d of %d productions in %s",
                  len(scoped), len(everything), sorted(config.COUNTRIES))
+        log.info("dates: %s", date_quality(scoped))
 
         if args.sample:
             scoped = take_sample(scoped, args.sample)
