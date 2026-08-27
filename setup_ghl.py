@@ -156,10 +156,91 @@ def looks_similar(wanted: str, field: dict) -> bool:
     return False
 
 
+def inspect(client: GHLClient, email: str) -> int:
+    """Show what GHL really holds, rather than what we assume it holds.
+
+    Two silent-drop bugs have already come from believing a write succeeded: a
+    fieldKey that matched nothing, and now a field that takes a value and does
+    not keep it. Both looked identical to success. So this prints the raw field
+    definitions -- every attribute, not the four the inventory chose to show,
+    because the answer is in one we did not think to display -- and then reads a
+    real contact back to compare stored against sent.
+    """
+    say("=== raw definitions of the fields we write ===")
+    try:
+        fields = get_custom_fields(client)
+    except GHLError as exc:
+        log.error("could not read custom fields: %s", exc)
+        return 1
+
+    by_id = {f.get("id"): f for f in fields if f.get("id")}
+    for name, _ in FIELDS:
+        fid = config.GHL_FIELD_IDS.get(name)
+        say("")
+        say("  %s  ->  %s", name, fid or "(unmapped, written by name)")
+        field = by_id.get(fid)
+        if fid and not field:
+            say("    NOT FOUND in this location -- the id is stale or wrong")
+            continue
+        if not field:
+            continue
+        for k in sorted(field):
+            say("    %-22s %r", k, field[k])
+
+    if not email:
+        say("")
+        say("no contact given; pass an email to read one back")
+        flush_summary()
+        return 0
+
+    say("")
+    say("=== what GHL stored against %s ===", email)
+    try:
+        found = client._request(
+            "GET", f"/contacts/search/duplicate"
+                   f"?locationId={client.location_id}&email={email}")
+    except GHLError as exc:
+        log.error("could not look up %s: %s", email, exc)
+        flush_summary()
+        return 1
+    contact = found.get("contact") or {}
+    if not contact.get("id"):
+        say("  no contact found for that address")
+        flush_summary()
+        return 0
+
+    try:
+        full = client._request("GET", f"/contacts/{contact['id']}")
+        contact = full.get("contact") or full
+    except GHLError as exc:
+        log.error("could not read contact %s: %s", contact["id"], exc)
+
+    stored = {}
+    for entry in contact.get("customFields") or []:
+        stored[entry.get("id") or entry.get("key")] = entry.get("value", entry)
+    say("  contact id: %s", contact.get("id"))
+    say("  tags      : %s", ", ".join(contact.get("tags") or []) or "(none)")
+    say("")
+    for name, _ in FIELDS:
+        fid = config.GHL_FIELD_IDS.get(name, name)
+        mark = "OK     " if fid in stored else "MISSING"
+        say("  %s %-22s %r", mark, name, stored.get(fid, ""))
+    say("")
+    say("  every custom field the contact actually carries:")
+    for k, v in stored.items():
+        say("    %-26s %r", k, v)
+    flush_summary()
+    return 0
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--apply", action="store_true",
                     help="create what is missing (otherwise just report)")
+    ap.add_argument("--inspect", metavar="EMAIL", default="",
+                    help="dump the raw definition of every wanted field, and "
+                         "read this contact back to see what GHL actually "
+                         "stored. Creates nothing.")
     args = ap.parse_args(argv)
 
     logging.basicConfig(level=logging.INFO, format="%(message)s")
@@ -168,6 +249,9 @@ def main(argv=None) -> int:
     if not client.api_key or not client.location_id:
         log.error("need GHL_API_KEY and GHL_LOCATION_ID (missing: %s)", missing)
         return 1
+
+    if args.inspect or os.environ.get("GHL_INSPECT"):
+        return inspect(client, args.inspect or os.environ.get("GHL_INSPECT", ""))
 
     say("=== pipelines ===")
     try:

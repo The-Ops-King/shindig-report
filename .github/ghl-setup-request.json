@@ -1,4 +1,5 @@
 {
   "apply": false,
-  "note": "verify: every field should now report ok or adopted, and no DATE warnings"
+  "inspect": "RegistrationOutreach@mps-edu.org",
+  "note": "diagnose why next_show_title is empty: dump raw field definitions and read a real contact back"
 }
