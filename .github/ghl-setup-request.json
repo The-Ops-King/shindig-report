@@ -1,5 +1,5 @@
 {
   "apply": false,
-  "inspect": "RegistrationOutreach@mps-edu.org",
-  "note": "diagnose why next_show_title is empty: dump raw field definitions and read a real contact back"
+  "inspect": "",
+  "note": "idle. set inspect to a contact email to dump field definitions and read that contact back"
 }

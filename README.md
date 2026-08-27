@@ -179,6 +179,23 @@ the whole bootstrap. Stopping early keeps what it wrote and resumes next run.
 **The 7am schedule runs `ingest`.** New organizations arrive daily, so the CRM
 keeps filling on its own. It still enrols nobody and sends nothing.
 
+**The show title lives in a different field group.** `next_show_title` is
+adopted from the pre-existing "What's the next play you are doing?"
+(`XW5c99K5MZaogICyK9kd`, folder `JTZoiQtMq7mEqfBRCSyH`); the six fields this
+project created share folder `M0Ktqvxl0IowItMtISbQ`. GHL groups custom fields
+on the contact record by folder, so the title renders in a **different section
+of the page** from the other six. That is cosmetic -- all seven are
+`model: contact`, all are written and stored, and merge tags do not care which
+folder a field sits in -- but it reads like a missing value if you are looking
+at the new group. It has already been mistaken for one once.
+
+`python setup_ghl.py --inspect <email>` settles that question in seconds: it
+dumps every attribute of each field we write and reads a real contact back, so
+what GHL stored can be compared against what was sent. Run it through the `GHL
+setup` workflow by putting an email in the `inspect` field of
+`.github/ghl-setup-request.json`. It creates nothing, and takes precedence over
+`apply` so a diagnostic can never write anything as a side effect.
+
 **Two tags, doing different jobs:**
 
 - `shindig-outreach` — starts the sequence. Only ever set by a real send.
