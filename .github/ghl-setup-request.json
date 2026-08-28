@@ -1,6 +1,6 @@
 {
   "apply": false,
-  "inspect": "",
-  "purge": "apply",
-  "note": "APPLY: delete the 770 contacts absent from the verified keep-list. Irreversible; backup is re-taken first and aborts if short."
+  "inspect": "boxoffice@anoisewithin.org",
+  "purge": "",
+  "note": "verify the purge: this address was deleted, GHL should now return no contact"
 }
