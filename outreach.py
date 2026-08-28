@@ -63,6 +63,7 @@ class Candidate:
     has_outreach_tag: bool = False     # already in the sequence, per GHL
     show_changed: bool = False         # their next show moved since last run
     rearmed: bool = False              # put back through the sequence this run
+    was_unverified: bool = True        # carried the unverified tag last run
 
     @property
     def sending(self) -> bool:
@@ -237,6 +238,13 @@ def _decide(cand: Candidate, record: dict, production, today: date):
     if known == production.key:
         return "none", "already current"
 
+    # Unverified is not the same as bad: the contact is still ingested and
+    # still carries its show, it just cannot be emailed until something has
+    # checked the address. Deleting on absence of evidence is what cost 770
+    # contacts; refusing to *send* on absence of evidence is free.
+    if not emails.is_verified(cand.address):
+        return "update_only", "email not verified"
+
     # Anything below is a new contact or a genuine roll-forward.
     if production.country not in config.OUTREACH_COUNTRIES:
         return "update_only", f"country {production.country or '?'} not enabled"
@@ -288,6 +296,10 @@ def load_opportunity_ids(cands: list, opportunities: dict) -> None:
         record = opportunities.get(cand.org_key) or {}
         cand.ghl_opportunity_id = record.get("opportunity_id", "")
         cand.was_ready = bool(record.get("ready"))
+        # Absent on records written before verification existed, and "was it
+        # unverified" is the safe reading of a missing value: a redundant tag
+        # removal costs one call, a missed one leaves a contact mislabelled.
+        cand.was_unverified = not record.get("verified", False)
 
 
 def needs_rearm(cand: Candidate, opportunities: dict, today: date) -> bool:
@@ -361,6 +373,7 @@ def record_opportunity(opportunities: dict, cand: Candidate, today: date) -> Non
         "show_key": cand.production.key if cand.production else "",
         "show_title": cand.production.show_title if cand.production else "",
         "ready": cand.ready,
+        "verified": emails.is_verified(cand.address),
         # Preserved across rollovers: this is what the 45-day floor measures
         # from, so it must survive a record being rewritten every time a show
         # changes.

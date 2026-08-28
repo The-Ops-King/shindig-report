@@ -33,6 +33,7 @@ import time
 import requests
 
 import config
+import emails
 
 log = logging.getLogger(__name__)
 
@@ -167,7 +168,8 @@ class GHLClient:
             # Provenance only. The outreach tag is deliberately NOT set here:
             # upsert merges tags, so a tag already present stays present and
             # the workflow's trigger never fires. enrol() owns that tag.
-            "tags": [config.GHL_SOURCE_TAG],
+            "tags": ([config.GHL_SOURCE_TAG] if emails.is_verified(cand.address)
+                     else [config.GHL_SOURCE_TAG, config.GHL_UNVERIFIED_TAG]),
             "customFields": self.custom_fields(cand),
         }
         # Never blank a name we do not have. A clear is built from the stored
@@ -312,6 +314,17 @@ class GHLClient:
         self.remove_from_workflow(contact_id)
         self.set_tags(contact_id, remove=[config.GHL_OUTREACH_TAG])
 
+    def sync_verified_tag(self, cand) -> None:
+        """Take the unverified tag off once the address has a verdict.
+
+        Upsert adds the tag but can never remove one, so clearing it needs an
+        explicit call -- otherwise a contact stays flagged unverified forever
+        after it has been checked. Only written on the transition.
+        """
+        if not emails.is_verified(cand.address) or not cand.was_unverified:
+            return
+        self.set_tags(cand.ghl_contact_id, remove=[config.GHL_UNVERIFIED_TAG])
+
     def sync_ready_tag(self, cand) -> None:
         """Add or drop the ready tag, but only when it actually changed.
 
@@ -397,6 +410,7 @@ class GHLClient:
             contact_id = self.upsert_contact(cand)
             cand.ghl_contact_id = contact_id
             self.sync_ready_tag(cand)
+            self.sync_verified_tag(cand)
             if cand.action == "clear":
                 # The card stays exactly where it is. The company has not gone
                 # away, it just has nothing on the books; only the show state

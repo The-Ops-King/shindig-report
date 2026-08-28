@@ -33,6 +33,35 @@ _ADDR = re.compile(r"^[^@\s]+@[^@\s]+\.[A-Za-z]{2,}$")
 _URL_ESCAPE = re.compile(r"%[0-9a-fA-F]{2}")
 
 _suppressed: set | None = None
+_verified: dict | None = None
+
+
+def verdicts() -> dict:
+    """Address -> what verification said about it, and when.
+
+    Cached on disk so an address is checked once and never paid for again --
+    the same bargain the enrichment cache makes. Seeded from the Verifalia
+    export; the API will write the same shape.
+    """
+    global _verified
+    if _verified is None:
+        try:
+            with open(config.VERIFIED_PATH, encoding="utf-8") as fh:
+                _verified = {normalize(k): v for k, v in json.load(fh).items()}
+        except (OSError, ValueError):
+            _verified = {}
+    return _verified
+
+
+def is_verified(address: str) -> bool:
+    """Whether this address has a positive deliverability verdict.
+
+    Unknown is not the same as bad. An unverified address is kept, tagged and
+    left out of sending until someone checks it -- deleting on absence of
+    evidence is what cost 770 contacts.
+    """
+    return (verdicts().get(normalize(address), {})
+            .get("status", "") == "deliverable")
 
 
 def suppressed() -> set:

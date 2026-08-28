@@ -20,6 +20,11 @@ OPPORTUNITIES_PATH = STATE_DIR / "opportunities.json"
 # daily ingest re-creates anything missing from the ledger, so a delete without
 # a suppression list undoes itself the next morning.
 SUPPRESSED_PATH = STATE_DIR / "suppressed.json"
+# Verification verdicts, keyed by address. Written by whatever ran the check --
+# a Verifalia export today, the Verifalia API later -- and read on every run so
+# an address is never paid to be verified twice. Same bargain as the enrichment
+# cache: check once, remember forever.
+VERIFIED_PATH = STATE_DIR / "verified.json"
 
 # --- Scope -----------------------------------------------------------------
 # US + Canada. MTI accepts a `country` param but silently ignores it, so this
@@ -175,6 +180,12 @@ GHL_LICENSOR_TAGS = {"mti": "MTI", "concord": "Concord", "trw": "TRW"}
 # it the pitch ("here is what YOUR playbill could look like") arrives with its
 # one asset missing.
 GHL_READY_TAG = "shindig-ready"
+
+# Carried by any contact whose address has never been checked for
+# deliverability. Its job is to be visible and filterable in GHL: these are the
+# ones to run through verification next, and the ones not to email meanwhile.
+# Removed automatically once a verdict arrives.
+GHL_UNVERIFIED_TAG = "unverified-email"
 
 # When a company's show rolls over -- Little Mermaid closes, Shrek is next --
 # put them back through the sequence with the new show's link. Only ever fires

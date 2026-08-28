@@ -57,6 +57,25 @@ def build(prods, links=None, state=None, today=TODAY):
 LINKS = {outreach.normalize_title("Annie"): "https://shindig.test/annie"}
 
 
+@pytest.fixture(autouse=True)
+def _isolate_from_live_state(monkeypatch, tmp_path):
+    """Keep the suite off the real state/ files.
+
+    Learned the hard way: info@burningcoal.org was used here as an example of
+    a good address, then genuinely appeared in state/suppressed.json after a
+    live purge, and a passing test started failing for a reason that had
+    nothing to do with the code. Tests must not read production state.
+
+    Verification is stubbed true for the same reason most tests are not about
+    it; the ones that are override this explicitly.
+    """
+    empty = tmp_path / "suppressed.json"
+    empty.write_text("[]")
+    monkeypatch.setattr(config, "SUPPRESSED_PATH", empty)
+    monkeypatch.setattr(emails, "_suppressed", None)
+    monkeypatch.setattr(emails, "is_verified", lambda addr: True)
+
+
 # --- one email per person ---------------------------------------------------
 
 def test_five_orgs_sharing_an_address_produce_one_send():
@@ -645,6 +664,7 @@ def test_ready_tag_is_only_written_when_it_changes():
     explicitly -- but writing it every run would cost a call per contact."""
     cand = a_candidate()
     cand.action, cand.was_ready = "hold", True
+    cand.was_unverified = False          # not what this test is about
     fake = FakeGHL()
     fake.client.push(cand)
     assert not any(p.endswith("/tags") for p in fake.paths())
@@ -1059,3 +1079,91 @@ def test_purge_reads_the_real_verified_csv():
     keep = purge_ghl.verified_addresses("data/verified_emails.csv")
     assert len(keep) == 1598
     assert all("@" in a and a == a.strip().lower() for a in keep)
+
+
+# --- unverified addresses: kept and tagged, never emailed --------------------
+
+@pytest.fixture
+def verdicts(monkeypatch):
+    """Declare which addresses have a deliverability verdict."""
+    def _set(mapping):
+        monkeypatch.setattr(emails, "_verified", {
+            a: {"status": s} for a, s in mapping.items()})
+        monkeypatch.setattr(emails, "is_verified",
+                            lambda addr: mapping.get(addr) == "deliverable")
+    return _set
+
+
+def test_an_unverified_address_is_still_ingested(verdicts):
+    """Unverified is not bad. Deleting on absence of evidence is what cost 770
+    contacts; refusing to send on it is free."""
+    verdicts({})
+    p = prod("mti:1", "T", IN_WINDOW)
+    registry = {p.org_key: org_for(p, "new@t.org")}
+    cands = outreach.build_candidates(
+        [p], registry, LINKS, {}, TODAY, hold=True)
+    assert len(cands) == 1, "still goes into GHL with its show"
+    assert cands[0].action == "update_only"
+    assert cands[0].reason == "email not verified"
+
+
+def test_an_unverified_address_is_never_ready_to_send(verdicts):
+    """shindig-ready is the set you can safely bulk-tag, so it must not
+    contain anyone whose address has never been checked."""
+    verdicts({})
+    p = prod("mti:1", "T", IN_WINDOW)
+    registry = {p.org_key: org_for(p, "new@t.org")}
+    cand = outreach.build_candidates(
+        [p], registry, LINKS, {}, TODAY, hold=True)[0]
+    assert not cand.ready
+
+
+def test_a_verified_address_sends_normally(verdicts):
+    verdicts({"good@t.org": "deliverable"})
+    p = prod("mti:1", "T", IN_WINDOW)
+    registry = {p.org_key: org_for(p, "good@t.org")}
+    assert outreach.build_candidates(
+        [p], registry, LINKS, {}, TODAY)[0].action == "send"
+
+
+def test_an_unverified_contact_carries_the_tag(verdicts):
+    verdicts({})
+    cand = a_candidate()
+    fake = FakeGHL()
+    fake.client.push(cand)
+    tags = fake.payload_for("/contacts/upsert")["tags"]
+    assert config.GHL_UNVERIFIED_TAG in tags
+    assert config.GHL_SOURCE_TAG in tags
+
+
+def test_the_tag_comes_off_once_a_verdict_arrives(verdicts):
+    """Upsert adds tags but can never remove one, so clearing it needs an
+    explicit call or the contact stays flagged forever after being checked."""
+    verdicts({"info@oct.org": "deliverable"})
+    cand = a_candidate()
+    cand.was_unverified = True
+    fake = FakeGHL()
+    fake.client.push(cand)
+    assert config.GHL_UNVERIFIED_TAG not in \
+        fake.payload_for("/contacts/upsert")["tags"]
+    assert ("DELETE", "/contacts/contact-1/tags",
+            {"tags": [config.GHL_UNVERIFIED_TAG]}) in fake.calls
+
+
+def test_the_tag_removal_is_not_repeated_every_run(verdicts):
+    verdicts({"info@oct.org": "deliverable"})
+    cand = a_candidate()
+    cand.was_unverified = False          # already cleared on an earlier run
+    fake = FakeGHL()
+    fake.client.push(cand)
+    assert not any(config.GHL_UNVERIFIED_TAG in ((b or {}).get("tags") or [])
+                   for _, _, b in fake.calls)
+
+
+def test_the_seeded_cache_matches_the_verified_export():
+    """The 1,598 that already passed are seeded, so connecting the API later
+    does not pay to re-check them."""
+    import json
+    seeded = json.load(open("state/verified.json"))
+    assert len(seeded) == 1598
+    assert all(v["status"] == "deliverable" for v in seeded.values())

@@ -196,8 +196,35 @@ setup` workflow by putting an email in the `inspect` field of
 `.github/ghl-setup-request.json`. It creates nothing, and takes precedence over
 `apply` so a diagnostic can never write anything as a side effect.
 
-**Two tags, doing different jobs:**
+### Email verification
 
+Bounces are what destroy a cold sending domain, so an address has to be checked
+before anything is sent to it. `state/verified.json` holds the verdicts, keyed
+by address and cached forever — an address is checked once and never paid for
+twice, the same bargain the enrichment cache makes. It is seeded with the 1,598
+that have already been through Verifalia.
+
+**Unverified is not the same as bad.** An address with no verdict is still
+scraped, still ingested, still carries its show and its pipeline card — it is
+simply tagged `unverified-email` and cannot be sent to. Deleting on absence of
+evidence is what cost 770 contacts; declining to *send* on absence of evidence
+costs nothing. The tag is removed automatically, on the transition, once a
+verdict arrives.
+
+That also means `shindig-ready` now implies verified: the set you can safely
+bulk-tag contains nobody whose address has never been checked.
+
+**Connecting the Verifalia API later** is a small change, not a rewrite: point
+it at `emails.verdicts()`, write the same `{status, source, checked}` shape, and
+verify new addresses during the run so nothing unverified ever reaches GHL. The
+one call worth making deliberately at that point is what to do with Verifalia's
+*Risky* and *Unknown* verdicts — treating them as sendable trades bounce risk
+for reach, and that is a judgement about the domain's reputation rather than a
+technical question.
+
+**Three tags, doing different jobs:**
+
+- `unverified-email` — never checked for deliverability. Cannot be sent to.
 - `shindig-outreach` — starts the sequence. Only ever set by a real send.
 - `shindig-ready` — *would* be sendable right now: next show in the window, in
   an enabled country, and with a sample link. Ingest sets this one.
