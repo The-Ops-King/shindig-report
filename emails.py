@@ -18,11 +18,38 @@ still caught.
 
 from __future__ import annotations
 
+import json
 import re
 
 import config
 
 _ADDR = re.compile(r"^[^@\s]+@[^@\s]+\.[A-Za-z]{2,}$")
+# A percent-escape that survived into an address means it was lifted out of a
+# URL and never decoded -- "%20centrestageinc@yahoo.com" is a mailto with a
+# leading space, "05%7c01%7cmdecorre@cbsd.org" is a fragment of an Outlook
+# safelink. Seven of these reached GHL. They cannot deliver, so they are
+# rejected outright rather than guessed at: decoding one back to a plausible
+# address would be inventing a recipient.
+_URL_ESCAPE = re.compile(r"%[0-9a-fA-F]{2}")
+
+_suppressed: set | None = None
+
+
+def suppressed() -> set:
+    """Addresses removed from GHL and never to be re-ingested.
+
+    Deleting a contact is not enough on its own: the daily ingest re-creates any
+    organization it cannot find in the ledger, so without this the next morning
+    would put every deleted address straight back.
+    """
+    global _suppressed
+    if _suppressed is None:
+        try:
+            with open(config.SUPPRESSED_PATH, encoding="utf-8") as fh:
+                _suppressed = {normalize(a) for a in json.load(fh)}
+        except (OSError, ValueError):
+            _suppressed = set()
+    return _suppressed
 
 
 def normalize(address: str) -> str:
@@ -49,6 +76,10 @@ def rejection_reason(address: str) -> str:
         return "empty"
     if not _ADDR.match(addr):
         return "malformed"
+    if _URL_ESCAPE.search(addr):
+        return "url_encoded"
+    if addr in suppressed():
+        return "suppressed"
 
     mailbox, domain = split(addr)
 

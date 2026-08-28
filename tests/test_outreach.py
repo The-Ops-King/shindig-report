@@ -7,6 +7,7 @@ in the live data rather than invented ones:
   * user@domain.com and friends are never sent to
 """
 
+import json
 import sys
 from datetime import date, timedelta
 from pathlib import Path
@@ -968,3 +969,93 @@ def test_the_switch_turns_it_off(monkeypatch):
     cand, opportunities = _rolled(tagged=True)
     monkeypatch.setattr(config, "REARM_ON_ROLLOVER", False)
     assert not outreach.needs_rearm(cand, opportunities, TODAY)
+
+
+# --- suppression: deleted contacts must not come back ------------------------
+
+@pytest.fixture
+def suppress(monkeypatch, tmp_path):
+    """Point the suppression list at a temp file and clear the module cache."""
+    def _set(addresses):
+        path = tmp_path / "suppressed.json"
+        path.write_text(json.dumps(list(addresses)))
+        monkeypatch.setattr(config, "SUPPRESSED_PATH", path)
+        monkeypatch.setattr(emails, "_suppressed", None)
+    return _set
+
+
+def test_a_suppressed_address_is_never_a_candidate(suppress):
+    """Deleting a contact is not enough: the daily ingest re-creates anything
+    missing from the ledger, so without this the next morning puts it back."""
+    suppress(["a@t.org"])
+    assert not emails.is_sendable("a@t.org")
+    assert emails.rejection_reason("a@t.org") == "suppressed"
+    p = prod("mti:1", "T", IN_WINDOW)
+    registry = {p.org_key: org_for(p, "a@t.org")}
+    assert outreach.build_candidates(
+        [p], registry, LINKS, {}, TODAY, hold=True) == []
+
+
+def test_suppressing_one_address_leaves_the_others_alone(suppress):
+    suppress(["a@t.org"])
+    a = prod("mti:1", "Gone Co", IN_WINDOW)
+    b = prod("mti:2", "Live Co", IN_WINDOW, city="Durham")
+    registry = {a.org_key: org_for(a, "a@t.org"),
+                b.org_key: org_for(b, "b@t.org")}
+    cands = outreach.build_candidates(
+        [a, b], registry, LINKS, {}, TODAY, hold=True)
+    assert [c.address for c in cands] == ["b@t.org"]
+
+
+@pytest.mark.parametrize("addr", [
+    "%20centrestageinc@yahoo.com",      # a mailto with a leading space
+    "05%7c01%7cmdecorre@cbsd.org",      # a fragment of an Outlook safelink
+    "tcsme%64ia@tcswv.org",
+])
+def test_url_encoded_addresses_are_rejected(addr):
+    """A percent-escape that survived into an address means it was lifted from
+    a URL and never decoded. It cannot deliver, and decoding it back would be
+    inventing a recipient."""
+    assert emails.rejection_reason(addr) == "url_encoded"
+
+
+def test_a_normal_address_with_a_percent_is_not_caught():
+    assert emails.is_sendable("box%office@theatre.org")
+
+
+# --- the purge: deleting by contact, not by organization ----------------------
+
+def test_purge_retires_every_org_behind_a_shared_inbox(monkeypatch):
+    """2,958 organizations sit on 2,368 inboxes. Deleting a contact must retire
+    all of its organizations -- a stale ledger row would make the next run
+    believe the contact still exists."""
+    import purge_ghl, state as state_mod
+    cache = {"a": {"email": "shared@t.org"}, "b": {"email": "shared@t.org"},
+             "c": {"email": "keep@t.org"}}
+    ledger = {"a": {"contact_id": "c-1"}, "b": {"contact_id": "c-1"},
+              "c": {"contact_id": "c-2"}}
+    monkeypatch.setattr(state_mod, "load_org_cache", lambda: cache)
+    monkeypatch.setattr(state_mod, "load_opportunities", lambda: ledger)
+
+    doomed, kept = purge_ghl.plan({"keep@t.org"})
+    assert list(doomed) == ["c-1"], "one contact, not two organizations"
+    assert sorted(doomed["c-1"]["orgs"]) == ["a", "b"]
+    assert list(kept) == ["c-2"]
+
+
+def test_purge_keeps_an_address_on_the_verified_list(monkeypatch):
+    import purge_ghl, state as state_mod
+    monkeypatch.setattr(state_mod, "load_org_cache",
+                        lambda: {"a": {"email": "Info@T.org"}})
+    monkeypatch.setattr(state_mod, "load_opportunities",
+                        lambda: {"a": {"contact_id": "c-1"}})
+    # Case differs between the export and the cache; both normalize the same.
+    doomed, kept = purge_ghl.plan({"info@t.org"})
+    assert not doomed and list(kept) == ["c-1"]
+
+
+def test_purge_reads_the_real_verified_csv():
+    import purge_ghl
+    keep = purge_ghl.verified_addresses("data/verified_emails.csv")
+    assert len(keep) == 1598
+    assert all("@" in a and a == a.strip().lower() for a in keep)

@@ -1,5 +1,6 @@
 {
   "apply": false,
   "inspect": "",
-  "note": "idle. set inspect to a contact email to dump field definitions and read that contact back"
+  "purge": "dry",
+  "note": "purge DRY RUN: report the 770 to delete and write the full contact backup. Deletes nothing."
 }

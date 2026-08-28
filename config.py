@@ -16,6 +16,10 @@ SEEN_PATH = STATE_DIR / "seen.json"
 ORG_CACHE_PATH = STATE_DIR / "org_cache.json"
 OUTREACH_PATH = STATE_DIR / "outreach.json"
 OPPORTUNITIES_PATH = STATE_DIR / "opportunities.json"
+# Addresses deleted from GHL as unverified. Kept out of every future run: the
+# daily ingest re-creates anything missing from the ledger, so a delete without
+# a suppression list undoes itself the next morning.
+SUPPRESSED_PATH = STATE_DIR / "suppressed.json"
 
 # --- Scope -----------------------------------------------------------------
 # US + Canada. MTI accepts a `country` param but silently ignores it, so this
