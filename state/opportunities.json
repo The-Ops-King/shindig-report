@@ -254,12 +254,14 @@
 },
 "adirondack lakes center for arts|blue mountain lake|NY": {
 "contact_id": "gXI7S83VukU1MwI2PFps",
+"last_armed": "",
 "opportunity_id": "",
 "org_name": "Adirondack Lakes Center For The Arts",
 "ready": false,
-"show_key": "mti:211647",
-"show_title": "The Last Five Years",
-"updated": "2026-08-21"
+"show_key": "",
+"show_title": "",
+"updated": "2026-08-30",
+"verified": true
 },
 "admiral theatre|bremerton|WA": {
 "contact_id": "J4rkrqdFW6rdp6AOFXK7",
@@ -4073,6 +4075,17 @@
 "show_title": "Seven Brides For Seven Brothers",
 "updated": "2026-08-21"
 },
+"cunneen hackett arts studio|poughkeepsie|NY": {
+"contact_id": "IfZa4ktoFz1L0qQXy1Ro",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Cunneen Hackett Arts Studio",
+"ready": false,
+"show_key": "concord:03e729132d841709",
+"show_title": "A Chorus Line: Teen Edition",
+"updated": "2026-08-30",
+"verified": false
+},
 "curators of university of missouri|columbia|MO": {
 "contact_id": "JtGDQufwbV0lPXp0R6VF",
 "opportunity_id": "",
@@ -5898,6 +5911,17 @@
 "show_title": "Come From Away",
 "updated": "2026-08-21"
 },
+"gaston school of arts playhouse|gastonia|NC": {
+"contact_id": "R488R3RSgROnogDVTGUH",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Gaston School of the Arts Playhouse",
+"ready": false,
+"show_key": "concord:8f1b55b07216f98d",
+"show_title": "The Secret Garden (Duffield)",
+"updated": "2026-08-30",
+"verified": true
+},
 "gaston school of arts|gastonia|NC": {
 "contact_id": "R488R3RSgROnogDVTGUH",
 "opportunity_id": "",
@@ -7422,12 +7446,14 @@
 },
 "john c dean community theater|beecher|IL": {
 "contact_id": "HxybfGBcoyhvG5fzVVYR",
+"last_armed": "",
 "opportunity_id": "",
 "org_name": "John C Dean Community theater",
 "ready": false,
-"show_key": "concord:4a3c50e54d3b8a48",
-"show_title": "Marian, or The True Tale of Robin Hood",
-"updated": "2026-08-21"
+"show_key": "concord:b68851e4b42c7dd0",
+"show_title": "Emma! A Pop Musical",
+"updated": "2026-08-30",
+"verified": true
 },
 "john carroll school|bel air|MD": {
 "contact_id": "1pSdSXBR3T2dz0pI92hB",
@@ -16650,12 +16676,14 @@
 },
 "univ of pennsylvania student activities|philadelphia|PA": {
 "contact_id": "zZPrzv0kAvy2Gdh1f5aX",
+"last_armed": "",
 "opportunity_id": "",
 "org_name": "Univ Of Pennsylvania - Student Activities",
 "ready": false,
-"show_key": "mti:212696",
-"show_title": "Songs For A New World",
-"updated": "2026-08-21"
+"show_key": "mti:217859",
+"show_title": "Sweeney Todd",
+"updated": "2026-08-30",
+"verified": true
 },
 "univ of pittsburgh|pittsburgh|PA": {
 "contact_id": "FWBPoR42bq1fyqAAWP1W",
