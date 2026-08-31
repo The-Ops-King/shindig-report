@@ -1167,3 +1167,121 @@ def test_the_seeded_cache_matches_the_verified_export():
     seeded = json.load(open("state/verified.json"))
     assert len(seeded) == 1598
     assert all(v["status"] == "deliverable" for v in seeded.values())
+
+
+# --- verify before ingest ----------------------------------------------------
+
+class FakeVerifalia:
+    """Records what was submitted and answers with a fixed verdict map."""
+    def __init__(self, answers=None, boom=False):
+        self.answers, self.boom, self.submitted = answers or {}, boom, []
+
+    def configured(self):
+        return True
+
+    def verify(self, addresses):
+        if self.boom:
+            raise RuntimeError("verifalia is down")
+        self.submitted.append(list(addresses))
+        return {a: self.answers[a] for a in addresses if a in self.answers}
+
+
+def _gate(monkeypatch, tmp_path, cands, answers=None, in_ghl=(), boom=False):
+    """Run main.gate_on_verification with GHL and Verifalia stubbed."""
+    import main, verifalia
+    fake_v = FakeVerifalia(answers, boom)
+    monkeypatch.setattr(verifalia, "Verifalia", lambda *a, **k: fake_v)
+    monkeypatch.setattr(config, "VERIFIED_PATH", tmp_path / "verified.json")
+    monkeypatch.setattr(config, "SUPPRESSED_PATH", tmp_path / "suppressed.json")
+    monkeypatch.setattr(emails, "_verified", {})
+    monkeypatch.setattr(emails, "_suppressed", set())
+    monkeypatch.setattr(emails, "is_verified",
+                        lambda a: emails._verified.get(a, {})
+                        .get("status", "") == "deliverable")
+
+    class FakeClient:
+        def find_by_email(self, address):
+            return "existing-1" if address in in_ghl else ""
+    allowed, stats = main.gate_on_verification(cands, FakeClient(), TODAY)
+    return allowed, stats, fake_v
+
+
+def _cand(addr, org="T"):
+    p = prod(f"mti:{abs(hash(addr)) % 999}", org, IN_WINDOW)
+    return outreach.Candidate(address=addr, org_key=p.org_key,
+                              org_name=org, production=p, action="hold")
+
+
+def test_only_deliverable_addresses_reach_ghl(monkeypatch, tmp_path):
+    """The whole point of the reordering: an address that bounces never
+    becomes a contact, rather than becoming one and being deleted later."""
+    cands = [_cand("good@t.org"), _cand("bad@t.org"), _cand("risky@t.org")]
+    allowed, stats, _ = _gate(monkeypatch, tmp_path, cands, answers={
+        "good@t.org": "Deliverable",
+        "bad@t.org": "Undeliverable",
+        "risky@t.org": "Risky",
+    })
+    assert [c.address for c in allowed] == ["good@t.org"]
+    assert stats["held_back"] == 2
+
+
+def test_undeliverable_is_suppressed_but_risky_is_not(monkeypatch, tmp_path):
+    """Suppressing Risky throws away reachable leads; creating it risks the
+    domain. It stays cached and undecided."""
+    cands = [_cand("bad@t.org"), _cand("risky@t.org")]
+    _gate(monkeypatch, tmp_path, cands, answers={
+        "bad@t.org": "Undeliverable", "risky@t.org": "Risky"})
+    assert "bad@t.org" in emails._suppressed
+    assert "risky@t.org" not in emails._suppressed
+    assert emails._verified["risky@t.org"]["status"] == "risky"
+
+
+def test_addresses_are_deduped_before_being_paid_for(monkeypatch, tmp_path):
+    """Organizations share inboxes, so verifying per organization would pay
+    several times for one address."""
+    cands = [_cand("shared@t.org", "A"), _cand("shared@t.org", "B"),
+             _cand("shared@t.org", "C")]
+    _, stats, fake = _gate(monkeypatch, tmp_path, cands,
+                           answers={"shared@t.org": "Deliverable"})
+    assert fake.submitted == [["shared@t.org"]]
+    assert stats["sent_to_verifalia"] == 1
+
+
+def test_an_address_already_in_ghl_is_adopted_not_verified(monkeypatch, tmp_path):
+    """The ledger only knows contacts we made; intake forms made others.
+    Paying to verify one that is already a contact buys nothing."""
+    cands = [_cand("existing@t.org")]
+    allowed, stats, fake = _gate(monkeypatch, tmp_path, cands,
+                                 in_ghl={"existing@t.org"})
+    assert fake.submitted == [], "never sent for verification"
+    assert stats["already_in_ghl"] == 1
+    assert [c.address for c in allowed] == ["existing@t.org"]
+
+
+def test_a_verifalia_outage_creates_nobody(monkeypatch, tmp_path):
+    """Fails closed. A broken integration must under-create, never flood the
+    CRM with addresses that bounce."""
+    cands = [_cand("a@t.org"), _cand("b@t.org")]
+    allowed, stats, _ = _gate(monkeypatch, tmp_path, cands, boom=True)
+    assert allowed == []
+    assert stats["held_back"] == 2
+
+
+def test_an_already_verified_address_is_not_resubmitted(monkeypatch, tmp_path):
+    """state/verified.json is permanent: an address is paid for once."""
+    import main, verifalia
+    fake_v = FakeVerifalia({})
+    monkeypatch.setattr(verifalia, "Verifalia", lambda *a, **k: fake_v)
+    monkeypatch.setattr(emails, "_verified",
+                        {"known@t.org": {"status": "deliverable"}})
+    monkeypatch.setattr(emails, "is_verified",
+                        lambda a: a == "known@t.org")
+
+    class FakeClient:
+        def find_by_email(self, address):
+            return ""
+    allowed, stats = main.gate_on_verification(
+        [_cand("known@t.org")], FakeClient(), TODAY)
+    assert fake_v.submitted == []
+    assert stats["sent_to_verifalia"] == 0
+    assert len(allowed) == 1

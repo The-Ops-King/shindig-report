@@ -146,6 +146,64 @@ def title_counts(productions, today) -> dict:
     return counts
 
 
+def gate_on_verification(batch, client, today):
+    """Let through only addresses that can actually receive mail.
+
+    Runs before anything is created, which is the whole point: an address that
+    bounces never becomes a contact, rather than becoming one and being deleted
+    three weeks later. Three steps, cheapest first.
+
+    1. Collapse to distinct addresses. Organizations share inboxes, so
+       verifying per organization would pay several times for one address.
+    2. Ask GHL whether it already holds each one. The ingest ledger only knows
+       contacts this pipeline made; intake forms and imports made others. An
+       address already in GHL is adopted rather than re-created, and is not
+       sent for verification -- it is already a contact, and paying to verify
+       it would buy nothing.
+    3. Verify what is genuinely new.
+
+    Returns (allowed, stats). Anything without a deliverable verdict is held
+    back, so a Verifalia outage creates nobody rather than creating everybody.
+    """
+    import emails as email_mod
+    from verifalia import Verifalia
+
+    unknown = sorted({c.address for c in batch
+                      if c.address and not email_mod.is_verified(c.address)})
+    stats = {"unverified_seen": len(unknown)}
+    adopted, queue = {}, []
+    for address in unknown:
+        contact_id = client.find_by_email(address)
+        if contact_id:
+            adopted[address] = contact_id
+        else:
+            queue.append(address)
+    stats["already_in_ghl"] = len(adopted)
+    stats["sent_to_verifalia"] = len(queue)
+
+    verifier = Verifalia()
+    if queue and not verifier.configured():
+        log.warning("VERIFALIA_USERNAME/PASSWORD not set: %d new addresses "
+                    "held back rather than created unverified", len(queue))
+    elif queue:
+        try:
+            results = verifier.verify(queue)
+        except Exception as exc:            # fail closed: create nobody
+            log.error("verifalia failed (%s); holding back %d addresses",
+                      exc, len(queue))
+            results = {}
+        stats["verdicts"] = email_mod.record_verdicts(results, today)
+        log.info("verification: %s", stats.get("verdicts") or "no verdicts")
+
+    allowed = [c for c in batch
+               if email_mod.is_verified(c.address) or c.address in adopted]
+    stats["held_back"] = len(batch) - len(allowed)
+    if stats["held_back"]:
+        log.info("ingest: %d organizations held back pending a verdict",
+                 stats["held_back"])
+    return allowed, stats
+
+
 def date_quality(productions) -> dict:
     """Per source, how many rows publish no usable performance date.
 
@@ -260,6 +318,9 @@ def run_outreach(productions, registry, book, today, args):
         # Stopping on the clock instead means whatever was written is kept.
         deadline = time.time() + config.OUTREACH_INGEST_MAX_SECONDS
         batch = todo[:cap] if cap else todo
+        if not dry:
+            batch, gate = gate_on_verification(batch, client, today)
+            stats.update(gate)
         for i, cand in enumerate(batch):
             if dry:
                 rows.append(sheets.outreach_row(cand, today, "DRY RUN"))

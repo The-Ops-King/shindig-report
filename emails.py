@@ -53,6 +53,39 @@ def verdicts() -> dict:
     return _verified
 
 
+def record_verdicts(results: dict, today) -> dict:
+    """Persist Verifalia's answers, and suppress what cannot be delivered.
+
+    Returns a count per classification for the run log. Undeliverable is added
+    to the suppression list here rather than at the call site, so there is one
+    place where "this address bounces" turns into "never touch it again".
+    """
+    if not results:
+        return {}
+    verdicts()                                  # ensure the cache is loaded
+    counts = {}
+    bad = set(suppressed())
+    for address, classification in results.items():
+        addr = normalize(address)
+        _verified[addr] = {"status": classification.lower(),
+                           "source": "verifalia",
+                           "checked": today.isoformat()}
+        counts[classification] = counts.get(classification, 0) + 1
+        if classification.lower() == "undeliverable":
+            bad.add(addr)
+
+    config.VERIFIED_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with open(config.VERIFIED_PATH, "w", encoding="utf-8") as fh:
+        json.dump(_verified, fh, indent=0, sort_keys=True)
+        fh.write("\n")
+    if bad != set(suppressed()):
+        with open(config.SUPPRESSED_PATH, "w", encoding="utf-8") as fh:
+            json.dump(sorted(bad), fh, indent=0)
+            fh.write("\n")
+        _suppressed.update(bad)
+    return counts
+
+
 def is_verified(address: str) -> bool:
     """Whether this address has a positive deliverability verdict.
 
@@ -61,7 +94,7 @@ def is_verified(address: str) -> bool:
     evidence is what cost 770 contacts.
     """
     return (verdicts().get(normalize(address), {})
-            .get("status", "") == "deliverable")
+            .get("status", "").lower() == "deliverable")
 
 
 def suppressed() -> set:

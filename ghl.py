@@ -210,6 +210,30 @@ class GHLClient:
         cand.has_outreach_tag = self._carries_outreach_tag(contact_id, contact)
         return contact_id
 
+    def find_by_email(self, address: str) -> str:
+        """The GHL contact id for this address, or "" if there is none.
+
+        The ingest ledger only knows contacts this pipeline created. Contacts
+        made any other way -- intake forms, imports, by hand -- are invisible
+        to it, so an address can be "new" to us and already present in GHL.
+        Creating it again would duplicate a person and pay to verify an address
+        that needed no verification.
+
+        Fails closed the other way from verification: an error answers "not
+        found", so a lookup failure risks a duplicate rather than losing a
+        contact. Duplicates are recoverable; a dropped lead is not.
+        """
+        try:
+            data = self._request(
+                "GET", f"/contacts/search/duplicate"
+                       f"?locationId={self.location_id}&email={address}",
+                retries=1,
+            )
+        except GHLError as exc:
+            log.debug("duplicate lookup failed for %s: %s", address, exc)
+            return ""
+        return ((data.get("contact") or {}).get("id")) or ""
+
     def _carries_outreach_tag(self, contact_id: str, contact: dict) -> bool:
         """Whether this contact is already in the sequence.
 

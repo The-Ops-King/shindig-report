@@ -198,6 +198,39 @@ setup` workflow by putting an email in the `inspect` field of
 
 ### Email verification
 
+**Order matters: verify, then create.** An address that cannot receive mail
+never becomes a GHL contact at all. The reverse order is what made 770
+deletions necessary in August.
+
+Each daily run, before anything is written:
+
+1. **Collapse to distinct addresses.** Organizations share inboxes, so
+   verifying per organization would pay several times for one address.
+2. **Ask GHL whether it already holds it** (`/contacts/search/duplicate`). The
+   ingest ledger only knows contacts this pipeline made; intake forms and
+   imports made others. An address already in GHL is adopted into the ledger,
+   not re-created, and not sent for verification — it is already a contact.
+3. **Verify the rest** through Verifalia, and cache the verdict forever.
+
+| Verifalia says | What happens |
+|---|---|
+| **Deliverable** | Contact created, tagged, fields and card written |
+| **Undeliverable** | Cached and added to `state/suppressed.json`. Never created, never retried |
+| **Risky / Unknown** | Cached. Not created, not suppressed — left undecided |
+
+Risky is deliberately neither: suppressing it throws away reachable leads,
+creating it risks the domain.
+
+**It fails closed.** A Verifalia outage, a timeout, missing credentials, or an
+unrecognised classification all mean "not deliverable", so a broken integration
+creates too few contacts rather than flooding the CRM with addresses that
+bounce. `python verifalia.py --probe <address>` submits one address and dumps
+the raw response, for checking the parser against what the API actually returns
+rather than what it was expected to return.
+
+Needs `VERIFALIA_USERNAME` and `VERIFALIA_PASSWORD` as repo secrets.
+
+
 Bounces are what destroy a cold sending domain, so an address has to be checked
 before anything is sent to it. `state/verified.json` holds the verdicts, keyed
 by address and cached forever — an address is checked once and never paid for

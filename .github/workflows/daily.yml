@@ -116,6 +116,11 @@ jobs:
           # run request asks for. Set it in Settings -> Variables when you are
           # ready to start sending.
           OUTREACH_ENABLED: ${{ vars.OUTREACH_ENABLED }}
+          # Deliverability is checked before a contact is created. Without
+          # these, genuinely new addresses are held back rather than created
+          # unverified -- the run fails closed.
+          VERIFALIA_USERNAME: ${{ secrets.VERIFALIA_USERNAME }}
+          VERIFALIA_PASSWORD: ${{ secrets.VERIFALIA_PASSWORD }}
           # Passed through the environment rather than interpolated into the
           # script, so a value can never be spliced into the shell command.
           DRY_RUN: ${{ steps.params.outputs.dry_run }}

@@ -187,6 +187,19 @@ GHL_READY_TAG = "shindig-ready"
 # Removed automatically once a verdict arrives.
 GHL_UNVERIFIED_TAG = "unverified-email"
 
+# --- Verifalia -------------------------------------------------------------
+# Deliverability is checked before a contact is created, so only addresses that
+# can actually receive mail become contacts. Verifalia authenticates with a
+# credential pair rather than a single token.
+VERIFALIA_USERNAME = os.environ.get("VERIFALIA_USERNAME", "")
+VERIFALIA_PASSWORD = os.environ.get("VERIFALIA_PASSWORD", "")
+VERIFALIA_TIMEOUT = 30
+# A validation job is asynchronous. Poll within the run, but bounded: an
+# address left unresolved is simply queued again tomorrow, which is far cheaper
+# than a daily job that hangs.
+VERIFALIA_POLL_SECONDS = 180
+VERIFALIA_POLL_INTERVAL = 5
+
 # When a company's show rolls over -- Little Mermaid closes, Shrek is next --
 # put them back through the sequence with the new show's link. Only ever fires
 # for a contact that ALREADY carries the outreach tag, so it can continue a
