@@ -31,6 +31,11 @@ _ADDR = re.compile(r"^[^@\s]+@[^@\s]+\.[A-Za-z]{2,}$")
 # rejected outright rather than guessed at: decoding one back to a plausible
 # address would be inventing a recipient.
 _URL_ESCAPE = re.compile(r"%[0-9a-fA-F]{2}")
+# Pages that hide an address from scrapers often print it masked --
+# "co*************@**************my.org". The real address is not recoverable
+# from that, so it is rejected outright rather than sent for verification,
+# where it would spend a credit to come back undeliverable.
+_MASKED = re.compile(r"[*\u2022]")
 
 _suppressed: set | None = None
 _verified: dict | None = None
@@ -115,8 +120,18 @@ def suppressed() -> set:
 
 
 def normalize(address: str) -> str:
-    """Lowercase and trim. This is the key everything is deduped on."""
-    return (address or "").strip().lower()
+    """Lowercase, trim, and drop a "mailto:" prefix.
+
+    This is the key everything is deduped on, so the prefix has to come off
+    here rather than at the point of rejection -- otherwise the same inbox
+    appears twice, once wearing the scheme and once without it. Unlike a
+    percent-escape, "mailto:x@y" is not a guess: the scheme unambiguously
+    names x@y, so stripping it invents no recipient.
+    """
+    addr = (address or "").strip().lower()
+    while addr.startswith("mailto:"):
+        addr = addr[len("mailto:"):].strip()
+    return addr
 
 
 def split(address: str) -> tuple[str, str]:
@@ -140,6 +155,8 @@ def rejection_reason(address: str) -> str:
         return "malformed"
     if _URL_ESCAPE.search(addr):
         return "url_encoded"
+    if _MASKED.search(addr):
+        return "masked"
     if addr in suppressed():
         return "suppressed"
 

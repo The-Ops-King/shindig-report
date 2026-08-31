@@ -1043,6 +1043,42 @@ def test_a_normal_address_with_a_percent_is_not_caught():
     assert emails.is_sendable("box%office@theatre.org")
 
 
+@pytest.mark.parametrize("addr", [
+    "co*************@**************my.org",   # masked on the page it came from
+    "info@theatre.org",                       # not masked -- sanity anchor
+])
+def test_masked_addresses_are_rejected(addr):
+    """A page that hides its address behind asterisks has not given us one.
+    Sending it for verification would spend a credit to be told what the
+    asterisks already said."""
+    expected = "masked" if "*" in addr else ""
+    assert emails.rejection_reason(addr) == expected
+
+
+def test_a_bulleted_mask_is_caught_too():
+    assert emails.rejection_reason("in\u2022\u2022@theatre.org") == "masked"
+
+
+def test_mailto_prefix_is_stripped_rather_than_rejected():
+    """"mailto:x@y" unambiguously names x@y, so the address is recovered.
+    Before this, the prefix rode through _ADDR into the verification queue."""
+    assert emails.normalize("mailto:hebinger@commack.k12.ny.us") == \
+        "hebinger@commack.k12.ny.us"
+    assert emails.is_sendable("MailTo:Hebinger@commack.k12.ny.us")
+
+
+def test_the_prefixed_and_bare_forms_dedupe_onto_one_address():
+    """normalize() is the dedupe key, so stripping has to happen there --
+    otherwise one inbox is verified twice and becomes two contacts."""
+    assert emails.normalize("mailto:a@t.org") == emails.normalize("a@t.org")
+
+
+def test_a_suppressed_address_stays_suppressed_when_it_arrives_prefixed(
+        suppress):
+    suppress(["a@t.org"])
+    assert emails.rejection_reason("mailto:a@t.org") == "suppressed"
+
+
 # --- the purge: deleting by contact, not by organization ----------------------
 
 def test_purge_retires_every_org_behind_a_shared_inbox(monkeypatch):
