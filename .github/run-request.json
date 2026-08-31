@@ -4,5 +4,5 @@
   "dry_run": false,
   "outreach": "ingest",
   "outreach_limit": 0,
-  "note": "back to ingest after the brake test: contacts and tags into GHL, no outreach"
+  "note": "first live verification pass: 32 addresses have no verdict yet. The gate checks each against GHL first, then sends what is genuinely new to Verifalia. Only Deliverable becomes a contact -- Risky (catch-all) is cached and held back, because with no separate sending domain a bounce costs the reputation of the domain carrying real business email. Watch the verdict split."
 }
