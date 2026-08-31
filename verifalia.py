@@ -24,6 +24,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import os
 import sys
 import time
 
@@ -129,32 +130,71 @@ class Verifalia:
         return out
 
 
-def probe(address: str) -> int:
-    """Submit one address and print the raw response, creating nothing.
+def _say(line: str) -> None:
+    """Print, and also write to the Actions run summary.
 
-    The point is to read the real shape before trusting a parser against it.
+    Actions collapses step logs, so a diagnostic nobody expands is a
+    diagnostic nobody reads -- the same lesson as the GHL setup report.
+    """
+    print(line)
+    path = os.environ.get("GITHUB_STEP_SUMMARY")
+    if path:
+        with open(path, "a", encoding="utf-8") as fh:
+            fh.write(line + "\n")
+
+
+def probe(addresses: list[str]) -> int:
+    """Submit addresses and print the raw response, creating nothing.
+
+    The point is to read the real shape before trusting a parser against it,
+    which is why the raw JSON is printed alongside the parsed result: if the
+    two disagree, that is visible here rather than as an empty merge tag in a
+    live email weeks later.
     """
     logging.basicConfig(level=logging.INFO, format="%(message)s")
     client = Verifalia()
     if not client.configured():
         log.error("need VERIFALIA_USERNAME and VERIFALIA_PASSWORD")
         return 1
-    payload = client.submit([address])
-    print("=== submit response ===")
-    print(json.dumps(payload, indent=2)[:4000])
+
+    _say("## Verifalia probe\n")
+    _say("submitting: " + ", ".join(addresses) + "\n")
+    _say("```")
+    try:
+        payload = client.submit(addresses)
+    except VerifaliaError as exc:
+        _say(f"SUBMIT FAILED: {exc}")
+        _say("```")
+        return 1
+    _say("=== submit response ===")
+    _say(json.dumps(payload, indent=2)[:3000])
+
     job = (payload.get("overview") or {}).get("id", "")
-    if job and not Verifalia._done(payload):
+    deadline = time.time() + config.VERIFALIA_POLL_SECONDS
+    while job and not Verifalia._done(payload) and time.time() < deadline:
         time.sleep(config.VERIFALIA_POLL_INTERVAL)
         payload = client.collect(job)
-        print("\n=== after polling ===")
-        print(json.dumps(payload, indent=2)[:4000])
-    print("\n=== what the parser makes of it ===")
-    print(json.dumps(client.verify([address]) if Verifalia._done(payload)
-                     else {"(job not finished)": ""}, indent=2))
+    _say("")
+    _say("=== after polling ===")
+    _say(json.dumps(payload, indent=2)[:6000])
+
+    _say("")
+    _say("=== what the parser makes of it ===")
+    parsed = {}
+    for entry in Verifalia._entries(payload):
+        addr = (entry.get("inputData") or "").strip().lower()
+        parsed[addr] = entry.get("classification") or "(no classification)"
+    _say(json.dumps(parsed, indent=2) if parsed
+         else "NOTHING PARSED -- _entries() does not match this envelope")
+    _say("")
+    _say(f"job complete: {Verifalia._done(payload)}")
+    _say("```")
     return 0
 
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("--probe", metavar="EMAIL", required=True)
-    sys.exit(probe(ap.parse_args().probe))
+    ap.add_argument("--probe", metavar="EMAILS", required=True,
+                    help="comma-separated addresses")
+    args = ap.parse_args()
+    sys.exit(probe([a.strip() for a in args.probe.split(",") if a.strip()]))

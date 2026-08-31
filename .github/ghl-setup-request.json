@@ -1,6 +1,7 @@
 {
   "apply": false,
-  "inspect": "boxoffice@anoisewithin.org",
+  "inspect": "",
   "purge": "",
-  "note": "verify the purge: this address was deleted, GHL should now return no contact"
+  "probe": "160-dismissalfoe@fultonschools.org,info@newberncivictheatre.org,no-such-mailbox-8f3k2q@shindig-nonexistent-domain-test.com",
+  "note": "read-only Verifalia probe: one known-good, one from the backlog, one that must come back Undeliverable"
 }

@@ -40,19 +40,27 @@ jobs:
         env:
           GHL_API_KEY: ${{ secrets.GHL_API_KEY }}
           GHL_LOCATION_ID: ${{ secrets.GHL_LOCATION_ID }}
+          VERIFALIA_USERNAME: ${{ secrets.VERIFALIA_USERNAME }}
+          VERIFALIA_PASSWORD: ${{ secrets.VERIFALIA_PASSWORD }}
           INPUT_APPLY: ${{ inputs.apply }}
         run: |
           APPLY="${INPUT_APPLY:-false}"
           INSPECT=""
           PURGE=""
+          PROBE=""
           if [ "${GITHUB_EVENT_NAME}" = "push" ] && [ -f .github/ghl-setup-request.json ]; then
             APPLY=$(jq -r '.apply // false' .github/ghl-setup-request.json)
             INSPECT=$(jq -r '.inspect // ""' .github/ghl-setup-request.json)
             PURGE=$(jq -r '.purge // ""' .github/ghl-setup-request.json)
+            PROBE=$(jq -r '.probe // ""' .github/ghl-setup-request.json)
           fi
           # Inspect wins over apply: it is a read-only diagnostic and should
           # never be able to create anything as a side effect.
-          if [ "${PURGE}" = "dry" ]; then
+          # Probe first: it is read-only, writes nothing to state/, and a
+          # diagnostic must never be able to delete or create as a side effect.
+          if [ -n "${PROBE}" ]; then
+            python verifalia.py --probe "${PROBE}"
+          elif [ "${PURGE}" = "dry" ]; then
             # Reports and writes the backup. Deletes nothing.
             python purge_ghl.py
           elif [ "${PURGE}" = "apply" ]; then
