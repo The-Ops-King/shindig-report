@@ -3578,6 +3578,17 @@
 "show_title": "Beetlejuice Jr.",
 "updated": "2026-08-21"
 },
+"commack middle school|commack|NY": {
+"contact_id": "ESCEQ9EhUi2VXW7BGVYZ",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Commack Middle School",
+"ready": false,
+"show_key": "mti:223259",
+"show_title": "Seussical Jr.",
+"updated": "2026-08-31",
+"verified": true
+},
 "commerce street theater|lynchburg|VA": {
 "contact_id": "GjeUtJck0AEtZCRcHWPP",
 "opportunity_id": "",
@@ -15545,12 +15556,14 @@
 },
 "studio tenn|franklin|TN": {
 "contact_id": "LsT1oCaIUo9BeyYhhRCR",
+"last_armed": "",
 "opportunity_id": "",
 "org_name": "Studio Tenn",
 "ready": false,
-"show_key": "trw:552718f2d20e4aa5",
-"show_title": "Ring of Fire: Small Cast Edition",
-"updated": "2026-08-21"
+"show_key": "trw:5547fe8892ed7c19",
+"show_title": "The Addams Family Musical",
+"updated": "2026-08-31",
+"verified": true
 },
 "studio theater|kansas city|MO": {
 "contact_id": "5VpY5mgrnDnoRVEf4JWy",
