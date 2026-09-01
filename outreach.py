@@ -79,6 +79,16 @@ class Candidate:
         """
         return self.action in ("send", "rollover", "hold")
 
+    @property
+    def verified(self) -> bool:
+        """Whether the address currently carries a deliverable verdict.
+
+        Read live rather than stored, because the backfill can resolve an
+        address part-way through a run and the ledger comparison in
+        needs_ingest() has to see the new answer, not the one from build time.
+        """
+        return emails.is_verified(self.address)
+
 
 def true_next_show(productions: list, today: date):
     """Soonest upcoming production, regardless of the outreach window.
@@ -351,7 +361,12 @@ def needs_ingest(cand: Candidate, opportunities: dict,
         return True
     show_key = cand.production.key if cand.production else ""
     cand.show_changed = record.get("show_key") != show_key
-    return cand.show_changed or bool(record.get("ready")) != cand.ready
+    # A verdict arriving is a change GHL has to be told about: sync_verified_tag
+    # only runs on a push, so without this the unverified-email tag stays on a
+    # contact forever after the address has been checked.
+    return (cand.show_changed
+            or bool(record.get("ready")) != cand.ready
+            or bool(record.get("verified")) != cand.verified)
 
 
 def record_opportunity(opportunities: dict, cand: Candidate, today: date) -> None:
@@ -373,7 +388,7 @@ def record_opportunity(opportunities: dict, cand: Candidate, today: date) -> Non
         "show_key": cand.production.key if cand.production else "",
         "show_title": cand.production.show_title if cand.production else "",
         "ready": cand.ready,
-        "verified": emails.is_verified(cand.address),
+        "verified": cand.verified,
         # Preserved across rollovers: this is what the 45-day floor measures
         # from, so it must survive a record being rewritten every time a show
         # changes.

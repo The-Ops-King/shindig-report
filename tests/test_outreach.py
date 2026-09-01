@@ -1198,9 +1198,16 @@ def test_the_tag_removal_is_not_repeated_every_run(verdicts):
 
 def test_the_seeded_cache_matches_the_verified_export():
     """The 1,598 that already passed are seeded, so connecting the API later
-    does not pay to re-check them."""
+    does not pay to re-check them.
+
+    Pinned on the seed rather than on the file, which is a live cache now --
+    every verdict the pipeline earns is appended to it, so asserting its total
+    would fail on the next real verification for no useful reason.
+    """
     import json
-    seeded = json.load(open("state/verified.json"))
+    cache = json.load(open("state/verified.json"))
+    seeded = {a: v for a, v in cache.items()
+              if v.get("source") == "verifalia-export"}
     assert len(seeded) == 1598
     assert all(v["status"] == "deliverable" for v in seeded.values())
 
@@ -1301,6 +1308,112 @@ def test_a_verifalia_outage_creates_nobody(monkeypatch, tmp_path):
     allowed, stats, _ = _gate(monkeypatch, tmp_path, cands, boom=True)
     assert allowed == []
     assert stats["held_back"] == 2
+
+
+# --- the backfill: verdicts for addresses the ingest gate cannot reach --------
+
+def _backfill(monkeypatch, tmp_path, cands, answers=None, in_ghl=(), cap=None):
+    """Run main.backfill_verdicts with GHL and Verifalia stubbed."""
+    import main, verifalia
+    fake_v = FakeVerifalia(answers)
+    monkeypatch.setattr(verifalia, "Verifalia", lambda *a, **k: fake_v)
+    monkeypatch.setattr(config, "VERIFIED_PATH", tmp_path / "verified.json")
+    monkeypatch.setattr(config, "SUPPRESSED_PATH", tmp_path / "suppressed.json")
+    monkeypatch.setattr(emails, "_verified", {})
+    monkeypatch.setattr(emails, "_suppressed", set())
+    monkeypatch.setattr(emails, "is_verified",
+                        lambda a: emails._verified.get(a, {})
+                        .get("status", "") == "deliverable")
+    if cap is not None:
+        monkeypatch.setattr(config, "VERIFY_BACKFILL_CAP", cap)
+
+    class FakeClient:
+        def find_by_email(self, address):
+            return "existing-1" if address in in_ghl else ""
+    stats = main.backfill_verdicts(cands, FakeClient(), TODAY)
+    return stats, fake_v
+
+
+def test_the_backfill_verifies_an_address_that_is_already_a_contact(
+        monkeypatch, tmp_path):
+    """The one thing that separates the backfill from the ingest gate. Being a
+    GHL contact is a reason not to create someone; it says nothing about
+    whether mail reaches them. Adopting here would scan nobody, since every
+    address in the backlog is already a contact."""
+    stats, fake = _backfill(monkeypatch, tmp_path, [_cand("existing@t.org")],
+                            answers={"existing@t.org": "Deliverable"},
+                            in_ghl={"existing@t.org"})
+    assert fake.submitted == [["existing@t.org"]]
+    assert stats["backfill_already_in_ghl"] == 0
+    assert emails.is_verified("existing@t.org")
+
+
+def test_the_backfill_is_capped(monkeypatch, tmp_path):
+    """Every address in the backlog is a paid verification, so a large backlog
+    must not turn into a surprise bill in one run."""
+    cands = [_cand(f"a{i}@t.org") for i in range(10)]
+    stats, fake = _backfill(monkeypatch, tmp_path, cands, cap=4)
+    assert len(fake.submitted[0]) == 4
+    assert stats["backfill_sent_to_verifalia"] == 4
+
+
+def test_the_backfill_skips_addresses_that_already_have_a_verdict(
+        monkeypatch, tmp_path):
+    cands = [_cand("known@t.org"), _cand("new@t.org")]
+    import main, verifalia
+    fake_v = FakeVerifalia({"new@t.org": "Deliverable"})
+    monkeypatch.setattr(verifalia, "Verifalia", lambda *a, **k: fake_v)
+    monkeypatch.setattr(config, "VERIFIED_PATH", tmp_path / "verified.json")
+    monkeypatch.setattr(config, "SUPPRESSED_PATH", tmp_path / "suppressed.json")
+    monkeypatch.setattr(emails, "_verified",
+                        {"known@t.org": {"status": "deliverable"}})
+    monkeypatch.setattr(emails, "_suppressed", set())
+    monkeypatch.setattr(emails, "is_verified",
+                        lambda a: emails._verified.get(a, {})
+                        .get("status", "") == "deliverable")
+
+    class FakeClient:
+        def find_by_email(self, address):
+            return ""
+    main.backfill_verdicts(cands, FakeClient(), TODAY)
+    assert fake_v.submitted == [["new@t.org"]]
+
+
+def test_an_empty_backlog_spends_nothing(monkeypatch, tmp_path):
+    """The steady state. Once everything carries a verdict the backfill must
+    cost nothing at all, or it becomes a daily bill for no information."""
+    import main, verifalia
+    fake_v = FakeVerifalia({})
+    monkeypatch.setattr(verifalia, "Verifalia", lambda *a, **k: fake_v)
+    monkeypatch.setattr(emails, "is_verified", lambda a: True)
+
+    class FakeClient:
+        def find_by_email(self, address):
+            raise AssertionError("must not ask GHL about a resolved address")
+    assert main.backfill_verdicts([_cand("a@t.org")], FakeClient(), TODAY) == {}
+    assert fake_v.submitted == []
+
+
+def test_a_newly_verified_contact_is_pushed_again_to_drop_its_tag(monkeypatch):
+    """sync_verified_tag only fires on a push, so without this the
+    unverified-email tag stays on a contact forever after it was checked."""
+    cand = _cand("a@t.org")
+    ledger = {cand.org_key: {"contact_id": "c1", "opportunity_id": "o1",
+                             "show_key": cand.production.key,
+                             "ready": cand.ready, "verified": False}}
+    monkeypatch.setattr(emails, "is_verified", lambda a: True)
+    assert outreach.needs_ingest(cand, ledger)
+
+
+def test_an_unchanged_verified_contact_is_left_alone(monkeypatch):
+    """The other half: once the ledger agrees, the re-push must stop rather
+    than rewriting every contact every morning."""
+    cand = _cand("a@t.org")
+    ledger = {cand.org_key: {"contact_id": "c1", "opportunity_id": "o1",
+                             "show_key": cand.production.key,
+                             "ready": cand.ready, "verified": True}}
+    monkeypatch.setattr(emails, "is_verified", lambda a: True)
+    assert not outreach.needs_ingest(cand, ledger)
 
 
 def test_an_already_verified_address_is_not_resubmitted(monkeypatch, tmp_path):

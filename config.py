@@ -221,6 +221,14 @@ OUTREACH_INGEST_CAP = 3000
 # the run finish, commit what it wrote, and resume next time.
 OUTREACH_INGEST_MAX_SECONDS = 1800
 
+# The ingest gate only ever sees organizations that need ingesting, so an
+# address on a contact whose show has not changed can sit without a verdict
+# indefinitely -- and an address with no verdict can never be emailed. The
+# backfill works that backlog down from the full candidate list. Capped
+# because every address in it is a paid verification: 250 bounds a run's
+# spend while clearing any realistic backlog in a few days.
+VERIFY_BACKFILL_CAP = 250
+
 # Custom fields the GHL workflow's merge tags read. Create these in GHL first.
 GHL_FIELDS = (
     "next_show_title", "next_show_start", "next_show_end",

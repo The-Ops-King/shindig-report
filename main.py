@@ -19,6 +19,7 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import date, datetime, timezone
 
 import config
+import emails
 import enrich as enrich_mod
 import geo
 import orgs as orgs_mod
@@ -146,34 +147,30 @@ def title_counts(productions, today) -> dict:
     return counts
 
 
-def gate_on_verification(batch, client, today):
-    """Let through only addresses that can actually receive mail.
+def resolve_verdicts(addresses, client, today, *, adopt):
+    """Get a deliverability verdict for each address, cheapest step first.
 
-    Runs before anything is created, which is the whole point: an address that
-    bounces never becomes a contact, rather than becoming one and being deleted
-    three weeks later. Three steps, cheapest first.
+    1. Collapse to distinct addresses. Organizations share inboxes, so asking
+       per organization would pay several times over for one address.
+    2. When `adopt`, ask GHL whether it already holds the address. That is a
+       reason not to *create* someone, so the ingest gate uses it to skip the
+       cost. It is not a statement about deliverability -- being a contact
+       says nothing about whether mail arrives -- so the backfill passes
+       adopt=False and asks Verifalia about contacts it already has.
+    3. Verify the rest.
 
-    1. Collapse to distinct addresses. Organizations share inboxes, so
-       verifying per organization would pay several times for one address.
-    2. Ask GHL whether it already holds each one. The ingest ledger only knows
-       contacts this pipeline made; intake forms and imports made others. An
-       address already in GHL is adopted rather than re-created, and is not
-       sent for verification -- it is already a contact, and paying to verify
-       it would buy nothing.
-    3. Verify what is genuinely new.
-
-    Returns (allowed, stats). Anything without a deliverable verdict is held
-    back, so a Verifalia outage creates nobody rather than creating everybody.
+    Returns (adopted, stats). Nothing is invented on failure: an outage
+    records no verdicts, and every caller reads "no verdict" as "not
+    sendable".
     """
-    import emails as email_mod
     from verifalia import Verifalia
 
-    unknown = sorted({c.address for c in batch
-                      if c.address and not email_mod.is_verified(c.address)})
+    unknown = sorted({a for a in addresses
+                      if a and not emails.is_verified(a)})
     stats = {"unverified_seen": len(unknown)}
     adopted, queue = {}, []
     for address in unknown:
-        contact_id = client.find_by_email(address)
+        contact_id = client.find_by_email(address) if adopt else ""
         if contact_id:
             adopted[address] = contact_id
         else:
@@ -183,20 +180,63 @@ def gate_on_verification(batch, client, today):
 
     verifier = Verifalia()
     if queue and not verifier.configured():
-        log.warning("VERIFALIA_USERNAME/PASSWORD not set: %d new addresses "
-                    "held back rather than created unverified", len(queue))
+        log.warning("VERIFALIA_USERNAME/PASSWORD not set: %d addresses left "
+                    "without a verdict rather than assumed good", len(queue))
     elif queue:
         try:
             results = verifier.verify(queue)
-        except Exception as exc:            # fail closed: create nobody
-            log.error("verifalia failed (%s); holding back %d addresses",
+        except Exception as exc:            # fail closed: assume nothing
+            log.error("verifalia failed (%s); %d addresses left unresolved",
                       exc, len(queue))
             results = {}
-        stats["verdicts"] = email_mod.record_verdicts(results, today)
+        stats["verdicts"] = emails.record_verdicts(results, today)
         log.info("verification: %s", stats.get("verdicts") or "no verdicts")
+    return adopted, stats
 
+
+def backfill_verdicts(candidates, client, today):
+    """Verify addresses the ingest gate structurally cannot reach.
+
+    The gate runs on the ingest batch, and the batch is what needs_ingest()
+    selects -- a new organization, a changed show, a missing card. An
+    organization sitting in the ledger with an unchanged show never enters it,
+    so its address never gets a verdict, and _decide() refuses to email an
+    address with no verdict. Their next rollover would eventually scan them,
+    but that can be months away and never comes at all for an organization
+    with no upcoming show.
+
+    So the backlog is worked from the full candidate list instead, capped so a
+    run can never spend a surprising number of verifications.
+    """
+    cap = config.VERIFY_BACKFILL_CAP
+    backlog = sorted({c.address for c in candidates
+                      if c.address and not emails.is_verified(c.address)})
+    if not backlog:
+        return {}
+    if len(backlog) > cap:
+        log.info("verify backfill: %d addresses without a verdict, doing %d "
+                 "this run (cap %d)", len(backlog), cap, cap)
+        backlog = backlog[:cap]
+    # adopt=False on purpose: these are already contacts, and the question
+    # being asked is whether mail reaches them, not whether they exist.
+    _, stats = resolve_verdicts(backlog, client, today, adopt=False)
+    return {f"backfill_{k}": v for k, v in stats.items()}
+
+
+def gate_on_verification(batch, client, today):
+    """Let through only addresses that can actually receive mail.
+
+    Runs before anything is created, which is the whole point: an address that
+    bounces never becomes a contact, rather than becoming one and being
+    deleted three weeks later.
+
+    Returns (allowed, stats). Anything without a deliverable verdict is held
+    back, so a Verifalia outage creates nobody rather than creating everybody.
+    """
+    adopted, stats = resolve_verdicts(
+        [c.address for c in batch], client, today, adopt=True)
     allowed = [c for c in batch
-               if email_mod.is_verified(c.address) or c.address in adopted]
+               if emails.is_verified(c.address) or c.address in adopted]
     stats["held_back"] = len(batch) - len(allowed)
     if stats["held_back"]:
         log.info("ingest: %d organizations held back pending a verdict",
@@ -296,6 +336,12 @@ def run_outreach(productions, registry, book, today, args):
             log.warning("no GHL_PIPELINE_ID/STAGE_ID: writing contacts with no "
                         "pipeline cards. Adding the secrets later re-writes "
                         "each organization once to create its card.")
+        # Before deciding what needs writing: give addresses the ingest gate
+        # cannot reach a verdict. Runs first so an address resolved here is
+        # already verified when needs_ingest() compares it against the ledger,
+        # and the contact is re-pushed this run to drop its unverified tag.
+        if not dry:
+            stats.update(backfill_verdicts(candidates, client, today))
         todo = [c for c in candidates
                 if c.action != "clear"
                 and outreach_mod.needs_ingest(c, opportunities, want_card)]
