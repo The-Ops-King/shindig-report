@@ -4,5 +4,5 @@
   "dry_run": false,
   "outreach": "ingest",
   "outreach_limit": 0,
-  "note": "first live verification pass: 32 addresses have no verdict yet. The gate checks each against GHL first, then sends what is genuinely new to Verifalia. Only Deliverable becomes a contact -- Risky (catch-all) is cached and held back, because with no separate sending domain a bounce costs the reputation of the domain carrying real business email. Watch the verdict split."
+  "note": "first backfill pass: verify the 24 addresses parked on 'email not verified' that the ingest gate cannot reach. Expect ~24 sent to Verifalia and a real Deliverable/Risky/Undeliverable split -- the number this whole thread has been waiting on. Also expect a one-time re-push of ~1,967 ledger records to write the verified flag and drop stale unverified-email tags; it may hit the 1800s budget and resume next run, which is fine. Nothing is emailed."
 }
