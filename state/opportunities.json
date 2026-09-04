@@ -500,9 +500,9 @@
 "opportunity_id": "",
 "org_name": "Altadena Music Theatre",
 "ready": false,
-"show_key": "mti:203869",
-"show_title": "Little Shop Of Horrors (broadway Version)",
-"updated": "2026-09-01",
+"show_key": "",
+"show_title": "",
+"updated": "2026-09-04",
 "verified": true
 },
 "altoona community theatre|altoona|PA": {
@@ -1411,9 +1411,9 @@
 "opportunity_id": "",
 "org_name": "Barn Lot Theater",
 "ready": false,
-"show_key": "mti:176321",
-"show_title": "Seussical Jr.",
-"updated": "2026-09-01",
+"show_key": "concord:58d112a73b414348",
+"show_title": "Wait Until Dark (Knott)",
+"updated": "2026-09-04",
 "verified": true
 },
 "barn theatre of porterville|porterville|CA": {
@@ -1905,9 +1905,9 @@
 "opportunity_id": "",
 "org_name": "Betty Long Unruh Theatre",
 "ready": false,
-"show_key": "concord:d13981f4f476f6fe",
-"show_title": "Agatha Christie's Murder on the Orient Express",
-"updated": "2026-09-01",
+"show_key": "concord:0740dc0ab5f71e9b",
+"show_title": "The Holiday Channel Christmas Movie Wonderthon",
+"updated": "2026-09-04",
 "verified": true
 },
 "bev facey community high school|sherwood park|AB": {
@@ -2328,6 +2328,17 @@
 "updated": "2026-09-01",
 "verified": true
 },
+"bowtie productions|toronto|ON": {
+"contact_id": "0WtdqdFk1LDXcHjvW9Px",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Bowtie Productions",
+"ready": false,
+"show_key": "mti:224948",
+"show_title": "Pippin",
+"updated": "2026-09-04",
+"verified": true
+},
 "box theatre|oconomowoc|WI": {
 "contact_id": "R8c0aNMOkCCQcTTAdXi8",
 "last_armed": "",
@@ -2370,6 +2381,17 @@
 "show_key": "mti:201593",
 "show_title": "Disney's Aladdin Jr.",
 "updated": "2026-09-01",
+"verified": true
+},
+"brantford collegiate institute|brantford|ON": {
+"contact_id": "0CPQeifqDhvmH7N4YcyZ",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Brantford Collegiate Institute",
+"ready": false,
+"show_key": "mti:225069",
+"show_title": "Shrek The Musical",
+"updated": "2026-09-04",
 "verified": true
 },
 "braver players theater|costa mesa|CA": {
@@ -2983,9 +3005,9 @@
 "opportunity_id": "",
 "org_name": "Carroll High School",
 "ready": false,
-"show_key": "mti:223769",
-"show_title": "Peter Pan",
-"updated": "2026-09-01",
+"show_key": "concord:853da08a565f7524",
+"show_title": "Clue (High School Edition)",
+"updated": "2026-09-04",
 "verified": true
 },
 "carson valley community theatre|minden|NV": {
@@ -3371,6 +3393,17 @@
 "show_key": "mti:215325",
 "show_title": "Frozen",
 "updated": "2026-09-01",
+"verified": true
+},
+"centre segal academy|montreal|QC": {
+"contact_id": "6T7Sby0owpcrciIi54CR",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Centre Segal Academy",
+"ready": false,
+"show_key": "mti:225054",
+"show_title": "Something Rotten! Jr.",
+"updated": "2026-09-04",
 "verified": true
 },
 "chagrin falls exempted village schools|chagrin falls|OH": {
@@ -3875,6 +3908,17 @@
 "show_key": "mti:210526",
 "show_title": "Little Shop Of Horrors",
 "updated": "2026-09-01",
+"verified": true
+},
+"christian heritage academy|northfield|IL": {
+"contact_id": "FVj15J8JqCYLcTSNExTD",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Christian Heritage Academy",
+"ready": false,
+"show_key": "mti:224928",
+"show_title": "Roald Dahl's Matilda The Musical Jr",
+"updated": "2026-09-04",
 "verified": true
 },
 "christian school of performing arts|baldwinsville|NY": {
@@ -4882,9 +4926,9 @@
 "opportunity_id": "",
 "org_name": "Courtyard Theatre",
 "ready": false,
-"show_key": "concord:f0eb3abc133859d5",
-"show_title": "The Wizard of Oz (RSC Version)",
-"updated": "2026-08-29",
+"show_key": "concord:3dd02497611d4a40",
+"show_title": "Harry Potter and the Cursed Child (High School Edition)",
+"updated": "2026-09-04",
 "verified": true
 },
 "covington high school|covington|LA": {
@@ -5400,6 +5444,17 @@
 "show_key": "mti:222322",
 "show_title": "The Musical Adventures Of Flat Stanley Jr",
 "updated": "2026-09-01",
+"verified": true
+},
+"delano dramatic|delano|MN": {
+"contact_id": "0My795YPEz7wtC4E1YJ1",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Delano Dramatic Company",
+"ready": false,
+"show_key": "mti:225083",
+"show_title": "Into The Woods",
+"updated": "2026-09-04",
 "verified": true
 },
 "delaware childrens theatre|wilmington|DE": {
@@ -6632,6 +6687,17 @@
 "updated": "2026-09-01",
 "verified": true
 },
+"fifth wall stage|clinton|CT": {
+"contact_id": "fxn3qGHXuFjTyYXh9BDa",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Fifth Wall Stage Company",
+"ready": false,
+"show_key": "mti:225071",
+"show_title": "If/then",
+"updated": "2026-09-04",
+"verified": true
+},
 "fillmore central school|fillmore|NY": {
 "contact_id": "XfuKkBLdCHTbQ1dsOE0s",
 "last_armed": "",
@@ -7824,9 +7890,9 @@
 "opportunity_id": "",
 "org_name": "Grayson High School Auditorium",
 "ready": false,
-"show_key": "concord:59dfccacd8243071",
-"show_title": "Hadestown: Teen Edition",
-"updated": "2026-09-01",
+"show_key": "concord:e01a745370f98d85",
+"show_title": "Harry's Hotter at Twilight",
+"updated": "2026-09-04",
 "verified": true
 },
 "greasepaint youththeatre and stagebrush theatre|scottsdale|AZ": {
@@ -10093,6 +10159,17 @@
 "updated": "2026-09-02",
 "verified": true
 },
+"knoxville high school drama|knoxville|IA": {
+"contact_id": "n8O5GI0PEmVAJST0oXX1",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Knoxville High School Drama",
+"ready": false,
+"show_key": "mti:224997",
+"show_title": "Singin' In The Rain",
+"updated": "2026-09-04",
+"verified": true
+},
 "knoxville jewish day school|knoxville|TN": {
 "contact_id": "ZSA7ww6nRbuyi5OQQuRk",
 "last_armed": "",
@@ -11521,6 +11598,17 @@
 "updated": "2026-09-01",
 "verified": true
 },
+"manchester high school|manchester|CT": {
+"contact_id": "8dxPV6LMmpKRbWOv0JHB",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Manchester High School",
+"ready": false,
+"show_key": "concord:659c148a08979bdf",
+"show_title": "Wait Until Dark (Knott)",
+"updated": "2026-09-04",
+"verified": true
+},
 "mandeville high school|mandeville|LA": {
 "contact_id": "F4g0QjtRtomQGexJDatK",
 "last_armed": "",
@@ -11714,9 +11802,9 @@
 "opportunity_id": "",
 "org_name": "Market House Theatre",
 "ready": false,
-"show_key": "mti:190023",
-"show_title": "Come From Away",
-"updated": "2026-09-01",
+"show_key": "",
+"show_title": "",
+"updated": "2026-09-04",
 "verified": true
 },
 "marquette university dept of perf arts|milwaukee|WI": {
@@ -12423,6 +12511,17 @@
 "updated": "2026-09-01",
 "verified": true
 },
+"minisink valley intermediate school|slate hill|NY": {
+"contact_id": "R407O4EEkMfuHvOuEkLA",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Minisink Valley Intermediate School",
+"ready": false,
+"show_key": "mti:224963",
+"show_title": "Disney's Frozen Kids",
+"updated": "2026-09-04",
+"verified": true
+},
 "minisink valley middle school|slate hill|NY": {
 "contact_id": "R407O4EEkMfuHvOuEkLA",
 "last_armed": "",
@@ -12465,6 +12564,17 @@
 "show_key": "mti:219866",
 "show_title": "Shrek The Musical",
 "updated": "2026-09-01",
+"verified": true
+},
+"miss edgars and miss cramps school|westmount|QC": {
+"contact_id": "xvoMidMA3gTeISKD3UYY",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Miss Edgars And Miss Cramps School",
+"ready": false,
+"show_key": "mti:225062",
+"show_title": "Disney's Alice In Wonderland Jr.",
+"updated": "2026-09-04",
 "verified": true
 },
 "missouri state university|springfield|MO": {
@@ -12709,6 +12819,17 @@
 "updated": "2026-09-01",
 "verified": true
 },
+"mt calvary christian school|elizabethtown|PA": {
+"contact_id": "YjurneyCGqaByLRaGMgS",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Mt Calvary Christian School",
+"ready": false,
+"show_key": "mti:225026",
+"show_title": "Seussical",
+"updated": "2026-09-04",
+"verified": true
+},
 "mt ed|webster|NY": {
 "contact_id": "dGbxEBxpU6K1wEUVhehg",
 "last_armed": "",
@@ -12902,9 +13023,9 @@
 "opportunity_id": "",
 "org_name": "Musical Theatre Southwest",
 "ready": false,
-"show_key": "mti:165224",
-"show_title": "Come From Away",
-"updated": "2026-09-01",
+"show_key": "mti:218821",
+"show_title": "Into The Woods Jr",
+"updated": "2026-09-04",
 "verified": true
 },
 "musical theatre west|long beach|CA": {
@@ -13210,9 +13331,9 @@
 "opportunity_id": "",
 "org_name": "New York Univ/tisch School Of The Arts",
 "ready": false,
-"show_key": "mti:214350",
-"show_title": "A Little Night Music",
-"updated": "2026-09-01",
+"show_key": "mti:224924",
+"show_title": "Night Side Songs",
+"updated": "2026-09-04",
 "verified": true
 },
 "newark high school|newark|DE": {
@@ -16736,6 +16857,17 @@
 "updated": "2026-09-01",
 "verified": true
 },
+"roxboro community school|roxboro|NC": {
+"contact_id": "RylwHSR8WiknDiUZSgFZ",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Roxboro Community School",
+"ready": false,
+"show_key": "mti:224950",
+"show_title": "Annie Jr",
+"updated": "2026-09-04",
+"verified": true
+},
 "roxys downtown|wichita|KS": {
 "contact_id": "Cg9lJDnRTfendQcpjP9l",
 "last_armed": "",
@@ -17062,6 +17194,17 @@
 "show_key": "concord:7054767fe147117f",
 "show_title": "Once Upon a Mattress",
 "updated": "2026-09-01",
+"verified": true
+},
+"saratoga school|morris|IL": {
+"contact_id": "HnQ73pgzTUOakB8qssZT",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Saratoga School",
+"ready": false,
+"show_key": "mti:225039",
+"show_title": "Roald Dahl's Willy Wonka Jr.",
+"updated": "2026-09-04",
 "verified": true
 },
 "sarnia lambton rebound|sarnia|ON": {
@@ -17392,6 +17535,17 @@
 "show_key": "mti:196909",
 "show_title": "Come From Away",
 "updated": "2026-09-01",
+"verified": true
+},
+"severna park high school|severna park|MD": {
+"contact_id": "HWwKnIdRlKKzNfMoAJ6e",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Severna Park High School",
+"ready": false,
+"show_key": "mti:224936",
+"show_title": "Legally Blonde",
+"updated": "2026-09-04",
 "verified": true
 },
 "shandaken theatrical|phoenicia|NY": {
@@ -18094,6 +18248,17 @@
 "updated": "2026-09-01",
 "verified": true
 },
+"sparc|richmond|VA": {
+"contact_id": "9jm3EQCeJxkiiMjlftMr",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "SPARC",
+"ready": false,
+"show_key": "concord:ffb16c2e5aa3c8c5",
+"show_title": "School of Rock: Young Actors Edition",
+"updated": "2026-09-04",
+"verified": true
+},
 "spark of creation dance studio|san bruno|CA": {
 "contact_id": "8E5ZjOeK3q7ebe3Oia66",
 "last_armed": "",
@@ -18653,6 +18818,17 @@
 "show_key": "mti:224803",
 "show_title": "Frozen",
 "updated": "2026-09-03",
+"verified": true
+},
+"st michael school|independence|OH": {
+"contact_id": "8HX2ebCHFnf1tWWFkuWL",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "St Michael School",
+"ready": false,
+"show_key": "mti:224986",
+"show_title": "Disney's Beauty And The Beast Jr",
+"updated": "2026-09-04",
 "verified": true
 },
 "st michaels school|poway|CA": {
@@ -19266,9 +19442,20 @@
 "opportunity_id": "",
 "org_name": "Stockton Civic Theatre",
 "ready": false,
-"show_key": "mti:199653",
-"show_title": "Bonnie  And  Clyde",
-"updated": "2026-09-01",
+"show_key": "mti:217143",
+"show_title": "Frozen",
+"updated": "2026-09-04",
+"verified": true
+},
+"stone hill middle school|ashburn|VA": {
+"contact_id": "QhdTlcG5BXXQQaN4pyX5",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Stone Hill Middle School",
+"ready": false,
+"show_key": "mti:225038",
+"show_title": "Legally Blonde Jr.",
+"updated": "2026-09-04",
 "verified": true
 },
 "stonebridge school|chesapeake|VA": {
@@ -19409,9 +19596,9 @@
 "opportunity_id": "",
 "org_name": "Strauss Theatre Center",
 "ready": false,
-"show_key": "mti:201131",
-"show_title": "Come From Away",
-"updated": "2026-09-01",
+"show_key": "",
+"show_title": "",
+"updated": "2026-09-04",
 "verified": true
 },
 "strauss youth academy for arts|monroe|LA": {
@@ -20490,6 +20677,17 @@
 "updated": "2026-09-01",
 "verified": true
 },
+"thomas simpson middle school|flat rock|MI": {
+"contact_id": "VUWcscHGZrfRmAD9hWWa",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Thomas Simpson Middle School",
+"ready": false,
+"show_key": "mti:224957",
+"show_title": "Beetlejuice Jr.",
+"updated": "2026-09-04",
+"verified": true
+},
 "three rivers music theatre|fort wayne|IN": {
 "contact_id": "bCrrWnfApByGEXjW8kSl",
 "last_armed": "",
@@ -20642,6 +20840,17 @@
 "show_key": "mti:216787",
 "show_title": "Tootsie",
 "updated": "2026-09-01",
+"verified": true
+},
+"trilogy repertory|liberty corner|NJ": {
+"contact_id": "0AmqcIMi8YZwQcLwU88X",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Trilogy Repertory Company",
+"ready": false,
+"show_key": "mti:225036",
+"show_title": "Come From Away",
+"updated": "2026-09-04",
 "verified": true
 },
 "trinity christian academy|jackson|TN": {
@@ -22430,9 +22639,9 @@
 "opportunity_id": "",
 "org_name": "Wichita Community Theatre",
 "ready": false,
-"show_key": "concord:fed4f5ca94801023",
-"show_title": "One Flew Over the Cuckoo's Nest",
-"updated": "2026-09-01",
+"show_key": "concord:9e40e96caf470e3f",
+"show_title": "The Haunting of Hill House",
+"updated": "2026-09-04",
 "verified": true
 },
 "wilbraham united players|wilbraham|MA": {
