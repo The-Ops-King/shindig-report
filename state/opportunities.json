@@ -2911,6 +2911,28 @@
 "updated": "2026-09-01",
 "verified": true
 },
+"calliope productions|boylston|MA": {
+"contact_id": "jhlDNP9I0H27ZL1uHU4K",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Calliope Productions",
+"ready": false,
+"show_key": "mti:181453",
+"show_title": "Shrek The Musical",
+"updated": "2026-09-14",
+"verified": true
+},
+"calliope theatre|boylston|MA": {
+"contact_id": "jhlDNP9I0H27ZL1uHU4K",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Calliope Theatre",
+"ready": false,
+"show_key": "concord:ed3d64aae3ef3749",
+"show_title": "Over the River and Through the Woods",
+"updated": "2026-09-14",
+"verified": true
+},
 "calmar secondary collegiate school|calmar|AB": {
 "contact_id": "1YtjHqcYHWYDYHiweo4l",
 "last_armed": "",
@@ -15641,9 +15663,9 @@
 "opportunity_id": "",
 "org_name": "Performance Theatre For Young Artists",
 "ready": false,
-"show_key": "mti:218642",
-"show_title": "Disney's Frozen Jr",
-"updated": "2026-09-01",
+"show_key": "",
+"show_title": "",
+"updated": "2026-09-14",
 "verified": true
 },
 "performers theatre workshop|madison|NJ": {
@@ -19161,6 +19183,17 @@
 "show_key": "mti:215520",
 "show_title": "Trolls The Musical Jr.",
 "updated": "2026-09-01",
+"verified": true
+},
+"spscc main stage|olympia|WA": {
+"contact_id": "H2hOUDXsA5k0Vyy6KEkD",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "SPSCC Main Stage",
+"ready": false,
+"show_key": "concord:a892fde455c71afb",
+"show_title": "Clybourne Park",
+"updated": "2026-09-14",
 "verified": true
 },
 "st agnes parish|butler|WI": {
