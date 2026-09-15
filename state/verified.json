@@ -405,12 +405,12 @@
 "status": "deliverable"
 },
 "admissions@esm.rochester.edu": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
 "admissions@farragut.org": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -522,6 +522,11 @@
 "admissions@oda.edu": {
 "checked": "2026-08-28",
 "source": "verifalia-export",
+"status": "deliverable"
+},
+"admissions@odcs.org": {
+"checked": "2026-09-15",
+"source": "verifalia",
 "status": "deliverable"
 },
 "admissions@pacific.edu": {
@@ -749,6 +754,11 @@
 "source": "verifalia-export",
 "status": "deliverable"
 },
+"alross@geneva304.org": {
+"checked": "2026-09-15",
+"source": "verifalia",
+"status": "deliverable"
+},
 "altadenamusictheatre@gmail.com": {
 "checked": "2026-08-28",
 "source": "verifalia-export",
@@ -960,7 +970,7 @@
 "status": "deliverable"
 },
 "attendance@holynames-sea.org": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -1260,7 +1270,7 @@
 "status": "deliverable"
 },
 "boxoffice@browardcenter.org": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -1479,6 +1489,11 @@
 "source": "verifalia-export",
 "status": "deliverable"
 },
+"boxoffice@naccnt.ca": {
+"checked": "2026-09-15",
+"source": "verifalia",
+"status": "deliverable"
+},
 "boxoffice@nctcsf.org": {
 "checked": "2026-08-28",
 "source": "verifalia-export",
@@ -1550,7 +1565,7 @@
 "status": "deliverable"
 },
 "boxoffice@presidiotheatre.org": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -1945,7 +1960,7 @@
 "status": "deliverable"
 },
 "center4arts@cityofgreersc.gov": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -2155,9 +2170,14 @@
 "status": "deliverable"
 },
 "communications@canyonsdistrict.org": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
+},
+"communications@d47.org": {
+"checked": "2026-09-15",
+"source": "verifalia",
+"status": "deliverable"
 },
 "communications@epsteinatlanta.org": {
 "checked": "2026-08-28",
@@ -2229,6 +2249,11 @@
 "source": "verifalia-export",
 "status": "deliverable"
 },
+"contact-svsd@svpanthers.org": {
+"checked": "2026-09-15",
+"source": "verifalia",
+"status": "deliverable"
+},
 "contact.ds@gcsaz.org": {
 "checked": "2026-08-28",
 "source": "verifalia-export",
@@ -2252,6 +2277,11 @@
 "contact@goshenschools.org": {
 "checked": "2026-08-28",
 "source": "verifalia-export",
+"status": "deliverable"
+},
+"contact@gunnisonartscenter.org": {
+"checked": "2026-09-15",
+"source": "verifalia",
 "status": "deliverable"
 },
 "contact@marylandensemble.org": {
@@ -2325,12 +2355,12 @@
 "status": "deliverable"
 },
 "continuinged@fpsct.org": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
 "cooperb@churchillcsd.com": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -2352,6 +2382,11 @@
 "cosacalendar@coronadousd.org": {
 "checked": "2026-08-28",
 "source": "verifalia-export",
+"status": "deliverable"
+},
+"cougars@cedarcreekschool.org": {
+"checked": "2026-09-15",
+"source": "verifalia",
 "status": "deliverable"
 },
 "covecommunitytheater@outlook.com": {
@@ -2395,7 +2430,7 @@
 "status": "deliverable"
 },
 "csanders@hw.com": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -2470,7 +2505,7 @@
 "status": "deliverable"
 },
 "daniel.weingarten@csun.edu": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -2485,7 +2520,7 @@
 "status": "deliverable"
 },
 "darekj@teamddm.com": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -2540,7 +2575,7 @@
 "status": "deliverable"
 },
 "debra.jones@vansd.org": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -2565,7 +2600,7 @@
 "status": "deliverable"
 },
 "dgreen@psusd.us": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -2655,7 +2690,7 @@
 "status": "deliverable"
 },
 "drakeshrader@uytinc.org": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -2909,6 +2944,11 @@
 "source": "verifalia-export",
 "status": "deliverable"
 },
+"frontdesk@aerotheatrics.com": {
+"checked": "2026-09-15",
+"source": "verifalia",
+"status": "risky"
+},
 "frontdesk@cornerstoneprep.org": {
 "checked": "2026-08-28",
 "source": "verifalia-export",
@@ -3109,6 +3149,11 @@
 "source": "verifalia-export",
 "status": "deliverable"
 },
+"hawthorne_players@yahoo.com": {
+"checked": "2026-09-15",
+"source": "verifalia",
+"status": "risky"
+},
 "hayswoodgala@gmail.com": {
 "checked": "2026-08-28",
 "source": "verifalia-export",
@@ -3239,6 +3284,11 @@
 "source": "verifalia-export",
 "status": "deliverable"
 },
+"hjcody@cesd73.ca": {
+"checked": "2026-09-15",
+"source": "verifalia",
+"status": "deliverable"
+},
 "hollister@morgan-wixson.org": {
 "checked": "2026-08-28",
 "source": "verifalia-export",
@@ -3258,6 +3308,11 @@
 "checked": "2026-08-28",
 "source": "verifalia-export",
 "status": "deliverable"
+},
+"hr@abingtonsd.org": {
+"checked": "2026-09-15",
+"source": "verifalia",
+"status": "risky"
 },
 "hr@stchas.edu": {
 "checked": "2026-08-28",
@@ -3389,6 +3444,11 @@
 "source": "verifalia-export",
 "status": "deliverable"
 },
+"info@americantheaterdance.com": {
+"checked": "2026-09-15",
+"source": "verifalia",
+"status": "risky"
+},
 "info@arquemuse.com": {
 "checked": "2026-08-28",
 "source": "verifalia-export",
@@ -3485,7 +3545,7 @@
 "status": "deliverable"
 },
 "info@bachmancc.org": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -3540,7 +3600,7 @@
 "status": "deliverable"
 },
 "info@bellevuedanceacademy.com": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -3875,7 +3935,7 @@
 "status": "deliverable"
 },
 "info@desertstages.org": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -3935,7 +3995,7 @@
 "status": "deliverable"
 },
 "info@elportaltheatre.com": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -4015,7 +4075,7 @@
 "status": "deliverable"
 },
 "info@forestranchcharter.org": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -4094,6 +4154,11 @@
 "source": "verifalia-export",
 "status": "deliverable"
 },
+"info@gooseberryparkplayers.org": {
+"checked": "2026-09-15",
+"source": "verifalia",
+"status": "risky"
+},
 "info@granderie.ca": {
 "checked": "2026-08-28",
 "source": "verifalia-export",
@@ -4102,6 +4167,11 @@
 "info@guildhall.org": {
 "checked": "2026-08-28",
 "source": "verifalia-export",
+"status": "deliverable"
+},
+"info@gus.org": {
+"checked": "2026-09-15",
+"source": "verifalia",
 "status": "deliverable"
 },
 "info@hanovercommunityplayers.ca": {
@@ -4175,7 +4245,7 @@
 "status": "deliverable"
 },
 "info@hudsonplayers.com": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -4240,7 +4310,7 @@
 "status": "deliverable"
 },
 "info@kippma.org": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -4278,6 +4348,11 @@
 "checked": "2026-08-28",
 "source": "verifalia-export",
 "status": "deliverable"
+},
+"info@latinotype.com": {
+"checked": "2026-09-15",
+"source": "verifalia",
+"status": "risky"
 },
 "info@lblandmark.org": {
 "checked": "2026-08-28",
@@ -4372,6 +4447,11 @@
 "info@lvlt.org": {
 "checked": "2026-08-28",
 "source": "verifalia-export",
+"status": "deliverable"
+},
+"info@lwcs.org": {
+"checked": "2026-09-15",
+"source": "verifalia",
 "status": "deliverable"
 },
 "info@lwlhs.com": {
@@ -4515,7 +4595,7 @@
 "status": "deliverable"
 },
 "info@monarchacademyglobal.org": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -4560,7 +4640,7 @@
 "status": "deliverable"
 },
 "info@musicconnections.org": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -4605,7 +4685,7 @@
 "status": "deliverable"
 },
 "info@newberncivictheatre.org": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -4905,7 +4985,7 @@
 "status": "deliverable"
 },
 "info@ramsey.k12.nj.us": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -4992,6 +5072,11 @@
 "info@saas.k12.de.us": {
 "checked": "2026-08-28",
 "source": "verifalia-export",
+"status": "deliverable"
+},
+"info@saintstephens.org": {
+"checked": "2026-09-15",
+"source": "verifalia",
 "status": "deliverable"
 },
 "info@saskexpress.com": {
@@ -5175,7 +5260,7 @@
 "status": "deliverable"
 },
 "info@stsavaorthodoxschool.com": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -5415,7 +5500,7 @@
 "status": "deliverable"
 },
 "info@uvawise.edu": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -5560,7 +5645,7 @@
 "status": "deliverable"
 },
 "info@woodstockplayhouse.org": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -6029,6 +6114,11 @@
 "source": "verifalia",
 "status": "deliverable"
 },
+"kevin@customcutshirts.com": {
+"checked": "2026-09-15",
+"source": "verifalia",
+"status": "undeliverable"
+},
 "keyplayersinfo@gmail.com": {
 "checked": "2026-08-28",
 "source": "verifalia-export",
@@ -6204,6 +6294,11 @@
 "source": "verifalia-export",
 "status": "deliverable"
 },
+"laurie.brawley@hildebrannc.org": {
+"checked": "2026-09-15",
+"source": "verifalia",
+"status": "deliverable"
+},
 "lbarth@wausauschools.org": {
 "checked": "2026-08-28",
 "source": "verifalia-export",
@@ -6295,7 +6390,7 @@
 "status": "deliverable"
 },
 "lnelson@mmcsd.org": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -6429,6 +6524,11 @@
 "source": "verifalia-export",
 "status": "deliverable"
 },
+"mainoffice@mentorcollege.edu": {
+"checked": "2026-09-15",
+"source": "verifalia",
+"status": "deliverable"
+},
 "majestictheaterpottsville@gmail.com": {
 "checked": "2026-08-28",
 "source": "verifalia-export",
@@ -6460,12 +6560,12 @@
 "status": "deliverable"
 },
 "manoa.admissions@hawaii.edu": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
 "manuelartime@miamigov.com": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -6510,7 +6610,7 @@
 "status": "deliverable"
 },
 "matt.huddlestone@huntsville.ca": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -6540,13 +6640,18 @@
 "status": "deliverable"
 },
 "mbstenta@vestalcsd.org": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
 "mburgy@theoakridgeschool.org": {
 "checked": "2026-08-28",
 "source": "verifalia-export",
+"status": "deliverable"
+},
+"mburke@sjheralds.org": {
+"checked": "2026-09-15",
+"source": "verifalia",
 "status": "deliverable"
 },
 "mbuzbee@olomschool.org": {
@@ -6652,6 +6757,11 @@
 "metcalfattendance@ilstu.edu": {
 "checked": "2026-08-28",
 "source": "verifalia-export",
+"status": "deliverable"
+},
+"mfickle@lakewoodlocal.k12.oh.us": {
+"checked": "2026-09-15",
+"source": "verifalia",
 "status": "deliverable"
 },
 "mfluellen@garlandtx.gov": {
@@ -6760,7 +6870,7 @@
 "status": "deliverable"
 },
 "mr.dan@srotheatercompany.com": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -6999,8 +7109,13 @@
 "source": "verifalia-export",
 "status": "deliverable"
 },
+"office.nyas@gmail.com": {
+"checked": "2026-09-15",
+"source": "verifalia",
+"status": "deliverable"
+},
 "office@actonetheatreschool.com": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -7100,7 +7215,7 @@
 "status": "deliverable"
 },
 "office@newhopeinfo.com": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -7204,6 +7319,11 @@
 "source": "verifalia-export",
 "status": "deliverable"
 },
+"office@youngstownpres.org": {
+"checked": "2026-09-15",
+"source": "verifalia",
+"status": "deliverable"
+},
 "officeadmin@shelbytheatre.org": {
 "checked": "2026-08-28",
 "source": "verifalia-export",
@@ -7255,7 +7375,7 @@
 "status": "deliverable"
 },
 "owiso@mainstreetlanding.com": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -7324,10 +7444,20 @@
 "source": "verifalia-export",
 "status": "deliverable"
 },
+"parkerronaldc@aasd.k12.wi.us": {
+"checked": "2026-09-15",
+"source": "verifalia",
+"status": "risky"
+},
 "parkshelpdesk@derrytownship.org": {
 "checked": "2026-08-28",
 "source": "verifalia-export",
 "status": "deliverable"
+},
+"paulinevanierinfo@dpcdsb.org": {
+"checked": "2026-09-15",
+"source": "verifalia",
+"status": "risky"
 },
 "pca.storm@providencechristianacademy.org": {
 "checked": "2026-08-28",
@@ -7355,7 +7485,7 @@
 "status": "deliverable"
 },
 "pdrecords@addisontx.gov": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -7435,7 +7565,7 @@
 "status": "deliverable"
 },
 "prepenquiries@headington.org": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -7670,7 +7800,7 @@
 "status": "deliverable"
 },
 "rosej@nostoschools.org": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -7710,7 +7840,7 @@
 "status": "deliverable"
 },
 "rwarren@pps.net": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -7720,7 +7850,7 @@
 "status": "deliverable"
 },
 "sacc@nkcschools.org": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -7740,7 +7870,7 @@
 "status": "deliverable"
 },
 "sagelynshoells@alpinedistrict.org": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -7989,6 +8119,11 @@
 "source": "verifalia-export",
 "status": "deliverable"
 },
+"showcasep@eastlink.ca": {
+"checked": "2026-09-15",
+"source": "verifalia",
+"status": "deliverable"
+},
 "shows@zaotheatre.org": {
 "checked": "2026-08-28",
 "source": "verifalia-export",
@@ -8150,7 +8285,7 @@
 "status": "deliverable"
 },
 "steve@sunsettheatrecompany.com": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -8345,7 +8480,7 @@
 "status": "deliverable"
 },
 "theatre@wiu.edu": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -8485,7 +8620,7 @@
 "status": "deliverable"
 },
 "tickets@brookhavenlittletheatre.com": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -8535,7 +8670,7 @@
 "status": "deliverable"
 },
 "tickets@showkids.org": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -8650,7 +8785,7 @@
 "status": "deliverable"
 },
 "trk@lyceela.org": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -8740,7 +8875,7 @@
 "status": "deliverable"
 },
 "vanessa@kickstudio.com": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -8795,7 +8930,7 @@
 "status": "deliverable"
 },
 "waterspring_ms@ocps.net": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
@@ -8857,6 +8992,11 @@
 "webmanager@madison-schools.com": {
 "checked": "2026-08-28",
 "source": "verifalia-export",
+"status": "deliverable"
+},
+"webmaster@arcadia.k12.wi.us": {
+"checked": "2026-09-15",
+"source": "verifalia",
 "status": "deliverable"
 },
 "webmaster@basdschools.org": {
@@ -8925,7 +9065,7 @@
 "status": "deliverable"
 },
 "webmaster@scarsdaleschools.org": {
-"checked": "2026-09-14",
+"checked": "2026-09-15",
 "source": "verifalia",
 "status": "risky"
 },
