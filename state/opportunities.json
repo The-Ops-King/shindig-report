@@ -11639,9 +11639,9 @@
 "opportunity_id": "",
 "org_name": "Lincoln Theatre Guild",
 "ready": false,
-"show_key": "mti:206329",
-"show_title": "The Santa Switch",
-"updated": "2026-09-18",
+"show_key": "mti:227116",
+"show_title": "Rent",
+"updated": "2026-09-21",
 "verified": true
 },
 "lincoln way community high school west|new lenox|IL": {
@@ -19933,6 +19933,17 @@
 "updated": "2026-09-01",
 "verified": true
 },
+"st joseph school|marietta|GA": {
+"contact_id": "TsVaulqLnMF1QfcChd0D",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "St Joseph School",
+"ready": false,
+"show_key": "mti:227127",
+"show_title": "Annie Jr",
+"updated": "2026-09-21",
+"verified": false
+},
 "st joseph st robert school|warminster|PA": {
 "contact_id": "mRuf2DXuVbPxFq4OeHaI",
 "last_armed": "",
@@ -20698,9 +20709,9 @@
 "opportunity_id": "",
 "org_name": "Starlight Community Theater",
 "ready": false,
-"show_key": "",
-"show_title": "",
-"updated": "2026-09-12",
+"show_key": "mti:227126",
+"show_title": "Schoolhouse Rock Live! Jr",
+"updated": "2026-09-21",
 "verified": true
 },
 "starlights youth theatre|northampton|MA": {
