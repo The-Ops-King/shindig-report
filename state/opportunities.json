@@ -208,6 +208,17 @@
 "updated": "2026-09-01",
 "verified": true
 },
+"act ii community theater|st peters|MO": {
+"contact_id": "mjkzseVkqErStYtYNFHB",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Act Ii Community Theater",
+"ready": false,
+"show_key": "mti:227731",
+"show_title": "Forever Plaid",
+"updated": "2026-09-24",
+"verified": false
+},
 "act playhouse|dalton|GA": {
 "contact_id": "pXSI5myUfkgkr7iJNqvR",
 "last_armed": "",
@@ -1996,6 +2007,17 @@
 "show_key": "mti:215512",
 "show_title": "Little Shop Of Horrors",
 "updated": "2026-09-01",
+"verified": true
+},
+"bethel parks and recreation|bethel|CT": {
+"contact_id": "Barqcsb2se94ImqnC5jJ",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Bethel Parks And Recreation",
+"ready": false,
+"show_key": "mti:227586",
+"show_title": "Disney's Aladdin Jr.",
+"updated": "2026-09-24",
 "verified": true
 },
 "bethel university|mishawaka|IN": {
@@ -5386,9 +5408,9 @@
 "opportunity_id": "",
 "org_name": "Creighton University",
 "ready": false,
-"show_key": "mti:204037",
-"show_title": "Godspell",
-"updated": "2026-09-01",
+"show_key": "mti:205864",
+"show_title": "Little Women",
+"updated": "2026-09-24",
 "verified": true
 },
 "crete high school|crete|NE": {
@@ -8110,9 +8132,9 @@
 "opportunity_id": "",
 "org_name": "GKHardt Stage, 6th Street Playhouse",
 "ready": false,
-"show_key": "concord:cecbc946502a3a2c",
+"show_key": "concord:0df6343beff05ad7",
 "show_title": "Meet Me In St. Louis",
-"updated": "2026-09-01",
+"updated": "2026-09-24",
 "verified": true
 },
 "glen cove high school|glen cove|NY": {
@@ -11749,9 +11771,9 @@
 "opportunity_id": "",
 "org_name": "Little Mountain Community Theatre",
 "ready": false,
-"show_key": "mti:224662",
-"show_title": "Frozen",
-"updated": "2026-09-02",
+"show_key": "mti:227716",
+"show_title": "Mti's Broadway Junior Revue-raise Your Voice",
+"updated": "2026-09-24",
 "verified": true
 },
 "little rock christian academy|little rock|AR": {
@@ -11771,9 +11793,9 @@
 "opportunity_id": "",
 "org_name": "Little Theatre Of Fall River",
 "ready": false,
-"show_key": "mti:208744",
-"show_title": "Roald Dahl's Matilda The Musical Jr",
-"updated": "2026-09-01",
+"show_key": "mti:227240",
+"show_title": "Annie",
+"updated": "2026-09-24",
 "verified": true
 },
 "little theatre of gastonia|gastonia|NC": {
@@ -15652,9 +15674,9 @@
 "opportunity_id": "",
 "org_name": "Palace Theatre",
 "ready": false,
-"show_key": "concord:37fd801814e0c15d",
-"show_title": "The Great Gatsby",
-"updated": "2026-09-01",
+"show_key": "concord:24f0753199778b74",
+"show_title": "The Lightning Thief",
+"updated": "2026-09-24",
 "verified": true
 },
 "palm beach atlantic university childrens theatre|west palm beach|FL": {
@@ -19851,9 +19873,9 @@
 "opportunity_id": "",
 "org_name": "St Georges School-lower",
 "ready": false,
-"show_key": "mti:225699",
-"show_title": "Seussical Kids",
-"updated": "2026-09-10",
+"show_key": "mti:227697",
+"show_title": "Schoolhouse Rock Live! Jr",
+"updated": "2026-09-24",
 "verified": true
 },
 "st gregory cathedral school|tyler|TX": {
@@ -20526,6 +20548,17 @@
 "show_title": "The Shark Is Broken",
 "updated": "2026-09-01",
 "verified": true
+},
+"stage 62|pittsburgh|PA": {
+"contact_id": "eir46CwgSwVql8WrsExL",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Stage 62",
+"ready": false,
+"show_key": "mti:227723",
+"show_title": "Pippin",
+"updated": "2026-09-24",
+"verified": false
 },
 "stage crafters community theater|fort walton beach|FL": {
 "contact_id": "VkCEgwQfUsKT1pZNo8EH",
@@ -22291,9 +22324,9 @@
 "opportunity_id": "",
 "org_name": "Town And Gown Community Theatre",
 "ready": false,
-"show_key": "mti:207256",
-"show_title": "Dear Evan Hansen",
-"updated": "2026-09-01",
+"show_key": "mti:207212",
+"show_title": "Something Rotten!",
+"updated": "2026-09-24",
 "verified": true
 },
 "town and gown theatre|stillwater|OK": {
