@@ -643,9 +643,9 @@
 "opportunity_id": "",
 "org_name": "Anchorage Community Theatre",
 "ready": false,
-"show_key": "mti:207341",
-"show_title": "The Last Five Years",
-"updated": "2026-09-19",
+"show_key": "concord:8d7201add0c265ce",
+"show_title": "The Best Christmas Pageant Ever",
+"updated": "2026-09-27",
 "verified": true
 },
 "and seen theatrical productions|wilmington|NC": {
@@ -3302,9 +3302,9 @@
 "opportunity_id": "",
 "org_name": "Cary Players",
 "ready": false,
-"show_key": "trw:460ebb4903e14f1f",
-"show_title": "The Prom",
-"updated": "2026-09-01",
+"show_key": "mti:169801",
+"show_title": "Once Upon A One More Time",
+"updated": "2026-09-27",
 "verified": true
 },
 "casady school|oklahoma city|OK": {
@@ -3467,9 +3467,9 @@
 "opportunity_id": "",
 "org_name": "Center for Performing Arts",
 "ready": false,
-"show_key": "",
-"show_title": "",
-"updated": "2026-09-19",
+"show_key": "concord:e2037dd23c950f27",
+"show_title": "Jesus Christ Superstar",
+"updated": "2026-09-27",
 "verified": true
 },
 "center for preforming arts in rhinebeck|rhinebeck|NY": {
@@ -5248,6 +5248,17 @@
 "show_key": "mti:209349",
 "show_title": "Elf-the Musical",
 "updated": "2026-09-01",
+"verified": true
+},
+"courtyard theater|plano|TX": {
+"contact_id": "HcekVnrzBPbLSXidjLKV",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "The Courtyard Theater",
+"ready": false,
+"show_key": "concord:11429c206d8ca206",
+"show_title": "Streuth",
+"updated": "2026-09-27",
 "verified": true
 },
 "courtyard theatre|plano|TX": {
@@ -7562,9 +7573,9 @@
 "opportunity_id": "",
 "org_name": "Frances Mohler Dance Company",
 "ready": false,
-"show_key": "mti:205081",
-"show_title": "Shrek The Musical Jr",
-"updated": "2026-09-01",
+"show_key": "mti:224981",
+"show_title": "Trolls The Musical Jr.",
+"updated": "2026-09-27",
 "verified": true
 },
 "francis j gaudette theatre|issaquah|WA": {
@@ -8554,6 +8565,17 @@
 "show_title": "Richard O'Brien's The Rocky Horror Show",
 "updated": "2026-09-20",
 "verified": true
+},
+"greenspace center|lewisburg|PA": {
+"contact_id": "6IqWLkkvcUhgZz1RdVFA",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Greenspace Center",
+"ready": false,
+"show_key": "concord:2f0d168ed6f3ab1b",
+"show_title": "Treasure Island (Lavery)",
+"updated": "2026-09-27",
+"verified": false
 },
 "greenville high school|greenville|MI": {
 "contact_id": "5j5rmod0aKoK2gOEPlop",
@@ -10552,9 +10574,9 @@
 "opportunity_id": "",
 "org_name": "Kemptville Youth Musical Theatre",
 "ready": false,
-"show_key": "mti:176110",
-"show_title": "Something Rotten!",
-"updated": "2026-09-01",
+"show_key": "mti:215995",
+"show_title": "Shrek The Musical",
+"updated": "2026-09-27",
 "verified": true
 },
 "kennebunk high school|kennebunk|ME": {
@@ -15091,9 +15113,9 @@
 "opportunity_id": "",
 "org_name": "Ohio University School Of Theater",
 "ready": false,
-"show_key": "mti:221832",
-"show_title": "Spring Awakening",
-"updated": "2026-09-01",
+"show_key": "mti:204042",
+"show_title": "Working-2012 Revised Version",
+"updated": "2026-09-27",
 "verified": true
 },
 "ohio wesleyan univ|delaware|OH": {
@@ -18425,9 +18447,9 @@
 "opportunity_id": "",
 "org_name": "Santa Monica Theatre Guild/morgan Wixson Theatre",
 "ready": false,
-"show_key": "mti:170486",
-"show_title": "Into The Woods",
-"updated": "2026-09-01",
+"show_key": "mti:219253",
+"show_title": "The 25th Annual Putnam County Spelling Bee",
+"updated": "2026-09-27",
 "verified": true
 },
 "sarah smith elementary school|atlanta|GA": {
@@ -19334,9 +19356,9 @@
 "opportunity_id": "",
 "org_name": "South Bay Musical Theatre",
 "ready": false,
-"show_key": "mti:191377",
-"show_title": "Into The Woods",
-"updated": "2026-09-01",
+"show_key": "mti:191395",
+"show_title": "Come From Away",
+"updated": "2026-09-27",
 "verified": true
 },
 "south bend civic theatre|mishawaka|IN": {
