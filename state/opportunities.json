@@ -230,6 +230,17 @@
 "updated": "2026-09-01",
 "verified": true
 },
+"acta theatre|trussville|AL": {
+"contact_id": "h98toR7tBlUnTp2kehIG",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Acta Theatre",
+"ready": false,
+"show_key": "mti:228564",
+"show_title": "Seussical",
+"updated": "2026-09-30",
+"verified": false
+},
 "acting for young people|fairfax|VA": {
 "contact_id": "NDct7x6LC1KTDbDF9pkY",
 "last_armed": "",
@@ -577,9 +588,9 @@
 "opportunity_id": "",
 "org_name": "Amelia Musical Playhouse",
 "ready": false,
-"show_key": "mti:174971",
-"show_title": "Frozen",
-"updated": "2026-09-01",
+"show_key": "concord:1d725ea6f1a6323c",
+"show_title": "Richard O'Brien's The Rocky Horror Show",
+"updated": "2026-09-30",
 "verified": true
 },
 "american heritage school|plantation|FL": {
@@ -899,6 +910,17 @@
 "show_key": "mti:222916",
 "show_title": "Disney's Dare To Dream Jr",
 "updated": "2026-09-01",
+"verified": true
+},
+"arkansas arts academy performing arts center|rogers|AR": {
+"contact_id": "pgamL3V3NLYwP7XiZzRc",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Arkansas Arts Academy Performing Arts Center",
+"ready": false,
+"show_key": "concord:dc306a98c4b970c9",
+"show_title": "Clue (High School Edition)",
+"updated": "2026-09-30",
 "verified": true
 },
 "arlington catholic high school|arlington|MA": {
@@ -1546,6 +1568,17 @@
 "show_key": "mti:190345",
 "show_title": "How To Succeed In Business...trying",
 "updated": "2026-09-11",
+"verified": true
+},
+"barnum studio theatre|indianola|IA": {
+"contact_id": "IJXzkXJ30te9VK6IJS7L",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Barnum Studio Theatre",
+"ready": false,
+"show_key": "concord:95798381287ec92b",
+"show_title": "Such Things Only Happen in Books",
+"updated": "2026-09-30",
 "verified": true
 },
 "barrie school|silver spring|MD": {
@@ -8247,6 +8280,17 @@
 "updated": "2026-09-01",
 "verified": true
 },
+"glyndon players|westminster|MD": {
+"contact_id": "6WEvrm8p3Byc6hoJJ0op",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "The Glyndon Players",
+"ready": false,
+"show_key": "mti:228572",
+"show_title": "Les Miserables",
+"updated": "2026-09-30",
+"verified": false
+},
 "golda och academy eric f ross upper school campus|west orange|NJ": {
 "contact_id": "K96XWLOi8qAcuV7HrY85",
 "last_armed": "",
@@ -12062,6 +12106,17 @@
 "updated": "2026-09-23",
 "verified": false
 },
+"lorain high school|lorain|OH": {
+"contact_id": "VPQgq9aWXe8B351xkUDe",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Lorain High School",
+"ready": false,
+"show_key": "concord:f90464eef3b6ac3e",
+"show_title": "Bedtime Stories (As Told by Our Dad) (Who Messed Them Up)",
+"updated": "2026-09-30",
+"verified": false
+},
 "loudonville christian school|loudonville|NY": {
 "contact_id": "SkITgucSVtoDohY4aAJv",
 "last_armed": "",
@@ -12717,9 +12772,9 @@
 "opportunity_id": "",
 "org_name": "Market House Theatre",
 "ready": false,
-"show_key": "",
-"show_title": "",
-"updated": "2026-09-04",
+"show_key": "mti:228427",
+"show_title": "Disney's Newsies Jr.",
+"updated": "2026-09-30",
 "verified": true
 },
 "marquette university dept of perf arts|milwaukee|WI": {
@@ -13645,6 +13700,17 @@
 "show_title": "Annie Kids",
 "updated": "2026-09-01",
 "verified": true
+},
+"montessori academy of cincinnati|mason|OH": {
+"contact_id": "FHFxDlRTPfUTUsVPgZQq",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Montessori Academy Of Cincinnati",
+"ready": false,
+"show_key": "mti:228537",
+"show_title": "Disney's Beauty And The Beast Jr",
+"updated": "2026-09-30",
+"verified": false
 },
 "montessori academy|brentwood|TN": {
 "contact_id": "FkPuimamJljfakefewgI",
@@ -17525,6 +17591,17 @@
 "updated": "2026-09-02",
 "verified": true
 },
+"rhode center for arts|kenosha|WI": {
+"contact_id": "ofwl4V6WIjJUreDCRt8r",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Rhode Center for the Arts",
+"ready": false,
+"show_key": "concord:38270e04bf88de5f",
+"show_title": "All in the Timing, Six One-Act Plays",
+"updated": "2026-09-30",
+"verified": true
+},
 "rhodes school|river grove|IL": {
 "contact_id": "kumNTEG40ypTfebfS1WI",
 "last_armed": "",
@@ -18329,6 +18406,17 @@
 "show_key": "concord:1de166e43407c49f",
 "show_title": "Treasure Island: A New Adventure",
 "updated": "2026-09-01",
+"verified": true
+},
+"saint john school|ashtabula|OH": {
+"contact_id": "Q2RaG3iYMMTwU22pNKzG",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Saint John school",
+"ready": false,
+"show_key": "concord:eb5b38d02f9d91fd",
+"show_title": "The Best Christmas Pageant Ever",
+"updated": "2026-09-30",
 "verified": true
 },
 "salesian boys and girls club|san francisco|CA": {
