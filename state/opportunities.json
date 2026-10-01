@@ -4312,9 +4312,9 @@
 "opportunity_id": "",
 "org_name": "Christopher Newport University (cnu)",
 "ready": false,
-"show_key": "",
-"show_title": "",
-"updated": "2026-09-03",
+"show_key": "mti:228648",
+"show_title": "Come From Away",
+"updated": "2026-10-01",
 "verified": true
 },
 "christopher newport university studio theatre|newport news|VA": {
@@ -8544,6 +8544,17 @@
 "updated": "2026-09-01",
 "verified": true
 },
+"greenbrier valley theatre|lewisburg|WV": {
+"contact_id": "8wwpodeTqeavJ6k22lbs",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Greenbrier Valley Theatre",
+"ready": false,
+"show_key": "concord:b04da183363d0d90",
+"show_title": "The Mousetrap",
+"updated": "2026-10-01",
+"verified": false
+},
 "greeneville theatre guild|greeneville|TN": {
 "contact_id": "ZEK8E96zI35o6ydtSbUj",
 "last_armed": "",
@@ -10984,6 +10995,17 @@
 "show_key": "mti:222498",
 "show_title": "Disney's Finding Nemo Kids",
 "updated": "2026-09-01",
+"verified": true
+},
+"knoxville performing arts center|knoxville|IA": {
+"contact_id": "n8O5GI0PEmVAJST0oXX1",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Knoxville Performing Arts Center",
+"ready": false,
+"show_key": "concord:5c12ac03a1e8484a",
+"show_title": "Wit",
+"updated": "2026-10-01",
 "verified": true
 },
 "korda productions|windsor|ON": {
@@ -15030,6 +15052,17 @@
 "updated": "2026-09-11",
 "verified": true
 },
+"o donnell middle school|stoughton|MA": {
+"contact_id": "lJ3zwDZPYZkGHrHxxi8J",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "O'donnell Middle School",
+"ready": false,
+"show_key": "mti:228674",
+"show_title": "Dear Edwina Jr",
+"updated": "2026-10-01",
+"verified": true
+},
 "oak bay high secondary school|victoria|BC": {
 "contact_id": "opsfeLlwvxEuWPHf5jtI",
 "last_armed": "",
@@ -15465,9 +15498,9 @@
 "opportunity_id": "",
 "org_name": "Opera Wyoming",
 "ready": false,
-"show_key": "mti:220758",
-"show_title": "Sweeney Todd",
-"updated": "2026-09-01",
+"show_key": "mti:228602",
+"show_title": "Spookley The Square Pumpkin",
+"updated": "2026-10-01",
 "verified": true
 },
 "orange community players|orange|TX": {
@@ -18011,9 +18044,9 @@
 "opportunity_id": "",
 "org_name": "Rockport Little Theatre",
 "ready": false,
-"show_key": "",
-"show_title": "",
-"updated": "2026-09-05",
+"show_key": "mti:228693",
+"show_title": "The Music Man",
+"updated": "2026-10-01",
 "verified": true
 },
 "rockville musical theatre|rockville|MD": {
@@ -19282,6 +19315,17 @@
 "show_key": "mti:222357",
 "show_title": "Peter And The Starcatcher",
 "updated": "2026-09-01",
+"verified": true
+},
+"sister carlotta performing arts center|monterey|CA": {
+"contact_id": "ab47ZslpeBQViN8uH7hC",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Sister Carlotta Performing Arts Center",
+"ready": false,
+"show_key": "concord:dc03a236a4ec3042",
+"show_title": "10 Ways to Survive the Zombie Apocalypse",
+"updated": "2026-10-01",
 "verified": true
 },
 "sitka stage and screen|courtenay|BC": {
