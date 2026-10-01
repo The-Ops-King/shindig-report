@@ -262,10 +262,11 @@ GHL_FIELD_IDS: dict[str, str] = {
 #   "School/ Theater" says what kind of institution the contact is, not which
 #   venue this particular show is in. Different question, same-looking name.
 
-# The tag that puts someone into the outreach sequence. The GHL workflow
-# triggers on this tag being *added*, which is what lets you add or remove
-# people by hand, or from another automation, without touching this code.
-GHL_OUTREACH_TAG = "shindig-outreach"
+# The tag that puts someone into the outreach sequence. This is the real tag
+# the GHL workflow triggers on -- it must match what is configured there
+# exactly, or enrolment writes a tag nothing is listening for and the run
+# reports success while sending nobody anything.
+GHL_OUTREACH_TAG = "mass-marketing"
 
 # --- Delivery --------------------------------------------------------------
 SHEET_ID = os.environ.get("SHEET_ID", "")
