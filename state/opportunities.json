@@ -1763,9 +1763,9 @@
 "opportunity_id": "",
 "org_name": "Bedford County Players",
 "ready": false,
-"show_key": "mti:173258",
-"show_title": "Sweeney Todd",
-"updated": "2026-09-01",
+"show_key": "mti:221033",
+"show_title": "Shrek The Musical",
+"updated": "2026-10-04",
 "verified": true
 },
 "bedford middle school|westport|CT": {
@@ -4510,9 +4510,9 @@
 "opportunity_id": "",
 "org_name": "City Of Torrance Parks And Recreation Department",
 "ready": false,
-"show_key": "mti:196665",
-"show_title": "A Gentleman's Guide To Love And Murder",
-"updated": "2026-09-01",
+"show_key": "",
+"show_title": "",
+"updated": "2026-10-04",
 "verified": true
 },
 "civic theatre of allentown|allentown|PA": {
@@ -5870,9 +5870,9 @@
 "opportunity_id": "",
 "org_name": "Delaware Childrens Theatre",
 "ready": false,
-"show_key": "mti:203364",
-"show_title": "Disney's Finding Nemo:a 60-minute Family Musical",
-"updated": "2026-09-01",
+"show_key": "mti:217780",
+"show_title": "Roald Dahl's Matilda The Musical",
+"updated": "2026-10-04",
 "verified": true
 },
 "delaware township school|sergeantsvillee|NJ": {
@@ -9864,6 +9864,17 @@
 "updated": "2026-09-01",
 "verified": true
 },
+"independence park theatre|baton rouge|LA": {
+"contact_id": "ztz01X2XWxGjX41mvtf9",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Independence Park Theatre",
+"ready": false,
+"show_key": "concord:fc5e62380c8d4972",
+"show_title": "Hadestown: Teen Edition",
+"updated": "2026-10-04",
+"verified": true
+},
 "indian creek middle school|trafalgar|IN": {
 "contact_id": "W93W7quvTd8Fxi48kJe2",
 "last_armed": "",
@@ -10046,9 +10057,9 @@
 "opportunity_id": "",
 "org_name": "Ja'Duke Theater",
 "ready": false,
-"show_key": "concord:7a89891e44d29a77",
-"show_title": "Night of the Living Dead Live",
-"updated": "2026-09-01",
+"show_key": "trw:bb3e5b3a7c5eadb9",
+"show_title": "The Addams Family Musical",
+"updated": "2026-10-04",
 "verified": true
 },
 "jackson theatre guild|jackson|TN": {
@@ -11388,9 +11399,9 @@
 "opportunity_id": "",
 "org_name": "Landmark Community Theatre",
 "ready": false,
-"show_key": "mti:214697",
-"show_title": "Ragtime 9 Piece Orchestration",
-"updated": "2026-09-05",
+"show_key": "mti:181659",
+"show_title": "The Santa Switch",
+"updated": "2026-10-04",
 "verified": true
 },
 "landmark musicals|albuquerque|NM": {
@@ -15388,9 +15399,9 @@
 "opportunity_id": "",
 "org_name": "On The Stage Children's Theatre",
 "ready": false,
-"show_key": "mti:211839",
-"show_title": "Peter And The Starcatcher",
-"updated": "2026-09-01",
+"show_key": "mti:211855",
+"show_title": "How To Train Your Dragon The Musical Jr.",
+"updated": "2026-10-04",
 "verified": true
 },
 "on stage|monroe|GA": {
@@ -16139,6 +16150,17 @@
 "show_key": "mti:209198",
 "show_title": "Shrek The Musical",
 "updated": "2026-09-01",
+"verified": true
+},
+"pattiz theater hamilton high school|los angeles|CA": {
+"contact_id": "pU7Lm57zHZ3t58e6VwTK",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Pattiz Theater - Hamilton High School",
+"ready": false,
+"show_key": "concord:9b413fce892e0d83",
+"show_title": "She Kills Monsters: Young Adventurers Edition",
+"updated": "2026-10-04",
 "verified": true
 },
 "paw paw high school|paw paw|MI": {
@@ -18403,9 +18425,9 @@
 "opportunity_id": "",
 "org_name": "The Ruth Theater",
 "ready": false,
-"show_key": "mti:209610",
-"show_title": "Dear Evan Hansen",
-"updated": "2026-09-01",
+"show_key": "mti:229096",
+"show_title": "Beetlejuice Jr.",
+"updated": "2026-10-04",
 "verified": true
 },
 "rye country day school|rye|NY": {
@@ -19444,9 +19466,9 @@
 "opportunity_id": "",
 "org_name": "Skyrise Childrens Theater",
 "ready": false,
-"show_key": "mti:221833",
-"show_title": "Something Rotten! Jr.",
-"updated": "2026-09-25",
+"show_key": "mti:221325",
+"show_title": "Disney's Newsies Jr.",
+"updated": "2026-10-04",
 "verified": true
 },
 "snow college|ephraim|UT": {
