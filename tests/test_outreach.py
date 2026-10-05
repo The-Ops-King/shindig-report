@@ -18,6 +18,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import config  # noqa: E402
 import emails  # noqa: E402
+import ghl  # noqa: E402
 import outreach  # noqa: E402
 from normalize import Production  # noqa: E402
 from orgs import Organization  # noqa: E402
@@ -826,20 +827,37 @@ def _run(monkeypatch, enabled, **kw):
 
     p = prod("mti:1", "Old Courthouse Theatre", IN_WINDOW)
     registry = {p.org_key: org_for(p, "info@oct.org")}
-    stats, _ = main.run_outreach([p], registry, object(), TODAY, Args(**kw))
+    stats, _, _ = main.run_outreach([p], registry, object(), TODAY, Args(**kw))
     return stats, fake
 
 
-def test_a_live_run_emails_nobody_while_the_switch_is_off(monkeypatch):
-    """One word in a JSON file should not be able to cold-email 2,700 people."""
+def test_a_live_run_sends_nothing_itself_while_the_switch_is_off(monkeypatch):
+    """The brake still stops this code sending: the run downgrades to ingest,
+    records the refusal, sends nothing and never calls the workflow endpoint."""
     stats, fake = _run(monkeypatch, enabled=False)
     assert stats["mode"] == "ingest"
     assert "refused" in stats
     assert stats.get("sent", 0) == 0
     assert not any("workflow" in path for path in fake.paths())
+
+
+def test_the_switch_no_longer_gates_enrolment(monkeypatch):
+    """What the brake stopped, and no longer does.
+
+    OUTREACH_ENABLED used to be the one thing between a JSON edit and 2,700
+    cold emails, because enrolment was a workflow API call this code made.
+    It is not any more: enrolment is the mass-marketing tag, the tag is now
+    applied on ingest, and the GHL workflow sends on its own from there.
+
+    So the switch governs this code's own sending path only. The remaining
+    gate on a real email reaching a real person is whether the GHL workflow
+    is live. Pinned deliberately so the day that is forgotten, this test
+    says what changed rather than a silent send saying it.
+    """
+    _, fake = _run(monkeypatch, enabled=False)
     tags = [t for _, path, body in fake.calls if path.endswith("/tags")
             for t in ((body or {}).get("tags") or [])]
-    assert config.GHL_OUTREACH_TAG not in tags
+    assert config.GHL_OUTREACH_TAG in tags
 
 
 def test_the_refusal_still_writes_the_contact(monkeypatch):
@@ -1434,3 +1452,90 @@ def test_an_already_verified_address_is_not_resubmitted(monkeypatch, tmp_path):
     assert fake_v.submitted == []
     assert stats["sent_to_verifalia"] == 0
     assert len(allowed) == 1
+
+
+# --- the mass-marketing tag, and the count Brian is sent -------------------
+
+def _tag_cand(addr="good@t.org", title="Annie", start=IN_WINDOW,
+              first=True, org="New Co"):
+    p = prod("mti:1", org, start, title=title) if title is not None else None
+    c = outreach.Candidate(address=addr,
+                           org_key=p.org_key if p else "k", org_name=org,
+                           production=p, action="hold")
+    c.first_ingest = first
+    c.ghl_contact_id = "c1"
+    return c
+
+
+def _tag(monkeypatch, cand, verified=True, sendable=True):
+    """Run GHLClient.sync_marketing_tag with the tag write captured."""
+    monkeypatch.setattr(emails, "is_verified", lambda a: verified)
+    monkeypatch.setattr(emails, "is_sendable", lambda a: sendable)
+    written = []
+    client = ghl.GHLClient.__new__(ghl.GHLClient)
+    monkeypatch.setattr(ghl.GHLClient, "set_tags",
+                        lambda self, cid, add=(), remove=(): written.append(list(add)))
+    client.sync_marketing_tag(cand)
+    return written, cand
+
+
+def test_a_usable_new_lead_is_tagged(monkeypatch):
+    """Title, real opening date and a verified address -- the whole point."""
+    written, cand = _tag(monkeypatch, _tag_cand())
+    assert written == [[config.GHL_OUTREACH_TAG]]
+    assert cand.tagged_marketing
+
+
+def test_an_organization_already_in_the_ledger_is_not_tagged(monkeypatch):
+    """Re-tagging would restart the sequence for someone mid-season."""
+    written, cand = _tag(monkeypatch, _tag_cand(first=False))
+    assert written == []
+    assert not cand.tagged_marketing
+
+
+def test_no_show_title_means_no_tag(monkeypatch):
+    """The copy names the show. Enrolling without one sends a blank."""
+    cand = _tag_cand()
+    cand.production.show_title = ""
+    assert _tag(monkeypatch, cand)[0] == []
+
+
+def test_a_licence_window_is_not_tagged(monkeypatch):
+    """It has a start_date, but custom_fields() blanks it before GHL sees it,
+    so every date-anchored wait in the sequence would fall through at once."""
+    cand = _tag_cand(start=TODAY + timedelta(days=60))
+    cand.production.end_date = cand.production.start_date + timedelta(days=900)
+    assert not cand.production.has_real_dates, "fixture must be a licence window"
+    assert _tag(monkeypatch, cand)[0] == []
+
+
+def test_an_unverified_address_is_not_tagged(monkeypatch):
+    assert _tag(monkeypatch, _tag_cand(), verified=False)[0] == []
+
+
+def test_an_unsendable_address_is_not_tagged(monkeypatch):
+    assert _tag(monkeypatch, _tag_cand(), sendable=False)[0] == []
+
+
+def test_the_digest_reports_the_number_tagged(monkeypatch):
+    """The count Brian reads has to be the count that was actually written."""
+    import notify
+    sent = {}
+    monkeypatch.setattr(notify, "_send", lambda subject, body, text="":
+                        sent.update(subject=subject, body=body, text=text))
+    added = [_tag_cand(org="A"), _tag_cand(org="B")]
+    notify.send_digest(added, {}, TODAY, seen_total=50)
+    assert f"2 added to {config.GHL_OUTREACH_TAG}" in sent["subject"]
+    assert "50 new productions found" in sent["body"]
+    assert "good@t.org" in sent["body"]
+
+
+def test_a_digest_with_nobody_added_says_so(monkeypatch):
+    """Zero is a real answer, and must not look like a crash."""
+    import notify
+    sent = {}
+    monkeypatch.setattr(notify, "_send", lambda subject, body, text="":
+                        sent.update(subject=subject, body=body))
+    notify.send_digest([], {}, TODAY, seen_total=12)
+    assert "0 added" in sent["subject"]
+    assert "Nobody was added today" in sent["body"]

@@ -265,7 +265,12 @@ def date_quality(productions) -> dict:
 def run_outreach(productions, registry, book, today, args):
     """Select who to contact, push them to GHL, and record it.
 
-    Returns (stats, sheet rows). A dry run does everything except touch GHL,
+    Returns (stats, sheet rows, tagged candidates). The third is who was put
+    into the mass-marketing sequence this run -- the number Brian's digest
+    reports, and the only place it is known, since the tag is applied deep in
+    push().
+
+    A dry run does everything except touch GHL,
     which is the only safe way to look at a cold-email queue before it sends.
     """
     import ghl
@@ -418,10 +423,13 @@ def run_outreach(productions, registry, book, today, args):
     if not dry:
         state_mod.save_outreach(outreach_state)
         state_mod.save_opportunities(opportunities)
+    tagged = [c for c in candidates if c.tagged_marketing]
+    stats["marketing_added"] = len(tagged)
     stats["sent"] = sent if not dry else 0
     stats["dry_run"] = dry
-    log.info("outreach: %d sent, %d queued rows", stats["sent"], len(rows))
-    return stats, rows
+    log.info("outreach: %d sent, %d added to %s, %d queued rows",
+             stats["sent"], len(tagged), config.GHL_OUTREACH_TAG, len(rows))
+    return stats, rows, tagged
 
 
 def main(argv=None) -> int:
@@ -523,8 +531,9 @@ def main(argv=None) -> int:
         # --- outreach ------------------------------------------------------
         outreach_stats = {}
         outreach_rows = []
+        tagged = []
         if args.outreach or args.outreach_dry_run or args.outreach_ingest:
-            outreach_stats, outreach_rows = run_outreach(
+            outreach_stats, outreach_rows, tagged = run_outreach(
                 scoped, registry, book, today, args
             )
 
@@ -585,7 +594,8 @@ def main(argv=None) -> int:
 
         if not args.sheet_only:
             import notify
-            notify.send_digest(new_today, registry, stats, today)
+            notify.send_digest(tagged, stats, today,
+                               seen_total=len(new_today))
 
         log.info("done in %.0fs — %d new of %d", duration, len(new_today),
                  len(scoped))

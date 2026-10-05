@@ -50,80 +50,84 @@ def _esc(v) -> str:
     return html.escape(str(v or ""))
 
 
-def _rows_html(productions: list, registry: dict) -> str:
-    if not productions:
+def _rows_html(added: list) -> str:
+    """One row per contact put into the sequence this run.
+
+    Built from candidates rather than productions because the candidate is
+    what carries the address that was actually written to GHL -- re-deriving
+    it from the registry would risk showing a different one.
+    """
+    if not added:
         return (
-            '<p style="color:#666">No new productions today. '
-            "The sheet is still current.</p>"
+            '<p style="color:#666">Nobody was added today. Either no new '
+            "organization cleared verification, or none of the new ones had "
+            "both a show title and an opening date.</p>"
         )
 
     cells = []
-    for p in productions[:config.EMAIL_TABLE_LIMIT]:
-        org = registry.get(p.org_key)
-        contact = ""
-        if org and org.email:
-            contact = _esc(org.email)
-        elif org and org.phone:
-            contact = _esc(org.phone)
-        else:
-            contact = '<span style="color:#b00">—</span>'
+    for c in added[:config.EMAIL_TABLE_LIMIT]:
+        p = c.production
         when = ""
-        if p.start_date:
+        if p is not None and p.start_date:
             when = p.start_date.strftime("%b %d, %Y")
-            if p.end_date and p.end_date != p.start_date:
-                when += f" – {p.end_date.strftime('%b %d')}"
         cells.append(
             "<tr>"
-            f'<td style="padding:6px 10px;border-bottom:1px solid #eee">{_esc(p.show_title)}</td>'
-            f'<td style="padding:6px 10px;border-bottom:1px solid #eee">{_esc(p.organization)}</td>'
-            f'<td style="padding:6px 10px;border-bottom:1px solid #eee">{_esc(p.city)}, {_esc(p.state)}</td>'
-            f'<td style="padding:6px 10px;border-bottom:1px solid #eee;white-space:nowrap">{_esc(when)}</td>'
-            f'<td style="padding:6px 10px;border-bottom:1px solid #eee">{contact}</td>'
+            f'<td style="padding:6px 10px;border-bottom:1px solid #eee">{_esc(c.org_name)}</td>'
+            f'<td style="padding:6px 10px;border-bottom:1px solid #eee">'
+            f'{_esc(p.show_title if p is not None else "")}</td>'
+            f'<td style="padding:6px 10px;border-bottom:1px solid #eee">'
+            f'{_esc(p.city if p is not None else "")}, '
+            f'{_esc(p.state if p is not None else "")}</td>'
+            f'<td style="padding:6px 10px;border-bottom:1px solid #eee;'
+            f'white-space:nowrap">{_esc(when)}</td>'
+            f'<td style="padding:6px 10px;border-bottom:1px solid #eee">{_esc(c.address)}</td>'
             "</tr>"
         )
 
     more = ""
-    if len(productions) > config.EMAIL_TABLE_LIMIT:
-        more = (
-            f'<p style="color:#666;font-size:13px">'
-            f"…and {len(productions) - config.EMAIL_TABLE_LIMIT} more in the sheet.</p>"
-        )
-
-    head = "".join(
-        f'<th style="text-align:left;padding:6px 10px;border-bottom:2px solid #333;'
-        f'font-size:12px;text-transform:uppercase;color:#555">{h}</th>'
-        for h in ("Show", "Organization", "Where", "Dates", "Contact")
-    )
+    if len(added) > config.EMAIL_TABLE_LIMIT:
+        more = (f'<p style="color:#666;font-size:13px">'
+                f'&hellip; and {len(added) - config.EMAIL_TABLE_LIMIT} more.</p>')
     return (
         '<table style="border-collapse:collapse;width:100%;font-size:14px">'
-        f"<thead><tr>{head}</tr></thead><tbody>{''.join(cells)}</tbody></table>{more}"
+        '<tr style="text-align:left;color:#666">'
+        '<th style="padding:6px 10px">Organization</th>'
+        '<th style="padding:6px 10px">Next show</th>'
+        '<th style="padding:6px 10px">Where</th>'
+        '<th style="padding:6px 10px">Opens</th>'
+        '<th style="padding:6px 10px">Email</th></tr>'
+        + "".join(cells) + "</table>" + more
     )
 
 
-def send_digest(new_today: list, registry: dict, stats: dict,
-                run_date: date | None = None) -> None:
+def send_digest(added: list, stats: dict, run_date: date | None = None,
+                seen_total: int | None = None) -> None:
+    """Report who was added to the mass-marketing sequence today.
+
+    `added` is the candidates that received the tag in this run, so each one
+    is by construction a new organization with a verified address, a show
+    title and a real opening date. `seen_total` is how many new productions
+    the scrape found, which stays in the footer: a bare "0 added" is
+    indistinguishable from a broken run without it.
+    """
     run_date = run_date or date.today()
-    n = len(new_today)
+    n = len(added)
+    found = 0 if seen_total is None else seen_total
+
     subject = (
-        f"Shindig Report — {n} new production{'s' if n != 1 else ''} "
+        f"Shindig — {n} added to {config.GHL_OUTREACH_TAG} "
         f"({run_date.strftime('%b %d')})"
     )
 
     by_source = stats.get("new_by_source", {})
-    source_line = " · ".join(
+    source_line = " \u00b7 ".join(
         f"{k.upper()}: {v}" for k, v in sorted(by_source.items())
-    ) or "—"
-
-    with_contact = sum(
-        1 for p in new_today
-        if (registry.get(p.org_key) and
-            (registry[p.org_key].email or registry[p.org_key].phone))
-    )
+    ) or "\u2014"
 
     body = f"""\
 <div style="font-family:-apple-system,Segoe UI,Helvetica,Arial,sans-serif;
             max-width:760px;color:#222">
-  <h2 style="margin:0 0 4px">{n} new production{'s' if n != 1 else ''}</h2>
+  <h2 style="margin:0 0 4px">{n} added to {_esc(config.GHL_OUTREACH_TAG)}</h2>
   <p style="margin:0 0 18px;color:#666">
     {run_date.strftime('%A, %B %d, %Y')} &middot; {source_line}
   </p>
@@ -134,11 +138,14 @@ def send_digest(new_today: list, registry: dict, stats: dict,
               text-decoration:none;display:inline-block">Open the sheet</a>
   </p>
 
-  {_rows_html(new_today, registry)}
+  {_rows_html(added)}
 
   <hr style="border:0;border-top:1px solid #eee;margin:22px 0">
   <p style="font-size:13px;color:#666;margin:0">
-    Contact on file for {with_contact} of {n} new production{'s' if n != 1 else ''}.<br>
+    {found:,} new production{'s' if found != 1 else ''} found today;
+    {n} became {'a contact' if n == 1 else 'contacts'} in the sequence.
+    The rest were already known, had no usable email, or had no opening
+    date.<br>
     Tracking {stats.get('total', 0):,} live productions across
     {stats.get('orgs', 0):,} organizations
     ({stats.get('pct_with_contact', 0)}% with contact info).<br>
@@ -148,10 +155,12 @@ def send_digest(new_today: list, registry: dict, stats: dict,
 </div>"""
 
     text = (
-        f"{n} new productions — {run_date}\n{source_line}\n\n"
+        f"{n} added to {config.GHL_OUTREACH_TAG} \u2014 {run_date}\n"
+        f"{found} new productions found\n\n"
         + "\n".join(
-            f"- {p.show_title} | {p.organization} | {p.city}, {p.state} | "
-            f"{p.start_date}" for p in new_today[:config.EMAIL_TABLE_LIMIT]
+            f"- {c.org_name} | "
+            f"{c.production.show_title if c.production else ''} | "
+            f"{c.address}" for c in added[:config.EMAIL_TABLE_LIMIT]
         )
         + f"\n\n{config.sheet_url()}\n"
     )

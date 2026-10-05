@@ -349,6 +349,39 @@ class GHLClient:
             return
         self.set_tags(cand.ghl_contact_id, remove=[config.GHL_UNVERIFIED_TAG])
 
+    def sync_marketing_tag(self, cand) -> None:
+        """Put a genuinely new, usable lead into the outreach sequence.
+
+        This is the tag the GHL workflow triggers on, so applying it *is* the
+        enrolment -- there is no separate send step on this side any more.
+
+        Only on a first ingest. An organization already in the ledger has had
+        its chance, and re-adding the tag later would restart the sequence for
+        someone mid-season.
+
+        All three facts have to be present, because the sequence schedules its
+        waits against the date field and names the show in the copy. Any one
+        missing and it either falls through every wait at once or sends with a
+        blank in it:
+
+        * a show title to pitch;
+        * an opening night to count back from. has_real_dates matters as much
+          as start_date -- custom_fields() blanks a licence window's date
+          before it reaches GHL, so without this check the contact arrives
+          with next_show_start empty;
+        * an address that is both well-formed and verified deliverable.
+        """
+        p = cand.production
+        if not cand.first_ingest:
+            return
+        if not (p and p.show_title and p.start_date and p.has_real_dates):
+            return
+        if not (emails.is_sendable(cand.address)
+                and emails.is_verified(cand.address)):
+            return
+        self.set_tags(cand.ghl_contact_id, add=[config.GHL_OUTREACH_TAG])
+        cand.tagged_marketing = True
+
     def sync_ready_tag(self, cand) -> None:
         """Add or drop the ready tag, but only when it actually changed.
 
@@ -435,6 +468,7 @@ class GHLClient:
             cand.ghl_contact_id = contact_id
             self.sync_ready_tag(cand)
             self.sync_verified_tag(cand)
+            self.sync_marketing_tag(cand)
             if cand.action == "clear":
                 # The card stays exactly where it is. The company has not gone
                 # away, it just has nothing on the books; only the show state

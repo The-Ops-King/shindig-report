@@ -64,6 +64,8 @@ class Candidate:
     show_changed: bool = False         # their next show moved since last run
     rearmed: bool = False              # put back through the sequence this run
     was_unverified: bool = True        # carried the unverified tag last run
+    first_ingest: bool = False         # no ledger record before this run
+    tagged_marketing: bool = False     # given the tag during this run
 
     @property
     def sending(self) -> bool:
@@ -355,6 +357,10 @@ def needs_ingest(cand: Candidate, opportunities: dict,
     one, and then goes quiet again.
     """
     record = opportunities.get(cand.org_key)
+    # Only a first ingest may be tagged into the sequence: an organization
+    # already in the ledger has had its chance, and re-tagging would restart
+    # the sequence for someone mid-season.
+    cand.first_ingest = not record
     if not record:
         return True
     if want_card and not record.get("opportunity_id"):
