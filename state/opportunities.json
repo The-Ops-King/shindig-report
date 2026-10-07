@@ -6885,6 +6885,17 @@
 "updated": "2026-09-01",
 "verified": true
 },
+"entertainment live events nsmt youth|beverly|MA": {
+"contact_id": "zWwkpIRZh2Zd7JAs5wGj",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Entertainment Live Events Dba Nsmt Youth",
+"ready": false,
+"show_key": "mti:229414",
+"show_title": "Honk! Jr",
+"updated": "2026-10-07",
+"verified": false
+},
 "ephrata performing arts center|ephrata|PA": {
 "contact_id": "ZkQGK9WhcZM0nHWf9FrX",
 "last_armed": "",
@@ -13514,6 +13525,17 @@
 "updated": "2026-09-25",
 "verified": true
 },
+"millbrook theatre|millbrook|AL": {
+"contact_id": "ZZfyWspEi0JycoxwcZte",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Millbrook Theatre",
+"ready": false,
+"show_key": "concord:e7ba6d7f56651b06",
+"show_title": "The Red Velvet Cake War",
+"updated": "2026-10-07",
+"verified": true
+},
 "milwaukee chamber theatre|milwaukee|WI": {
 "contact_id": "kBBkebo180joEhxAF0Ps",
 "last_armed": "",
@@ -16444,9 +16466,9 @@
 "opportunity_id": "",
 "org_name": "Phipps Center For The Arts",
 "ready": false,
-"show_key": "mti:203913",
-"show_title": "Freaky Friday",
-"updated": "2026-09-12",
+"show_key": "concord:c42545f80026207d",
+"show_title": "A Christmas Carol (Goldfinger)",
+"updated": "2026-10-07",
 "verified": true
 },
 "phoenix country day school|paradise valley|AZ": {
@@ -19099,6 +19121,17 @@
 "updated": "2026-09-12",
 "verified": true
 },
+"shawnee playhouse amateur|shawnee on delaware|PA": {
+"contact_id": "f2p5e6b8H0eABhlKR1aS",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Shawnee Playhouse- Amateur",
+"ready": false,
+"show_key": "mti:229513",
+"show_title": "The Music Man Sr.",
+"updated": "2026-10-07",
+"verified": false
+},
 "shawnee summer theatre of greene county|bloomfield|IN": {
 "contact_id": "n3O6UObWQzDtK9wON1Uw",
 "last_armed": "",
@@ -19372,6 +19405,17 @@
 "updated": "2026-09-01",
 "verified": true
 },
+"sir john franklin high school|yellowknife|NT": {
+"contact_id": "T8fg5RGqBtIJYJRIjvOb",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Sir John Franklin High School",
+"ready": false,
+"show_key": "mti:229314",
+"show_title": "Disney's The Little Mermaid Jr",
+"updated": "2026-10-07",
+"verified": true
+},
 "sister carlotta performing arts center|monterey|CA": {
 "contact_id": "ab47ZslpeBQViN8uH7hC",
 "last_armed": "",
@@ -19488,9 +19532,9 @@
 "opportunity_id": "",
 "org_name": "Snow College",
 "ready": false,
-"show_key": "mti:218056",
-"show_title": "A Year With Frog And Toad",
-"updated": "2026-09-01",
+"show_key": "",
+"show_title": "",
+"updated": "2026-10-07",
 "verified": true
 },
 "snow productions wilmington performing arts|wilmington|NC": {
@@ -20918,9 +20962,9 @@
 "opportunity_id": "",
 "org_name": "Stage West- West Fargo Events",
 "ready": false,
-"show_key": "",
-"show_title": "",
-"updated": "2026-09-26",
+"show_key": "mti:229326",
+"show_title": "Elf-the Musical Jr.",
+"updated": "2026-10-07",
 "verified": true
 },
 "stagecrafters|royal oak|MI": {
@@ -21713,6 +21757,17 @@
 "show_key": "mti:225482",
 "show_title": "Alice By Heart",
 "updated": "2026-09-10",
+"verified": true
+},
+"tawes theatre in gibson center for arts at washington college|chestertown|MD": {
+"contact_id": "19fveRK3JtsBANTJUALV",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Tawes Theatre in the Gibson Center for the Arts at Washington College",
+"ready": false,
+"show_key": "concord:db9496a4e61d342d",
+"show_title": "The Arsonists",
+"updated": "2026-10-07",
 "verified": true
 },
 "tcan players center for arts in natick|natick|MA": {
