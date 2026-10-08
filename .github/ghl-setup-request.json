@@ -1,7 +1,4 @@
 {
-  "apply": false,
-  "inspect": "",
-  "purge": "",
-  "probe": "160-dismissalfoe@fultonschools.org,info@newberncivictheatre.org,no-such-mailbox-8f3k2q@shindig-nonexistent-domain-test.com",
-  "note": "read-only Verifalia probe: one known-good, one from the backlog, one that must come back Undeliverable"
+  "sends": "probe",
+  "note": "read-only: ask GHL which endpoint reports a sent email, and in what shape. Creates nothing, writes no state. Answers needed before the digest can count emails sent: which endpoint has sends at all, whether they can be filtered by date, and whether a workflow send is distinguishable from a human one."
 }
