@@ -86,14 +86,14 @@ class GHLClient:
         }
 
     def _request(self, method: str, path: str, payload: dict | None = None,
-                 retries: int = 3):
+                 retries: int = 3, params: dict | None = None):
         url = f"{config.GHL_BASE}{path}"
         last = None
         for attempt in range(retries):
             try:
                 resp = self.session.request(
-                    method, url, json=payload, headers=self._headers(),
-                    timeout=config.GHL_TIMEOUT,
+                    method, url, json=payload, params=params,
+                    headers=self._headers(), timeout=config.GHL_TIMEOUT,
                 )
             except requests.RequestException as exc:
                 last = exc
