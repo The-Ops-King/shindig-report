@@ -1625,6 +1625,17 @@
 "updated": "2026-09-30",
 "verified": true
 },
+"barre opera house|barre|VT": {
+"contact_id": "d5za0WhjpBicCE1E1VRY",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Barre Opera House",
+"ready": false,
+"show_key": "mti:231061",
+"show_title": "Disney's Frozen Kids",
+"updated": "2026-10-21",
+"verified": false
+},
 "barrie school|silver spring|MD": {
 "contact_id": "grL61s9t577a037yXBKj",
 "last_armed": "",
@@ -7177,9 +7188,9 @@
 "opportunity_id": "",
 "org_name": "Excelsior Middle School",
 "ready": false,
-"show_key": "mti:215785",
-"show_title": "Elf-the Musical Jr.",
-"updated": "2026-09-01",
+"show_key": "",
+"show_title": "",
+"updated": "2026-10-21",
 "verified": true
 },
 "exit 7 players theater|ludlow|MA": {
@@ -9435,6 +9446,17 @@
 "updated": "2026-10-17",
 "verified": true
 },
+"high touch ministries oaktree academy|virginia beach|VA": {
+"contact_id": "5y62sRuMkK6dpfyzvaFE",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "High Touch Ministries D.b.a. Oaktree Academy",
+"ready": false,
+"show_key": "mti:231160",
+"show_title": "Disney's The Little Mermaid",
+"updated": "2026-10-21",
+"verified": true
+},
 "highland arts theatre|sydney|NS": {
 "contact_id": "qPodIY0SijcuJ712HRrJ",
 "last_armed": "",
@@ -9573,9 +9595,9 @@
 "opportunity_id": "",
 "org_name": "Hippodrome State Theatre Inc",
 "ready": false,
-"show_key": "mti:209510",
-"show_title": "Kimberly Akimbo",
-"updated": "2026-10-16",
+"show_key": "mti:231207",
+"show_title": "The Full Monty",
+"updated": "2026-10-21",
 "verified": true
 },
 "historic lincoln theatre|mount vernon|WA": {
@@ -11870,9 +11892,9 @@
 "opportunity_id": "",
 "org_name": "Lewis Family Playhouse",
 "ready": false,
-"show_key": "concord:1228b357ef87fbd3",
+"show_key": "concord:eb355733df651ff9",
 "show_title": "Sunset Boulevard (Lloyd Webber)",
-"updated": "2026-09-01",
+"updated": "2026-10-21",
 "verified": true
 },
 "lewisville playhouse|lewisville|TX": {
@@ -13556,6 +13578,17 @@
 "show_key": "concord:96b0134235bf2e25",
 "show_title": "The Price",
 "updated": "2026-09-01",
+"verified": true
+},
+"merit theatre|cincinnati|OH": {
+"contact_id": "zp398PIPg1CK7s3Zsb4E",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Merit Theatre Company",
+"ready": false,
+"show_key": "mti:231237",
+"show_title": "Les Miserables",
+"updated": "2026-10-21",
 "verified": true
 },
 "merrimack valley stageworks|plaistow|NH": {
@@ -17412,9 +17445,9 @@
 "opportunity_id": "",
 "org_name": "Prince Avenue Christian School",
 "ready": false,
-"show_key": "mti:206939",
-"show_title": "Guys  And  Dolls Jr",
-"updated": "2026-10-09",
+"show_key": "mti:224816",
+"show_title": "Disney's Finding Nemo Kids",
+"updated": "2026-10-21",
 "verified": true
 },
 "prince of wales collegiate|st johns|NF": {
@@ -17909,6 +17942,17 @@
 "show_title": "Singin' In The Rain",
 "updated": "2026-09-01",
 "verified": true
+},
+"renaissance city theatre granite theatre|westerly|RI": {
+"contact_id": "s8nUZaVFtjDQDl6j5u1T",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Renaissance City Theatre Dba The Granite Theatre",
+"ready": false,
+"show_key": "mti:231216",
+"show_title": "Lionel Barts Oliver! Jr",
+"updated": "2026-10-21",
+"verified": false
 },
 "renaissance performing arts|omaha|NE": {
 "contact_id": "MgffObIadjrhQYvI0RQ8",
@@ -18766,9 +18810,9 @@
 "opportunity_id": "",
 "org_name": "Rye Neck High School",
 "ready": false,
-"show_key": "mti:221392",
-"show_title": "Urinetown",
-"updated": "2026-09-01",
+"show_key": "mti:231047",
+"show_title": "Songs For A New World",
+"updated": "2026-10-21",
 "verified": true
 },
 "sacred heart church|grand rapids|MI": {
@@ -20395,6 +20439,17 @@
 "updated": "2026-09-01",
 "verified": true
 },
+"st barnabas catholic school|indianapolis|IN": {
+"contact_id": "THeZynhf7R1UIOGlOcdq",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "St Barnabas Catholic School",
+"ready": false,
+"show_key": "mti:231156",
+"show_title": "James And The Giant Peach Jr.",
+"updated": "2026-10-21",
+"verified": true
+},
 "st bernard preparatory school|cullman|AL": {
 "contact_id": "taBPS95iDAX4ObpE8Z8Q",
 "last_armed": "",
@@ -21138,9 +21193,9 @@
 "opportunity_id": "",
 "org_name": "Stafford Intermediate School",
 "ready": false,
-"show_key": "mti:223125",
-"show_title": "Disney's Finding Nemo Jr.",
-"updated": "2026-09-01",
+"show_key": "mti:222718",
+"show_title": "Trolls The Musical Jr.",
+"updated": "2026-10-21",
 "verified": true
 },
 "stage 13|little rock|AR": {
@@ -21801,6 +21856,17 @@
 "show_key": "concord:b99b5ae1af6b79ab",
 "show_title": "Corners Grove",
 "updated": "2026-09-01",
+"verified": true
+},
+"studio theatre at alabama center for arts|decatur|AL": {
+"contact_id": "kuhhNNsORa5pdhZEv5EX",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Studio Theatre at Alabama Center for the Arts",
+"ready": false,
+"show_key": "concord:19116addb4913f21",
+"show_title": "In Juliet's Garden",
+"updated": "2026-10-21",
 "verified": true
 },
 "su hornets nest shenandoah university students|winchester|VA": {
@@ -24381,9 +24447,9 @@
 "opportunity_id": "",
 "org_name": "Watertower Theatre Incorporated",
 "ready": false,
-"show_key": "mti:219295",
-"show_title": "Songs For A New World",
-"updated": "2026-09-17",
+"show_key": "",
+"show_title": "",
+"updated": "2026-10-21",
 "verified": true
 },
 "waterville opera house|waterville|ME": {
