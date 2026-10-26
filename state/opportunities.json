@@ -1427,6 +1427,17 @@
 "updated": "2026-09-01",
 "verified": true
 },
+"augusta players|augusta|GA": {
+"contact_id": "rHYp6e5D5DpZTW4dTFzh",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Augusta Players Inc",
+"ready": false,
+"show_key": "mti:174317",
+"show_title": "Frozen",
+"updated": "2026-10-26",
+"verified": false
+},
 "aurora players|east aurora|NY": {
 "contact_id": "Ph3Trix645fwNig1c9VQ",
 "last_armed": "",
@@ -8473,9 +8484,9 @@
 "opportunity_id": "",
 "org_name": "Glens Falls Community Theatre",
 "ready": false,
-"show_key": "mti:219036",
-"show_title": "Les Miserables",
-"updated": "2026-10-24",
+"show_key": "mti:231669",
+"show_title": "Frozen",
+"updated": "2026-10-26",
 "verified": true
 },
 "gloriana opera|fort bragg|CA": {
@@ -17071,9 +17082,9 @@
 "opportunity_id": "",
 "org_name": "Players Theatre Of The Villages",
 "ready": false,
-"show_key": "mti:178350",
-"show_title": "Singin' In The Rain Sr.",
-"updated": "2026-09-01",
+"show_key": "",
+"show_title": "",
+"updated": "2026-10-26",
 "verified": true
 },
 "players theatre|conroe|TX": {
@@ -17687,9 +17698,9 @@
 "opportunity_id": "",
 "org_name": "Putnam County Playhouse-Hazel Day Longden Theatre",
 "ready": false,
-"show_key": "",
-"show_title": "",
-"updated": "2026-09-11",
+"show_key": "concord:7588aab0219bb858",
+"show_title": "The Wizard of Oz (RSC Version)",
+"updated": "2026-10-26",
 "verified": true
 },
 "putnam county playhouse|greencastle|IN": {
@@ -18931,9 +18942,9 @@
 "opportunity_id": "",
 "org_name": "San Angelo Central High School",
 "ready": false,
-"show_key": "",
-"show_title": "",
-"updated": "2026-10-24",
+"show_key": "mti:231667",
+"show_title": "Little Shop Of Horrors",
+"updated": "2026-10-26",
 "verified": true
 },
 "san carlos childrens theater|san carlos|CA": {
