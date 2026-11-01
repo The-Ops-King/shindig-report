@@ -1554,9 +1554,9 @@
 "opportunity_id": "",
 "org_name": "Baldwinsville Theatre Guild",
 "ready": false,
-"show_key": "mti:198590",
-"show_title": "Come From Away",
-"updated": "2026-10-17",
+"show_key": "concord:869c20343fd10ad3",
+"show_title": "Joseph and the Amazing Technicolor Dreamcoat",
+"updated": "2026-11-01",
 "verified": true
 },
 "baltimore school for arts|baltimore|MD": {
@@ -3830,9 +3830,9 @@
 "opportunity_id": "",
 "org_name": "Central Wisconsin Area Community Theatre",
 "ready": false,
-"show_key": "",
-"show_title": "",
-"updated": "2026-10-24",
+"show_key": "mti:232460",
+"show_title": "Seussical",
+"updated": "2026-11-01",
 "verified": true
 },
 "centralia high school|centralia|IL": {
@@ -7705,9 +7705,9 @@
 "opportunity_id": "",
 "org_name": "The Footlight Club",
 "ready": false,
-"show_key": "mti:200753",
-"show_title": "Annie",
-"updated": "2026-09-01",
+"show_key": "trw:ad65fa49fcf778a5",
+"show_title": "Pirates!",
+"updated": "2026-11-01",
 "verified": true
 },
 "footlight players|coshocton|OH": {
@@ -11897,6 +11897,17 @@
 "updated": "2026-09-01",
 "verified": true
 },
+"lenoir rhyne university|hickory|NC": {
+"contact_id": "8e24x9MCNpw4aV3V6qj2",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Lenoir Rhyne University",
+"ready": false,
+"show_key": "mti:232448",
+"show_title": "Come From Away",
+"updated": "2026-11-01",
+"verified": false
+},
 "lester centre of arts|prince rupert|BC": {
 "contact_id": "amToXRPjTi8fBDBaWyPd",
 "last_armed": "",
@@ -14862,9 +14873,9 @@
 "opportunity_id": "",
 "org_name": "New York Univ/tisch School Of The Arts",
 "ready": false,
-"show_key": "mti:214350",
-"show_title": "A Little Night Music",
-"updated": "2026-10-23",
+"show_key": "",
+"show_title": "",
+"updated": "2026-11-01",
 "verified": true
 },
 "newark high school|newark|DE": {
@@ -15501,6 +15512,17 @@
 "show_key": "mti:226497",
 "show_title": "The Connector",
 "updated": "2026-10-23",
+"verified": true
+},
+"oak lawn park district|oak lawn|IL": {
+"contact_id": "h8WwzxCxFgw5XtdLD4mw",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Oak Lawn Park District",
+"ready": false,
+"show_key": "mti:231657",
+"show_title": "Come From Away",
+"updated": "2026-11-01",
 "verified": true
 },
 "oak lawn park district|oaklawn|IL": {
