@@ -6002,9 +6002,9 @@
 "opportunity_id": "",
 "org_name": "Davinci Academy Of Arts And Sciences",
 "ready": false,
-"show_key": "mti:221323",
-"show_title": "Mary Poppins Jr",
-"updated": "2026-09-01",
+"show_key": "",
+"show_title": "",
+"updated": "2026-11-12",
 "verified": true
 },
 "davis musical theatre|davis|CA": {
@@ -6057,9 +6057,9 @@
 "opportunity_id": "",
 "org_name": "Dean College",
 "ready": false,
-"show_key": "mti:203891",
-"show_title": "Urinetown",
-"updated": "2026-09-01",
+"show_key": "mti:201800",
+"show_title": "9 To 5",
+"updated": "2026-11-12",
 "verified": true
 },
 "dearborn recreation city of dearborn|dearborn|MI": {
@@ -11008,6 +11008,17 @@
 "updated": "2026-11-06",
 "verified": true
 },
+"kent county theatre guild|dover|DE": {
+"contact_id": "1QqezKGf6oLugcN27PHk",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Kent County Theatre Guild",
+"ready": false,
+"show_key": "mti:236183",
+"show_title": "The Fantasticks",
+"updated": "2026-11-12",
+"verified": false
+},
 "kent state university|warren|OH": {
 "contact_id": "VEIPidL3gAqI2bwZ7VR2",
 "last_armed": "",
@@ -11925,9 +11936,9 @@
 "opportunity_id": "",
 "org_name": "Legacy Preparatory Academy (north Campus)",
 "ready": false,
-"show_key": "mti:220744",
-"show_title": "Roald Dahl's Matilda The Musical Jr",
-"updated": "2026-09-01",
+"show_key": "mti:228139",
+"show_title": "Tarzan",
+"updated": "2026-11-12",
 "verified": true
 },
 "lemon bay high school|englewood|FL": {
@@ -13575,9 +13586,9 @@
 "opportunity_id": "",
 "org_name": "Mello Drama Productions",
 "ready": false,
-"show_key": "",
-"show_title": "",
-"updated": "2026-10-24",
+"show_key": "mti:236174",
+"show_title": "Seussical Jr.",
+"updated": "2026-11-12",
 "verified": true
 },
 "memorial opera house|valparaiso|IN": {
@@ -13740,9 +13751,9 @@
 "opportunity_id": "",
 "org_name": "Metropolitan Community College Longview (mcc)",
 "ready": false,
-"show_key": "mti:203484",
-"show_title": "Little Shop Of Horrors",
-"updated": "2026-09-01",
+"show_key": "",
+"show_title": "",
+"updated": "2026-11-12",
 "verified": true
 },
 "metropolitan performing arts academy|vancouver|WA": {
@@ -14345,9 +14356,9 @@
 "opportunity_id": "",
 "org_name": "Mouse River Players",
 "ready": false,
-"show_key": "concord:d98e21db99a7577c",
+"show_key": "concord:0f848ad091684688",
 "show_title": "The Best Christmas Pageant Ever",
-"updated": "2026-09-12",
+"updated": "2026-11-12",
 "verified": true
 },
 "move productions|lake zurich|IL": {
@@ -17346,9 +17357,9 @@
 "opportunity_id": "",
 "org_name": "Point Park University",
 "ready": false,
-"show_key": "mti:203896",
-"show_title": "Girls Just Want To Have Fun",
-"updated": "2026-09-01",
+"show_key": "mti:201957",
+"show_title": "The 25th Annual Putnam County Spelling Bee",
+"updated": "2026-11-12",
 "verified": true
 },
 "point theater|indianapolis|IN": {
@@ -18806,6 +18817,17 @@
 "updated": "2026-09-25",
 "verified": true
 },
+"rotunda theatre|houston|TX": {
+"contact_id": "xgzcwEtquNZakBSTymhE",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Rotunda Theatre",
+"ready": false,
+"show_key": "concord:404237cb916d7c88",
+"show_title": "Bye Bye Birdie",
+"updated": "2026-11-12",
+"verified": true
+},
 "round lake area park district community theatre|round lake|IL": {
 "contact_id": "Ngv19gRyVHDjn7zYYmjG",
 "last_armed": "",
@@ -20060,9 +20082,9 @@
 "opportunity_id": "",
 "org_name": "Snow College",
 "ready": false,
-"show_key": "mti:232985",
-"show_title": "Les Miserables",
-"updated": "2026-11-05",
+"show_key": "mti:236080",
+"show_title": "A Gentleman's Guide To Love And Murder",
+"updated": "2026-11-12",
 "verified": true
 },
 "snow productions wilmington performing arts|wilmington|NC": {
@@ -24260,9 +24282,9 @@
 "opportunity_id": "",
 "org_name": "Vero Beach Theatre Guild,inc.",
 "ready": false,
-"show_key": "mti:198118",
-"show_title": "Songs For A New World",
-"updated": "2026-10-16",
+"show_key": "mti:196447",
+"show_title": "A Christmas Carol",
+"updated": "2026-11-12",
 "verified": true
 },
 "verona area high school|verona|WI": {
@@ -25545,9 +25567,9 @@
 "opportunity_id": "",
 "org_name": "Winchester Little Theatre, Inc.",
 "ready": false,
-"show_key": "concord:f1ca2083ea358673",
-"show_title": "The Wickhams: Christmas at Pemberley",
-"updated": "2026-09-16",
+"show_key": "concord:e70903e832a310fb",
+"show_title": "Miss Bennet: Christmas at Pemberley",
+"updated": "2026-11-12",
 "verified": true
 },
 "windermere preparatory school|windermere|FL": {
