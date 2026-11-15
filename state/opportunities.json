@@ -406,6 +406,17 @@
 "updated": "2026-09-01",
 "verified": true
 },
+"aiken community playhouse|aiken|SC": {
+"contact_id": "aPJfgxvksJsA0OuyTf3s",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Aiken Community Playhouse",
+"ready": false,
+"show_key": "mti:200818",
+"show_title": "Sweeney Todd",
+"updated": "2026-11-15",
+"verified": false
+},
 "alamogordo music theatre|alamogordo|NM": {
 "contact_id": "XfrnUCIDlUXE9wNelG7R",
 "last_armed": "",
@@ -437,6 +448,17 @@
 "show_key": "mti:209344",
 "show_title": "Disney's Descendants",
 "updated": "2026-09-01",
+"verified": true
+},
+"albert lea community theatre|albert lea|MN": {
+"contact_id": "K1g33HtuCGouG7qm3fvr",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Albert Lea Community Theatre",
+"ready": false,
+"show_key": "mti:213748",
+"show_title": "Frozen",
+"updated": "2026-11-15",
 "verified": true
 },
 "aldersgate united methodist church|wilmington|DE": {
@@ -599,9 +621,9 @@
 "opportunity_id": "",
 "org_name": "Amelia Musical Playhouse",
 "ready": false,
-"show_key": "mti:221681",
-"show_title": "Disney's Finding Nemo Kids",
-"updated": "2026-11-06",
+"show_key": "concord:c78ced4f579ac26b",
+"show_title": "Scrooge!",
+"updated": "2026-11-15",
 "verified": true
 },
 "american heritage school|plantation|FL": {
@@ -889,6 +911,17 @@
 "show_title": "",
 "updated": "2026-11-13",
 "verified": true
+},
+"ardmore little theatre|ardmore|OK": {
+"contact_id": "0m2wWgpB1J4KCGypsSFW",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Ardmore Little Theatre",
+"ready": false,
+"show_key": "mti:223251",
+"show_title": "The Producers",
+"updated": "2026-11-15",
+"verified": false
 },
 "area community theatre|tomah|WI": {
 "contact_id": "38zWLz4Ifdmcy9M5RyaK",
@@ -1678,6 +1711,17 @@
 "show_key": "mti:218875",
 "show_title": "Fiddler On The Roof",
 "updated": "2026-09-01",
+"verified": true
+},
+"barrow civic theatre|franklin|PA": {
+"contact_id": "ttSQLCVRZ2JnZtDePidn",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Barrow-Civic Theatre",
+"ready": false,
+"show_key": "concord:e64f6ebfca74ac2d",
+"show_title": "Miracle on 34th Street: A Live Musical Radio Play",
+"updated": "2026-11-15",
 "verified": true
 },
 "barry goldwater high school|phoenix|AZ": {
@@ -2702,6 +2746,17 @@
 "updated": "2026-09-01",
 "verified": true
 },
+"brandywiners|montchanin|DE": {
+"contact_id": "F3VWlKMua0EZ0cAtLm1u",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Brandywiners Ltd",
+"ready": false,
+"show_key": "mti:223609",
+"show_title": "Finding Neverland",
+"updated": "2026-11-15",
+"verified": false
+},
 "brantford collegiate institute|brantford|ON": {
 "contact_id": "0CPQeifqDhvmH7N4YcyZ",
 "last_armed": "",
@@ -3041,6 +3096,17 @@
 "show_key": "mti:190422",
 "show_title": "Come From Away",
 "updated": "2026-09-25",
+"verified": true
+},
+"bus stop theatre|halifax|NS": {
+"contact_id": "4UAx1KzDHuYnpQxecc1s",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Bus Stop Theatre,  The",
+"ready": false,
+"show_key": "concord:435acfbab7b7668c",
+"show_title": "Rabbit Hole",
+"updated": "2026-11-15",
 "verified": true
 },
 "c and c impact youth theatre|san antonio|TX": {
@@ -4548,6 +4614,17 @@
 "updated": "2026-10-18",
 "verified": true
 },
+"cinnabar theater|rohnert park|CA": {
+"contact_id": "m235BTVbrq0ZLwOUKJVm",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Cinnabar Theater",
+"ready": false,
+"show_key": "mti:206464",
+"show_title": "Urinetown",
+"updated": "2026-11-15",
+"verified": true
+},
 "citadel theatre|edmonton|AB": {
 "contact_id": "5Te7vMBj6LdZylAqaNy1",
 "last_armed": "",
@@ -5272,6 +5349,17 @@
 "updated": "2026-09-01",
 "verified": true
 },
+"concord youth theatre|concord|MA": {
+"contact_id": "M4XsiWv687muXWbGeji3",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Concord Youth Theatre",
+"ready": false,
+"show_key": "mti:214734",
+"show_title": "Trolls The Musical Jr.",
+"updated": "2026-11-15",
+"verified": false
+},
 "concordia university theatre arts|mequon|WI": {
 "contact_id": "BggSlqb8WnUYsaq3I8e2",
 "last_armed": "",
@@ -5947,9 +6035,9 @@
 "opportunity_id": "",
 "org_name": "Dance Unlimited - Spotlight Acting Academy",
 "ready": false,
-"show_key": "mti:210231",
-"show_title": "Madagascar-a Musical Adventure Jr.",
-"updated": "2026-11-08",
+"show_key": "mti:216159",
+"show_title": "The 25th Annual Putnam County Spelling Bee",
+"updated": "2026-11-15",
 "verified": true
 },
 "dance zone|henderson|NV": {
@@ -6013,9 +6101,9 @@
 "opportunity_id": "",
 "org_name": "Davis Musical Theatre",
 "ready": false,
-"show_key": "mti:206330",
-"show_title": "Disney's The Lion King Jr",
-"updated": "2026-11-14",
+"show_key": "mti:199816",
+"show_title": "West Side Story",
+"updated": "2026-11-15",
 "verified": true
 },
 "dayspring school of arts|maryland heights|MO": {
@@ -6343,9 +6431,9 @@
 "opportunity_id": "",
 "org_name": "Donelson Christian Academy",
 "ready": false,
-"show_key": "mti:219311",
-"show_title": "Madagascar-a Musical Adventure Jr.",
-"updated": "2026-09-01",
+"show_key": "mti:219392",
+"show_title": "Seussical Jr.",
+"updated": "2026-11-15",
 "verified": true
 },
 "doris harper white community playhouse|flagstaff|AZ": {
@@ -6530,9 +6618,9 @@
 "opportunity_id": "",
 "org_name": "Dreamers Productions",
 "ready": false,
-"show_key": "mti:218546",
-"show_title": "Shrek The Musical Kids",
-"updated": "2026-09-01",
+"show_key": "mti:222185",
+"show_title": "Elf-the Musical Jr.",
+"updated": "2026-11-15",
 "verified": true
 },
 "drury lane theatrical productions|burlington|ON": {
@@ -6596,9 +6684,9 @@
 "opportunity_id": "",
 "org_name": "Eado Playhouse, Inc Dba Art Factory Houston, Inc",
 "ready": false,
-"show_key": "mti:219148",
-"show_title": "Disney's Finding Nemo:a 60-minute Family Musical",
-"updated": "2026-09-01",
+"show_key": "",
+"show_title": "",
+"updated": "2026-11-15",
 "verified": true
 },
 "eagle butte high school|medicine hat|AB": {
@@ -6897,6 +6985,17 @@
 "show_title": "Mean Girls Jr",
 "updated": "2026-11-14",
 "verified": true
+},
+"eight o clock theatre|largo|FL": {
+"contact_id": "4ytx0VaaokaW3YIzQGvI",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Eight O'clock Theatre",
+"ready": false,
+"show_key": "mti:207552",
+"show_title": "Damn Yankees",
+"updated": "2026-11-15",
+"verified": false
 },
 "eisenhower high school|decatur|IL": {
 "contact_id": "o4Q9l3UFWCiMykXAQe48",
@@ -7397,9 +7496,9 @@
 "opportunity_id": "",
 "org_name": "Fantasy Playhouse Childrens Theater",
 "ready": false,
-"show_key": "mti:208615",
-"show_title": "Roald Dahl's Matilda The Musical Jr",
-"updated": "2026-09-01",
+"show_key": "mti:208670",
+"show_title": "Roald Dahl's Charlie And The Chocolate Factory Jr.",
+"updated": "2026-11-15",
 "verified": true
 },
 "festival place|sherwood park|AB": {
@@ -7687,6 +7786,17 @@
 "show_title": "",
 "updated": "2026-10-30",
 "verified": true
+},
+"flowertown players|summerville|SC": {
+"contact_id": "BfykhdkhmTiI1YDOLRrs",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Flowertown Players Inc",
+"ready": false,
+"show_key": "mti:196438",
+"show_title": "A Year With Frog And Toad-kids",
+"updated": "2026-11-15",
+"verified": false
 },
 "focal forsyth county arts and learning center|cumming|GA": {
 "contact_id": "o4HRQPZBcVxL3bpIZo05",
@@ -8374,9 +8484,9 @@
 "opportunity_id": "",
 "org_name": "Geneva School Of Boerne",
 "ready": false,
-"show_key": "mti:224022",
-"show_title": "Seussical Kids",
-"updated": "2026-08-29",
+"show_key": "mti:229334",
+"show_title": "Into The Woods Jr",
+"updated": "2026-11-15",
 "verified": true
 },
 "genoa christian academy|westerville|OH": {
@@ -8605,9 +8715,9 @@
 "opportunity_id": "",
 "org_name": "Golden Hills School",
 "ready": false,
-"show_key": "mti:221206",
-"show_title": "Disney's 101 Dalmatians Kids",
-"updated": "2026-09-01",
+"show_key": "",
+"show_title": "",
+"updated": "2026-11-15",
 "verified": true
 },
 "good players|fresno|CA": {
@@ -9353,9 +9463,9 @@
 "opportunity_id": "",
 "org_name": "The Haverhill Performing Arts Workshop, Inc.",
 "ready": false,
-"show_key": "mti:225933",
-"show_title": "Trolls The Musical Jr.",
-"updated": "2026-09-12",
+"show_key": "mti:226159",
+"show_title": "Little Shop Of Horrors (broadway Version)",
+"updated": "2026-11-15",
 "verified": true
 },
 "hawaii childrens theatre|lihue|HI": {
@@ -9710,6 +9820,17 @@
 "updated": "2026-10-21",
 "verified": true
 },
+"historic dixon theatre group|dixon|IL": {
+"contact_id": "mqsaSpjYylRC51BU34uW",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Historic Dixon Theatre Group",
+"ready": false,
+"show_key": "mti:213266",
+"show_title": "Trolls The Musical Jr.",
+"updated": "2026-11-15",
+"verified": false
+},
 "historic lincoln theatre|mount vernon|WA": {
 "contact_id": "qxLyArTzYcKlHsfW9KbI",
 "last_armed": "",
@@ -9863,6 +9984,17 @@
 "show_title": "A Year With Frog And Toad-kids",
 "updated": "2026-09-01",
 "verified": true
+},
+"homewood theatre|homewood|AL": {
+"contact_id": "tML3nehV4e5U3y0UA3IN",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Homewood Theatre",
+"ready": false,
+"show_key": "concord:62e313fa032d06a2",
+"show_title": "Miss Bennet: Christmas at Pemberley",
+"updated": "2026-11-15",
+"verified": false
 },
 "hoobler music|enterprise|AL": {
 "contact_id": "rhtVvh8qv6WPww5cnKGW",
@@ -10057,9 +10189,9 @@
 "opportunity_id": "",
 "org_name": "I Can Do That Theatre Company",
 "ready": false,
-"show_key": "mti:197626",
-"show_title": "Disney's Frozen Kids",
-"updated": "2026-09-01",
+"show_key": "mti:197634",
+"show_title": "Into The Woods Jr",
+"updated": "2026-11-15",
 "verified": true
 },
 "iberia performing arts league|new iberia|LA": {
@@ -10370,6 +10502,17 @@
 "updated": "2026-11-05",
 "verified": true
 },
+"ivoryton playhouse|ivoryton|CT": {
+"contact_id": "zKvcqCii4slHj2cNTNH8",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Ivoryton Playhouse Foundation",
+"ready": false,
+"show_key": "concord:055ffdce233ee628",
+"show_title": "Steel Magnolias",
+"updated": "2026-11-15",
+"verified": false
+},
 "ja duke productions|turners falls|MA": {
 "contact_id": "H48Oorzb03sfGe92gwTi",
 "last_armed": "",
@@ -10402,6 +10545,17 @@
 "show_title": "Magic Tree House: Pirates Past Noon Kids",
 "updated": "2026-10-20",
 "verified": true
+},
+"james f dean community theater|summerville|SC": {
+"contact_id": "BfykhdkhmTiI1YDOLRrs",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "James F. Dean Community Theater",
+"ready": false,
+"show_key": "concord:31218417f5613f94",
+"show_title": "Irving Berlin's White Christmas",
+"updated": "2026-11-15",
+"verified": false
 },
 "james f veninga theater|wausau|WI": {
 "contact_id": "Mt9SFCLyJbeWSKGQLhBY",
@@ -10486,9 +10640,9 @@
 "opportunity_id": "",
 "org_name": "Jewish Community Center On The Palisades",
 "ready": false,
-"show_key": "mti:229134",
-"show_title": "Come From Away",
-"updated": "2026-10-06",
+"show_key": "mti:225309",
+"show_title": "Disney's The Lion King Jr",
+"updated": "2026-11-15",
 "verified": true
 },
 "jitterug performing arts|smyrna|GA": {
@@ -11138,6 +11292,17 @@
 "show_key": "mti:218332",
 "show_title": "Annie Jr",
 "updated": "2026-09-01",
+"verified": true
+},
+"kidz konnection|clinton|CT": {
+"contact_id": "fxn3qGHXuFjTyYXh9BDa",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Kidz Konnection",
+"ready": false,
+"show_key": "mti:212731",
+"show_title": "Shrek The Musical",
+"updated": "2026-11-15",
 "verified": true
 },
 "kidz theatre kompany|fenton|MI": {
@@ -12348,6 +12513,17 @@
 "updated": "2026-10-09",
 "verified": true
 },
+"little theatre of norfolk|norfolk|VA": {
+"contact_id": "PGLHgSE1BgrlAYuVOZLO",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Little Theatre Of Norfolk",
+"ready": false,
+"show_key": "concord:9a902852a8d0489e",
+"show_title": "The Skin of Our Teeth",
+"updated": "2026-11-15",
+"verified": false
+},
 "little theatre of tuscarawas county|new philadelphia|OH": {
 "contact_id": "ZV753EecMaaSdV5mD4Nq",
 "last_armed": "",
@@ -12456,6 +12632,17 @@
 "show_key": "",
 "show_title": "",
 "updated": "2026-11-07",
+"verified": true
+},
+"logan county educational service center|bellefontaine|OH": {
+"contact_id": "b6wk2xtE3C8Yu0UyO8g0",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Logan County Educational Service Center",
+"ready": false,
+"show_key": "mti:208365",
+"show_title": "Chitty Chitty Bang Bang Jr.",
+"updated": "2026-11-15",
 "verified": true
 },
 "london community players|london|ON": {
@@ -12673,9 +12860,9 @@
 "opportunity_id": "",
 "org_name": "Lynnfield Community Schools - District Wide Shows",
 "ready": false,
-"show_key": "mti:221094",
-"show_title": "Disney's Finding Nemo Kids",
-"updated": "2026-09-01",
+"show_key": "mti:231109",
+"show_title": "The Drowsy Chaperone Jr.",
+"updated": "2026-11-15",
 "verified": true
 },
 "lyric arts of anoka|anoka|MN": {
@@ -12717,9 +12904,9 @@
 "opportunity_id": "",
 "org_name": "Lyric Rose Theatre",
 "ready": false,
-"show_key": "mti:223660",
-"show_title": "Disney's Lion King Kids",
-"updated": "2026-09-01",
+"show_key": "mti:223679",
+"show_title": "James And The Giant Peach Jr.",
+"updated": "2026-11-15",
 "verified": true
 },
 "lyric rose theatre|penn valley|CA": {
@@ -12765,6 +12952,17 @@
 "show_title": "Rent",
 "updated": "2026-11-13",
 "verified": true
+},
+"m and d productions m and d playhouse|north conway|NH": {
+"contact_id": "P9tYRCYLGwahVH35YXCH",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "M And D Productions Dba M And D Playhouse",
+"ready": false,
+"show_key": "mti:218775",
+"show_title": "Moby Dick!",
+"updated": "2026-11-15",
+"verified": false
 },
 "macklanburg playhouse|columbia|MO": {
 "contact_id": "Be30DKpA1owBLZAcTXtN",
@@ -12842,6 +13040,17 @@
 "show_title": "Disney's Dare To Dream Jr",
 "updated": "2026-11-07",
 "verified": true
+},
+"magnolia arts center|greenville|NC": {
+"contact_id": "yeSffDk1of2g92VFndzN",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Magnolia Arts Center",
+"ready": false,
+"show_key": "",
+"show_title": "",
+"updated": "2026-11-15",
+"verified": false
 },
 "main stage productions stage right|conroe|TX": {
 "contact_id": "Msvkvnqj0qNKZUhtYfkR",
@@ -13294,6 +13503,17 @@
 "updated": "2026-09-03",
 "verified": true
 },
+"mason community players|mason|OH": {
+"contact_id": "FHFxDlRTPfUTUsVPgZQq",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Mason Community Players",
+"ready": false,
+"show_key": "mti:211718",
+"show_title": "Company",
+"updated": "2026-11-15",
+"verified": false
+},
 "mason middle school|waterford|MI": {
 "contact_id": "6NF7Bcm5EvjRAoqpVTz7",
 "last_armed": "",
@@ -13722,6 +13942,28 @@
 "show_title": "Les Miserables",
 "updated": "2026-10-21",
 "verified": true
+},
+"merrimack rep youth|lowell|MA": {
+"contact_id": "G3Aqgf3EOYcQfV3xVfRq",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Merrimack Rep Youth",
+"ready": false,
+"show_key": "mti:215967",
+"show_title": "Don't Let The Pigeon Drive The Bus",
+"updated": "2026-11-15",
+"verified": false
+},
+"merrimack repertory theatre|lowell|MA": {
+"contact_id": "G3Aqgf3EOYcQfV3xVfRq",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Merrimack Repertory Theatre",
+"ready": false,
+"show_key": "mti:219832",
+"show_title": "The 25th Annual Putnam County Spelling Bee",
+"updated": "2026-11-15",
+"verified": false
 },
 "merrimack valley stageworks|plaistow|NH": {
 "contact_id": "6Xrxrh3lQaFUVgqkxZvc",
@@ -14834,6 +15076,17 @@
 "updated": "2026-08-31",
 "verified": false
 },
+"new castle playhouse|new castle|PA": {
+"contact_id": "3K0XofwUpCmxRtGVLbKf",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "New Castle Playhouse",
+"ready": false,
+"show_key": "mti:192573",
+"show_title": "Miracle On 34th Street The Musical",
+"updated": "2026-11-15",
+"verified": false
+},
 "new conservatory theatre|san francisco|CA": {
 "contact_id": "PMoqrFGsDYSafcEp9jIK",
 "last_armed": "",
@@ -15272,6 +15525,39 @@
 "updated": "2026-09-19",
 "verified": true
 },
+"north texas performing arts|fairview|TX": {
+"contact_id": "FLY3mQxIi6BtUoMTIrcA",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "North Texas Performing Arts",
+"ready": false,
+"show_key": "mti:214909",
+"show_title": "Disney's The Jungle Book Kids",
+"updated": "2026-11-15",
+"verified": false
+},
+"north texas performing arts|plano|TX": {
+"contact_id": "FLY3mQxIi6BtUoMTIrcA",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "North Texas Performing Arts",
+"ready": false,
+"show_key": "mti:224729",
+"show_title": "Trolls The Musical Jr.",
+"updated": "2026-11-15",
+"verified": false
+},
+"north texas performing arts|southlake|TX": {
+"contact_id": "FLY3mQxIi6BtUoMTIrcA",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "North Texas Performing Arts",
+"ready": false,
+"show_key": "mti:233280",
+"show_title": "A Year With Frog And Toad-kids",
+"updated": "2026-11-15",
+"verified": false
+},
 "north valley christian academy|phoenix|AZ": {
 "contact_id": "bAa1Caudcv6drpDagLGE",
 "last_armed": "",
@@ -15491,6 +15777,17 @@
 "show_title": "10 Ways to Survive the Zombie Apocalypse",
 "updated": "2026-09-02",
 "verified": true
+},
+"not just dance|chantilly|VA": {
+"contact_id": "GDbMUZ9j6W3jNUavmXgJ",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Not Just Dance, Llc",
+"ready": false,
+"show_key": "mti:213102",
+"show_title": "Disney's Frozen Kids",
+"updated": "2026-11-15",
+"verified": false
 },
 "not so common players town of clifton park|rexford|NY": {
 "contact_id": "HqxR8Y5XYMMFvYsu0elE",
@@ -17153,6 +17450,17 @@
 "updated": "2026-11-14",
 "verified": true
 },
+"plano childrens theatre mckinney youth theatre|plano|TX": {
+"contact_id": "FLY3mQxIi6BtUoMTIrcA",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Plano Childrens Theatre Dba Mckinney Youth Theatre",
+"ready": false,
+"show_key": "mti:209590",
+"show_title": "Peter Pan Jr",
+"updated": "2026-11-15",
+"verified": false
+},
 "plano sr high school|plano|TX": {
 "contact_id": "1V4ljcmftkYrR0Urar6C",
 "last_armed": "",
@@ -17830,9 +18138,9 @@
 "opportunity_id": "",
 "org_name": "Purdue University",
 "ready": false,
-"show_key": "mti:220319",
-"show_title": "Sweeney Todd",
-"updated": "2026-09-01",
+"show_key": "",
+"show_title": "",
+"updated": "2026-11-15",
 "verified": true
 },
 "purejoy performing arts|armonk|NY": {
@@ -17872,9 +18180,9 @@
 "opportunity_id": "",
 "org_name": "Pyramid Inc- Pensacola Pyramid School Of Fine Arts",
 "ready": false,
-"show_key": "mti:214516",
+"show_key": "mti:236444",
 "show_title": "Disney's The Lion King Jr",
-"updated": "2026-09-01",
+"updated": "2026-11-15",
 "verified": true
 },
 "quaboag regional jr sr high school|warren|MA": {
@@ -18106,6 +18414,17 @@
 "show_key": "mti:215339",
 "show_title": "Annie Jr",
 "updated": "2026-10-30",
+"verified": true
+},
+"regina lyric musical theatre|regina|SK": {
+"contact_id": "xsb183D61Tl21CE8Ls3m",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Regina Lyric Musical Theatre",
+"ready": false,
+"show_key": "mti:198144",
+"show_title": "Wonderland",
+"updated": "2026-11-15",
 "verified": true
 },
 "regis jesuit high school|aurora|CO": {
@@ -18464,9 +18783,9 @@
 "opportunity_id": "",
 "org_name": "Riverhead Faculty Community Theatre",
 "ready": false,
-"show_key": "mti:205194",
-"show_title": "Come From Away",
-"updated": "2026-09-01",
+"show_key": "",
+"show_title": "",
+"updated": "2026-11-15",
 "verified": true
 },
 "riverside high school|leesburg|VA": {
@@ -18599,6 +18918,17 @@
 "updated": "2026-09-10",
 "verified": true
 },
+"robidoux resident theatre|saint joseph|MO": {
+"contact_id": "nSBOS8xNn7JpIkYxoekl",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Robidoux Resident Theatre",
+"ready": false,
+"show_key": "mti:217665",
+"show_title": "Roald Dahl's Matilda The Musical Jr",
+"updated": "2026-11-15",
+"verified": false
+},
 "rochester city school district|rochester|NY": {
 "contact_id": "GJZFiokwVWfDJngbU4KQ",
 "last_armed": "",
@@ -18702,9 +19032,9 @@
 "opportunity_id": "",
 "org_name": "Rocky Mount Academy",
 "ready": false,
-"show_key": "mti:221096",
-"show_title": "How To Train Your Dragon The Musical Jr.",
-"updated": "2026-09-01",
+"show_key": "",
+"show_title": "",
+"updated": "2026-11-15",
 "verified": true
 },
 "roger rocka s dinner theater|fresno|CA": {
@@ -19349,9 +19679,9 @@
 "opportunity_id": "",
 "org_name": "Scarborough Village Theatre",
 "ready": false,
-"show_key": "concord:33ba574dacec8d61",
-"show_title": "The Wizard of Oz (RSC Version)",
-"updated": "2026-11-06",
+"show_key": "concord:f644de2c7ee12a87",
+"show_title": "A Party to Murder",
+"updated": "2026-11-15",
 "verified": true
 },
 "schauer arts and activities center|hartford|WI": {
@@ -19397,6 +19727,17 @@
 "show_title": "Mary Poppins",
 "updated": "2026-09-01",
 "verified": true
+},
+"schenectady light opera sloc|schenectady|NY": {
+"contact_id": "aVb8azYLQcRd6MIWxTYo",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Schenectady Light Opera    Sloc",
+"ready": false,
+"show_key": "mti:200804",
+"show_title": "Company",
+"updated": "2026-11-15",
+"verified": false
 },
 "school board of polk county harrison school of art|lakeland|FL": {
 "contact_id": "cW7TMotGx0uePZriAgGl",
@@ -19485,6 +19826,17 @@
 "show_title": "Disney's The Little Mermaid Jr",
 "updated": "2026-09-01",
 "verified": true
+},
+"second act productions|san antonio|TX": {
+"contact_id": "di0gvWsQROFDhU0ihdNH",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Second Act Productions",
+"ready": false,
+"show_key": "mti:219209",
+"show_title": "Disney's The Little Mermaid Kids",
+"updated": "2026-11-15",
+"verified": false
 },
 "second presbyterian church praeclara|little rock|AR": {
 "contact_id": "78zGDk4Q7qLbkNUL81Un",
@@ -19715,6 +20067,28 @@
 "updated": "2026-09-01",
 "verified": true
 },
+"sheldon theatre phoenix theatre|red wing|MN": {
+"contact_id": "HBaR8ln1oTEJlALrsNMp",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Sheldon Theatre Dba Phoenix Theatre",
+"ready": false,
+"show_key": "mti:205401",
+"show_title": "Come From Away",
+"updated": "2026-11-15",
+"verified": false
+},
+"sheldon theatre youth theatre|red wing|MN": {
+"contact_id": "HBaR8ln1oTEJlALrsNMp",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Sheldon Theatre - Youth Theatre",
+"ready": false,
+"show_key": "mti:220184",
+"show_title": "Elf-the Musical Jr.",
+"updated": "2026-11-15",
+"verified": false
+},
 "shelton auditorium|indianapolis|IN": {
 "contact_id": "ZoVo61bglrYLIBl4mChd",
 "last_armed": "",
@@ -19799,6 +20173,17 @@
 "show_key": "mti:209224",
 "show_title": "Disney's Finding Nemo Jr.",
 "updated": "2026-09-01",
+"verified": true
+},
+"shoreline musical theatre|campbell river|BC": {
+"contact_id": "fCctfeoPn91A68sotyc6",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Shoreline Musical Theatre Society",
+"ready": false,
+"show_key": "mti:197799",
+"show_title": "Sweeney Todd",
+"updated": "2026-11-15",
 "verified": true
 },
 "showcase productions|amherst|NS": {
@@ -19961,9 +20346,9 @@
 "opportunity_id": "",
 "org_name": "Sioux Valley Schools",
 "ready": false,
-"show_key": "mti:222357",
-"show_title": "Peter And The Starcatcher",
-"updated": "2026-09-01",
+"show_key": "",
+"show_title": "",
+"updated": "2026-11-15",
 "verified": true
 },
 "sir john franklin high school|yellowknife|NT": {
@@ -20329,6 +20714,17 @@
 "updated": "2026-09-10",
 "verified": true
 },
+"southgate community players|southgate|MI": {
+"contact_id": "T7BQYqBRqGhdXyOr2OeN",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Southgate Community Players",
+"ready": false,
+"show_key": "mti:198136",
+"show_title": "Company",
+"updated": "2026-11-15",
+"verified": false
+},
 "southridge high school|beaverton|OR": {
 "contact_id": "iTOzP1OhsE0RJX8S1DbH",
 "last_armed": "",
@@ -20537,6 +20933,17 @@
 "show_title": "Disney's The Lion King Jr",
 "updated": "2026-09-02",
 "verified": true
+},
+"spotlight theatre arts|fairport|NY": {
+"contact_id": "8koutXf4oTqOoeWuaySE",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Spotlight Theatre Arts",
+"ready": false,
+"show_key": "mti:218685",
+"show_title": "Disney's 101 Dalmatians Kids",
+"updated": "2026-11-15",
+"verified": false
 },
 "spring lake community house theatre|spring lake|NJ": {
 "contact_id": "c8nI0NjxFMfCCWHR8RzO",
@@ -20767,6 +21174,17 @@
 "show_key": "mti:227697",
 "show_title": "Schoolhouse Rock Live! Jr",
 "updated": "2026-09-24",
+"verified": true
+},
+"st georges school upper|spokane|WA": {
+"contact_id": "302ruIE6iUouS4KZMUfi",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "St Georges School-upper",
+"ready": false,
+"show_key": "mti:227798",
+"show_title": "Disney's Dare To Dream Jr",
+"updated": "2026-11-15",
 "verified": true
 },
 "st gregory cathedral school|tyler|TX": {
@@ -21237,9 +21655,9 @@
 "opportunity_id": "",
 "org_name": "St Peter Chanel School",
 "ready": false,
-"show_key": "mti:220317",
-"show_title": "Disney's The Little Mermaid Kids",
-"updated": "2026-09-01",
+"show_key": "",
+"show_title": "",
+"updated": "2026-11-15",
 "verified": true
 },
 "st peter s episcopal church|greenville|SC": {
@@ -21314,9 +21732,9 @@
 "opportunity_id": "",
 "org_name": "St Rose School",
 "ready": false,
-"show_key": "mti:216898",
-"show_title": "Disney's 101 Dalmatians Kids",
-"updated": "2026-09-01",
+"show_key": "mti:224347",
+"show_title": "Annie Jr",
+"updated": "2026-11-15",
 "verified": true
 },
 "st stephens episcopal school|bradenton|FL": {
@@ -21483,6 +21901,17 @@
 "show_title": "Bleeding Kansas",
 "updated": "2026-10-15",
 "verified": true
+},
+"stage coach players|dekalb|IL": {
+"contact_id": "n4TBqcdZXSmrVTcNJwjC",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Stage Coach Players",
+"ready": false,
+"show_key": "mti:217680",
+"show_title": "Singin' In The Rain",
+"updated": "2026-11-15",
+"verified": false
 },
 "stage crafters community theater|fort walton beach|FL": {
 "contact_id": "VkCEgwQfUsKT1pZNo8EH",
@@ -22573,6 +23002,17 @@
 "updated": "2026-10-02",
 "verified": true
 },
+"tenino young at heart theatre|tenino|WA": {
+"contact_id": "HHXGh7ukhEiqNtcgCvxr",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Tenino Young At Heart Theatre",
+"ready": false,
+"show_key": "mti:217562",
+"show_title": "Shrek The Musical",
+"updated": "2026-11-15",
+"verified": false
+},
 "terrace plaza playhouse|ogden|UT": {
 "contact_id": "rTk8iuaeZGbmkkBRLn6d",
 "last_armed": "",
@@ -22724,6 +23164,17 @@
 "show_title": "Little Women",
 "updated": "2026-09-01",
 "verified": true
+},
+"theatre 42|mason|OH": {
+"contact_id": "FHFxDlRTPfUTUsVPgZQq",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Theatre 42",
+"ready": false,
+"show_key": "concord:f09b9a77edea9b8a",
+"show_title": "The Cover of Life",
+"updated": "2026-11-15",
+"verified": false
 },
 "theatre 55|saint paul|MN": {
 "contact_id": "WXtU3MRVyRE6r8xFTA9G",
@@ -23187,6 +23638,17 @@
 "updated": "2026-10-31",
 "verified": true
 },
+"thibodaux playhouse|thibodaux|LA": {
+"contact_id": "DNUU8EsgDyhLyqktyZtZ",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Thibodaux Playhouse",
+"ready": false,
+"show_key": "mti:213398",
+"show_title": "The Hunchback Of Notre Dame",
+"updated": "2026-11-15",
+"verified": false
+},
 "thinktank theatre|tampa|FL": {
 "contact_id": "PtoFhYFjbe100TKkyStm",
 "last_armed": "",
@@ -23240,6 +23702,17 @@
 "show_key": "mti:225887",
 "show_title": "Disney's Beauty And The Beast Jr",
 "updated": "2026-09-11",
+"verified": true
+},
+"three legged dog productions|courtenay|BC": {
+"contact_id": "TiBQXM6E5jSLiY6Xa6E6",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Three Legged Dog Productions",
+"ready": false,
+"show_key": "mti:216805",
+"show_title": "Les Miserables",
+"updated": "2026-11-15",
 "verified": true
 },
 "three rivers music theatre|fort wayne|IN": {
@@ -23417,6 +23890,17 @@
 "show_title": "Freckleface Strawberry The Musical",
 "updated": "2026-09-09",
 "verified": true
+},
+"triboro youth theatre|attleboro|MA": {
+"contact_id": "aDKobHy7mz0mYbkpe1n7",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Triboro Youth Theatre Inc",
+"ready": false,
+"show_key": "mti:221215",
+"show_title": "Disney's Descendants",
+"updated": "2026-11-15",
+"verified": false
 },
 "trilogy repertory|liberty corner|NJ": {
 "contact_id": "0AmqcIMi8YZwQcLwU88X",
@@ -24216,9 +24700,9 @@
 "opportunity_id": "",
 "org_name": "Vari Musicisti",
 "ready": false,
-"show_key": "mti:226330",
-"show_title": "The Last Five Years",
-"updated": "2026-09-16",
+"show_key": "",
+"show_title": "",
+"updated": "2026-11-15",
 "verified": true
 },
 "vashon allied arts|vashon|WA": {
@@ -24408,6 +24892,28 @@
 "updated": "2026-09-01",
 "verified": true
 },
+"village players of birmingham|birmingham|MI": {
+"contact_id": "Jxvd7OZATDwk5s82spIp",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Village Players of Birmingham",
+"ready": false,
+"show_key": "concord:6647067dd4566349",
+"show_title": "Amadeus",
+"updated": "2026-11-15",
+"verified": false
+},
+"village players|birmingham|MI": {
+"contact_id": "Jxvd7OZATDwk5s82spIp",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Village Players",
+"ready": false,
+"show_key": "mti:203381",
+"show_title": "The 25th Annual Putnam County Spelling Bee",
+"updated": "2026-11-15",
+"verified": false
+},
 "village theatre at cherry hill|canton|MI": {
 "contact_id": "bnE38Koy0PJKs9co3AW6",
 "last_armed": "",
@@ -24440,6 +24946,28 @@
 "show_title": "Dear Evan Hansen",
 "updated": "2026-11-11",
 "verified": true
+},
+"village youth theatre|birmingham|MI": {
+"contact_id": "Jxvd7OZATDwk5s82spIp",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Village Youth Theatre",
+"ready": false,
+"show_key": "concord:c543d542bf4afdad",
+"show_title": "School of Rock: Young Actors Edition",
+"updated": "2026-11-15",
+"verified": false
+},
+"villagers theatre|somerset|NJ": {
+"contact_id": "F2PJUkrFoimzmAChknfp",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Villagers Theatre",
+"ready": false,
+"show_key": "mti:213394",
+"show_title": "Les Miserables School Edition",
+"updated": "2026-11-15",
+"verified": false
 },
 "villanova theatre|villanova|PA": {
 "contact_id": "IPR1qzJKiA8vpEelUWbY",
@@ -24583,6 +25111,17 @@
 "show_title": "Disney's Alice In Wonderland Jr.",
 "updated": "2026-09-01",
 "verified": true
+},
+"wagon wheel theatre|warsaw|IN": {
+"contact_id": "ij0F2RecPbOuBvClaLiI",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Wagon Wheel Theatre",
+"ready": false,
+"show_key": "mti:214742",
+"show_title": "Annie",
+"updated": "2026-11-15",
+"verified": false
 },
 "wakefield high school|raleigh|NC": {
 "contact_id": "DIwYhcu2JBqJlZxefhYX",
@@ -24887,9 +25426,9 @@
 "opportunity_id": "",
 "org_name": "The Wayne Theatre Alliance",
 "ready": false,
-"show_key": "mti:217322",
-"show_title": "Chitty Chitty Bang Bang Jr.",
-"updated": "2026-09-01",
+"show_key": "mti:216112",
+"show_title": "Beetlejuice Jr.",
+"updated": "2026-11-15",
 "verified": true
 },
 "waynesville high school auditorium|waynesville|MO": {
@@ -25255,6 +25794,28 @@
 "updated": "2026-09-23",
 "verified": false
 },
+"weston friendly for performing arts|weston|MA": {
+"contact_id": "RF3zEV7sgILRJsbQAMhl",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Weston Friendly Society For The Performing Arts",
+"ready": false,
+"show_key": "mti:220641",
+"show_title": "Disney's Lion King Kids",
+"updated": "2026-11-15",
+"verified": false
+},
+"wetlands acadian cultural center|thibodaux|LA": {
+"contact_id": "DNUU8EsgDyhLyqktyZtZ",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "wetlands acadian cultural center",
+"ready": false,
+"show_key": "concord:b14e18ec407c23c9",
+"show_title": "Steel Magnolias",
+"updated": "2026-11-15",
+"verified": false
+},
 "wharton institute|berkeley heights|NJ": {
 "contact_id": "LcreRuMNPkYXCQ4FHsAg",
 "last_armed": "",
@@ -25567,9 +26128,9 @@
 "opportunity_id": "",
 "org_name": "Wilmington Friends School",
 "ready": false,
-"show_key": "mti:213082",
-"show_title": "Seussical",
-"updated": "2026-09-01",
+"show_key": "mti:226144",
+"show_title": "Disney's Frozen Jr",
+"updated": "2026-11-15",
 "verified": true
 },
 "wilson elementary school|fishersville|VA": {
@@ -25747,6 +26308,17 @@
 "show_title": "The Music Man",
 "updated": "2026-09-01",
 "verified": true
+},
+"woodford county theatrical arts|versailles|KY": {
+"contact_id": "wVb7xgOqxttvQRnmWfwO",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Woodford County Theatrical Arts Association",
+"ready": false,
+"show_key": "mti:202969",
+"show_title": "Singin' In The Rain",
+"updated": "2026-11-15",
+"verified": false
 },
 "woodland c u s d 5|streator|IL": {
 "contact_id": "Ccks9wTRX7CWe5VQcqj1",
