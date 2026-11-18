@@ -830,9 +830,9 @@
 "opportunity_id": "",
 "org_name": "Antioch Elementary School",
 "ready": false,
-"show_key": "mti:208852",
-"show_title": "A Year With Frog And Toad-kids",
-"updated": "2026-09-01",
+"show_key": "",
+"show_title": "",
+"updated": "2026-11-18",
 "verified": true
 },
 "antrim playhouse|tappan|NY": {
@@ -1173,6 +1173,17 @@
 "show_title": "Trolls The Musical Jr.",
 "updated": "2026-09-01",
 "verified": true
+},
+"arvada center for arts kids camp|arvada|CO": {
+"contact_id": "J6PcZObUivr3p13nGsSF",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Arvada Center For The Arts Kids Camp",
+"ready": false,
+"show_key": "mti:236909",
+"show_title": "The Drowsy Chaperone",
+"updated": "2026-11-18",
+"verified": false
 },
 "arvada center theatre|arvada|CO": {
 "contact_id": "J6PcZObUivr3p13nGsSF",
@@ -2284,6 +2295,17 @@
 "updated": "2026-09-10",
 "verified": true
 },
+"big studio omaha|elkhorn|NE": {
+"contact_id": "sQ1JD3IzivhaguCjGgvl",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Big Studio Omaha",
+"ready": false,
+"show_key": "mti:236820",
+"show_title": "Disney's Frozen Jr",
+"updated": "2026-11-18",
+"verified": true
+},
 "big studio omaha|omaha|NE": {
 "contact_id": "sQ1JD3IzivhaguCjGgvl",
 "last_armed": "",
@@ -2807,9 +2829,9 @@
 "opportunity_id": "",
 "org_name": "Breitling Youth Theater",
 "ready": false,
-"show_key": "mti:213248",
-"show_title": "Disney's The Little Mermaid Jr",
-"updated": "2026-10-09",
+"show_key": "mti:217493",
+"show_title": "Dr. Seuss's How The Grinch Stole Christmas!",
+"updated": "2026-11-18",
 "verified": true
 },
 "brentwood elementary school|strathmore|AB": {
@@ -2994,9 +3016,9 @@
 "opportunity_id": "",
 "org_name": "Brookstone School",
 "ready": false,
-"show_key": "",
-"show_title": "",
-"updated": "2026-10-22",
+"show_key": "mti:236776",
+"show_title": "Guys  And  Dolls Jr",
+"updated": "2026-11-18",
 "verified": true
 },
 "brown school|schenectady|NY": {
@@ -5388,9 +5410,9 @@
 "opportunity_id": "",
 "org_name": "Conrad Centre for the Performing Arts",
 "ready": false,
-"show_key": "concord:f21c87d3d1fe022f",
+"show_key": "concord:e73190dc1be0c7b2",
 "show_title": "The Secret Garden",
-"updated": "2026-09-01",
+"updated": "2026-11-18",
 "verified": true
 },
 "conrad grebel university|kitchener|ON": {
@@ -7595,9 +7617,9 @@
 "opportunity_id": "",
 "org_name": "Firefly Theatrical",
 "ready": false,
-"show_key": "",
-"show_title": "",
-"updated": "2026-10-30",
+"show_key": "mti:236727",
+"show_title": "Annie Jr",
+"updated": "2026-11-18",
 "verified": true
 },
 "firehall theatre|brockville|ON": {
@@ -12167,9 +12189,9 @@
 "opportunity_id": "",
 "org_name": "Lenoir Rhyne University",
 "ready": false,
-"show_key": "",
-"show_title": "",
-"updated": "2026-11-06",
+"show_key": "mti:236935",
+"show_title": "Spring Awakening",
+"updated": "2026-11-18",
 "verified": false
 },
 "lester centre of arts|prince rupert|BC": {
@@ -14249,6 +14271,17 @@
 "show_key": "mti:222982",
 "show_title": "The Music Man Jr",
 "updated": "2026-09-01",
+"verified": true
+},
+"mineola high school|garden city park|NY": {
+"contact_id": "P3SgQpNY2AQzLivGL79t",
+"last_armed": "",
+"opportunity_id": "",
+"org_name": "Mineola High School",
+"ready": false,
+"show_key": "mti:235903",
+"show_title": "Mean Girls",
+"updated": "2026-11-18",
 "verified": true
 },
 "mineola middle school|mineola|NY": {
@@ -20533,9 +20566,9 @@
 "opportunity_id": "",
 "org_name": "Soho Performing Arts, Llc",
 "ready": false,
-"show_key": "mti:215696",
-"show_title": "How To Train Your Dragon The Musical Jr.",
-"updated": "2026-10-30",
+"show_key": "mti:217472",
+"show_title": "Disney's Newsies Jr.",
+"updated": "2026-11-18",
 "verified": true
 },
 "solomon schechter day school|west hartford|CT": {
@@ -20731,9 +20764,9 @@
 "opportunity_id": "",
 "org_name": "Southfield Middle School",
 "ready": false,
-"show_key": "mti:225510",
-"show_title": "Roald Dahl's Matilda The Musical Jr",
-"updated": "2026-09-10",
+"show_key": "",
+"show_title": "",
+"updated": "2026-11-18",
 "verified": true
 },
 "southgate community players|southgate|MI": {
@@ -22293,9 +22326,9 @@
 "opportunity_id": "",
 "org_name": "Stillwater Childrens Theatre",
 "ready": false,
-"show_key": "mti:219185",
-"show_title": "Roald Dahl's Matilda The Musical Jr",
-"updated": "2026-11-07",
+"show_key": "mti:236783",
+"show_title": "Peter Pan Jr",
+"updated": "2026-11-18",
 "verified": true
 },
 "stinson middle school|san antonio|TX": {
