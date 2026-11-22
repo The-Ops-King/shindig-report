@@ -1016,7 +1016,7 @@
 "manual": false,
 "name": "Abbot School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "MA",
 "status": "error",
 "website": "http://as.westfordk12.us/pages/index"
@@ -4424,7 +4424,7 @@
 "website": "http://www.saisd.net/schools/advancedacademy"
 },
 "adventure theatre mtc amateur|glen echo|MD": {
-"checked": "2026-08-24",
+"checked": "2026-11-22",
 "city": "Glen Echo",
 "email": "",
 "facebook": "",
@@ -4432,13 +4432,13 @@
 "manual": false,
 "name": "Adventure Theatre-mtc (amateur)",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "MD",
-"status": "not_found",
+"status": "error",
 "website": "http://www.adventuretheatre.com"
 },
 "adventure theatre mtc|glen echo|MD": {
-"checked": "2026-08-24",
+"checked": "2026-11-22",
 "city": "Glen Echo",
 "email": "",
 "facebook": "",
@@ -4446,9 +4446,9 @@
 "manual": false,
 "name": "Adventure Theatre MTC",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "MD",
-"status": "not_found",
+"status": "error",
 "website": "http://www.adventuretheatre.com"
 },
 "adventures in social development asd|johnston|IA": {
@@ -5414,6 +5414,20 @@
 "phone": "",
 "requests": 0,
 "state": "BC",
+"status": "no_website",
+"website": ""
+},
+"albert college|belleville|ON": {
+"checked": "2026-11-22",
+"city": "Belleville",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Albert College",
+"phone": "",
+"requests": 0,
+"state": "ON",
 "status": "no_website",
 "website": ""
 },
@@ -7932,7 +7946,7 @@
 "manual": false,
 "name": "Alta Loma Middle School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "CA",
 "status": "not_found",
 "website": "http://almsdrama.com"
@@ -8520,7 +8534,7 @@
 "manual": false,
 "name": "Amani Public Charter School",
 "phone": "914-668-2553",
-"requests": 1,
+"requests": 0,
 "state": "NY",
 "status": "found",
 "website": "https://www.amanicharter.org/"
@@ -9422,7 +9436,7 @@
 "website": ""
 },
 "amherst recreation|amherst|MA": {
-"checked": "2026-11-15",
+"checked": "2026-11-22",
 "city": "Amherst",
 "email": "",
 "facebook": "",
@@ -9430,7 +9444,7 @@
 "manual": false,
 "name": "Amherst Recreation",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "MA",
 "status": "error",
 "website": "http://www.amherstacts.org"
@@ -9660,7 +9674,7 @@
 "website": ""
 },
 "anamosa community high school|anamosa|IA": {
-"checked": "2026-11-15",
+"checked": "2026-11-22",
 "city": "Anamosa",
 "email": "",
 "facebook": "",
@@ -9668,7 +9682,7 @@
 "manual": false,
 "name": "Anamosa Community High School",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "IA",
 "status": "error",
 "website": "http://www.anamosa.k12.ia.us/ahs/ahs.html"
@@ -10074,7 +10088,7 @@
 "manual": false,
 "name": "Andrew Jackson High School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "SC",
 "status": "error",
 "website": "http://www.lcsd.k12.sc.us"
@@ -12572,7 +12586,7 @@
 "website": ""
 },
 "archer high school|lawrenceville|GA": {
-"checked": "2026-11-15",
+"checked": "2026-11-22",
 "city": "Lawrenceville",
 "email": "",
 "facebook": "",
@@ -12580,7 +12594,7 @@
 "manual": false,
 "name": "Archer High School",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "GA",
 "status": "error",
 "website": "http://www.archerdrama.com"
@@ -13882,7 +13896,7 @@
 "manual": false,
 "name": "Army Entertainment-soldiers'theatre",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "AE",
 "status": "error",
 "website": "http://www.vicenzamwr.com/theatre.html"
@@ -14584,6 +14598,20 @@
 "phone": "",
 "requests": 0,
 "state": "",
+"status": "no_website",
+"website": ""
+},
+"artist rep|portland|OR": {
+"checked": "2026-11-22",
+"city": "Portland",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Artist Rep",
+"phone": "",
+"requests": 0,
+"state": "OR",
 "status": "no_website",
 "website": ""
 },
@@ -15316,7 +15344,7 @@
 "website": ""
 },
 "arts in motion|north conway|NH": {
-"checked": "2026-11-15",
+"checked": "2026-11-22",
 "city": "North Conway",
 "email": "",
 "facebook": "",
@@ -15324,7 +15352,7 @@
 "manual": false,
 "name": "Arts In Motion",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "NH",
 "status": "error",
 "website": "http://www.khsmwv.com/"
@@ -15436,7 +15464,7 @@
 "manual": false,
 "name": "Arts On The Avenue / Avenue Theatre",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "MO",
 "status": "error",
 "website": "http://artsontheavenue.com"
@@ -16212,7 +16240,7 @@
 "website": ""
 },
 "asheville performing arts acad|asheville|NC": {
-"checked": "2026-08-24",
+"checked": "2026-11-22",
 "city": "Asheville",
 "email": "",
 "facebook": "",
@@ -16220,7 +16248,7 @@
 "manual": false,
 "name": "Asheville Performing Arts Acad",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "NC",
 "status": "not_found",
 "website": "https://www.dwtheatre.com/online/default.asp"
@@ -16668,7 +16696,7 @@
 "manual": false,
 "name": "Assumption Parish School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "MO",
 "status": "error",
 "website": "http://www.assumptionstl.org"
@@ -18760,7 +18788,7 @@
 "website": ""
 },
 "avenues world school|new york|NY": {
-"checked": "2026-11-15",
+"checked": "2026-11-22",
 "city": "New York",
 "email": "",
 "facebook": "",
@@ -18768,7 +18796,7 @@
 "manual": false,
 "name": "Avenues: The World School",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "NY",
 "status": "error",
 "website": "http://www.avenues-ny.org"
@@ -18896,6 +18924,20 @@
 "phone": "",
 "requests": 0,
 "state": "",
+"status": "no_website",
+"website": ""
+},
+"avon central schools district auditorium|avon|NY": {
+"checked": "2026-11-22",
+"city": "Avon",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Avon Central Schools District Auditorium",
+"phone": "",
+"requests": 0,
+"state": "NY",
 "status": "no_website",
 "website": ""
 },
@@ -19431,6 +19473,20 @@
 "status": "no_website",
 "website": ""
 },
+"babs lab|jacksonville|FL": {
+"checked": "2026-11-22",
+"city": "Jacksonville",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "BABS'LAB",
+"phone": "",
+"requests": 0,
+"state": "FL",
+"status": "no_website",
+"website": ""
+},
 "babson college|babson park|MA": {
 "checked": "2026-11-21",
 "city": "Babson Park",
@@ -19440,7 +19496,7 @@
 "manual": false,
 "name": "Babson College",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "MA",
 "status": "error",
 "website": "http://www3.babson.edu/sorenson/events.cfm"
@@ -20086,6 +20142,20 @@
 "phone": "",
 "requests": 0,
 "state": "IN",
+"status": "no_website",
+"website": ""
+},
+"baker street west|jackson|CA": {
+"checked": "2026-11-22",
+"city": "Jackson",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Baker Street West",
+"phone": "",
+"requests": 0,
+"state": "CA",
 "status": "no_website",
 "website": ""
 },
@@ -22386,7 +22456,7 @@
 "website": ""
 },
 "basis ahwatukee charter school|phoenix|AZ": {
-"checked": "2026-11-15",
+"checked": "2026-11-22",
 "city": "Phoenix",
 "email": "",
 "facebook": "",
@@ -22394,7 +22464,7 @@
 "manual": false,
 "name": "Basis Ahwatukee Charter School",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "AZ",
 "status": "error",
 "website": "http://www.basisahwatukee.org"
@@ -25186,7 +25256,7 @@
 "website": ""
 },
 "beechwood school|brea|CA": {
-"checked": "2026-11-15",
+"checked": "2026-11-22",
 "city": "Brea",
 "email": "",
 "facebook": "",
@@ -25194,7 +25264,7 @@
 "manual": false,
 "name": "Beechwood School",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "CA",
 "status": "error",
 "website": "http://curtistheater.com"
@@ -26684,17 +26754,17 @@
 "website": ""
 },
 "bemidji community theater|bemidji|MN": {
-"checked": "2026-11-15",
+"checked": "2026-11-22",
 "city": "Bemidji",
 "email": "",
-"facebook": "",
-"instagram": "",
+"facebook": "https://www.facebook.com/BemidjiCommunityTheater/",
+"instagram": "https://www.instagram.com/bemidji_community_theater/#",
 "manual": false,
 "name": "Bemidji Community Theater",
-"phone": "",
-"requests": 0,
+"phone": "(218) 333-8989",
+"requests": 3,
 "state": "MN",
-"status": "error",
+"status": "found",
 "website": "http://www.bemidjicommunitytheater.com"
 },
 "bemidji state university|bemidji|MN": {
@@ -26818,7 +26888,7 @@
 "manual": false,
 "name": "Ben Porat Yosef",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "NJ",
 "status": "error",
 "website": "https://welcome.benporatyosef.org"
@@ -34126,7 +34196,7 @@
 "manual": false,
 "name": "Bondurant Farrar High School",
 "phone": "(515) 967-7819",
-"requests": 3,
+"requests": 0,
 "state": "IA",
 "status": "found",
 "website": "http://www.bfschools.org"
@@ -35778,7 +35848,7 @@
 "manual": false,
 "name": "Braddock Middle School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "MD",
 "status": "error",
 "website": "http://boe.allconet.org/users/br/"
@@ -37976,7 +38046,7 @@
 "manual": false,
 "name": "Bridgewater Middle School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "MA",
 "status": "error",
 "website": "http://www.bridge-rayn.org/bridgewatermiddle.cfm"
@@ -38032,7 +38102,7 @@
 "manual": false,
 "name": "Bridgeway Christian Academy",
 "phone": "(980) 455-7770",
-"requests": 1,
+"requests": 0,
 "state": "NC",
 "status": "found",
 "website": "https://www.discoverbridgeway.com/"
@@ -38634,7 +38704,7 @@
 "manual": false,
 "name": "British International School Of Charlotte",
 "phone": "+1 (704) 341-3236",
-"requests": 1,
+"requests": 0,
 "state": "NC",
 "status": "found",
 "website": "https://www.nordangliaeducation.com/bisc-charlotte"
@@ -44612,7 +44682,7 @@
 "manual": false,
 "name": "Cactus Youth Theatre",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "NV",
 "status": "error",
 "website": "http://cactusyouththeatrenv.com"
@@ -45564,7 +45634,7 @@
 "manual": false,
 "name": "California Middle School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "CA",
 "status": "error",
 "website": "http://www.calmiddle.org"
@@ -45626,7 +45696,7 @@
 "website": ""
 },
 "california state univ long beach|long beach|CA": {
-"checked": "2026-11-15",
+"checked": "2026-11-22",
 "city": "Long Beach",
 "email": "",
 "facebook": "",
@@ -45634,7 +45704,7 @@
 "manual": false,
 "name": "California State Univ Long Beach",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "CA",
 "status": "error",
 "website": "http://www.csulb/theatre-arts"
@@ -46908,7 +46978,7 @@
 "manual": false,
 "name": "Camp Swatara",
 "phone": "717-933-8510",
-"requests": 1,
+"requests": 0,
 "state": "PA",
 "status": "found",
 "website": "http://www.campswatara.org/"
@@ -47524,7 +47594,7 @@
 "manual": false,
 "name": "Candlewood Middle School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "NY",
 "status": "error",
 "website": "http://www.halfhollowhills.k12.ny.us/page.cfm?p=67"
@@ -49512,7 +49582,7 @@
 "manual": false,
 "name": "Carleton Washburne Junior High School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "IL",
 "status": "error",
 "website": "http://www.winnetka.k12.il.us/cw"
@@ -51150,7 +51220,7 @@
 "manual": false,
 "name": "Casa 0101, Inc",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "CA",
 "status": "not_found",
 "website": "http://www.casa0101.org"
@@ -51598,7 +51668,7 @@
 "manual": false,
 "name": "Casper Childrens Theatre Inc",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "WY",
 "status": "error",
 "website": "http://www.thecasperchildrenstheatre.com/index.htm"
@@ -53348,7 +53418,7 @@
 "manual": false,
 "name": "Cedarbrook Middle School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "PA",
 "status": "not_found",
 "website": "http://www.cheltenham.org/cbktheatre"
@@ -54712,17 +54782,17 @@
 "website": ""
 },
 "center stage community theatre|tamaqua|PA": {
-"checked": "2026-08-24",
+"checked": "2026-11-22",
 "city": "Tamaqua",
-"email": "",
-"facebook": "",
-"instagram": "",
+"email": "Marketing@tamaquaarts.org",
+"facebook": "http://facebook.com/tamaquaarts",
+"instagram": "http://instagram.com/tamaquaarts",
 "manual": false,
 "name": "Center Stage Community Theatre",
-"phone": "",
-"requests": 0,
+"phone": "(570) 668-1192",
+"requests": 1,
 "state": "PA",
-"status": "not_found",
+"status": "found",
 "website": "http://www.tamaquaarts.org"
 },
 "center stage ensemble|murfreesboro|TN": {
@@ -56937,6 +57007,20 @@
 "status": "error",
 "website": "http://centralvpa.com"
 },
+"central washington university|ellensburg|WA": {
+"checked": "2026-11-22",
+"city": "Ellensburg",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Central Washington University",
+"phone": "",
+"requests": 0,
+"state": "WA",
+"status": "no_website",
+"website": ""
+},
 "central wesleyan church|holland|MI": {
 "checked": "2026-10-28",
 "city": "Holland",
@@ -58976,7 +59060,7 @@
 "manual": false,
 "name": "Charles Armstrong School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "CA",
 "status": "error",
 "website": "http://baysidetheater.com/theater/index.html"
@@ -59542,7 +59626,7 @@
 "website": ""
 },
 "charlotte community education|charlotte|MI": {
-"checked": "2026-11-15",
+"checked": "2026-11-22",
 "city": "Charlotte",
 "email": "",
 "facebook": "",
@@ -59550,9 +59634,9 @@
 "manual": false,
 "name": "Charlotte Community Education",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "MI",
-"status": "error",
+"status": "not_found",
 "website": "http://www.charlottenet.org"
 },
 "charlotte country day school|charlotte|NC": {
@@ -60014,6 +60098,20 @@
 "phone": "",
 "requests": 0,
 "state": "",
+"status": "no_website",
+"website": ""
+},
+"chatham hall black box theatre|chatham|VA": {
+"checked": "2026-11-22",
+"city": "Chatham",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Chatham Hall Black Box Theatre",
+"phone": "",
+"requests": 0,
+"state": "VA",
 "status": "no_website",
 "website": ""
 },
@@ -62812,7 +62910,7 @@
 "manual": false,
 "name": "Chris Hadfield Public School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "ON",
 "status": "error",
 "website": "http://www.ddsb.ca/school/chrishadfield/pages/default.aspx"
@@ -63078,7 +63176,7 @@
 "manual": false,
 "name": "Christ The King School",
 "phone": "(574) 272-3922",
-"requests": 1,
+"requests": 0,
 "state": "IN",
 "status": "found",
 "website": "https://school.sbctk.com/"
@@ -64063,6 +64161,20 @@
 "status": "no_website",
 "website": ""
 },
+"chs event center|collinsville|OK": {
+"checked": "2026-11-22",
+"city": "Collinsville",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "CHS Event Center",
+"phone": "",
+"requests": 0,
+"state": "OK",
+"status": "no_website",
+"website": ""
+},
 "chs john halchin memorial auditorium|copley|OH": {
 "checked": "2026-09-27",
 "city": "Copley",
@@ -64282,7 +64394,7 @@
 "manual": false,
 "name": "Churchill High School",
 "phone": "(204) 474-1301",
-"requests": 1,
+"requests": 0,
 "state": "MB",
 "status": "found",
 "website": "https://www.winnipegsd.ca/churchill"
@@ -66172,7 +66284,7 @@
 "manual": false,
 "name": "Clap Arts",
 "phone": "(650) 943-4200",
-"requests": 1,
+"requests": 0,
 "state": "CA",
 "status": "found",
 "website": "http://springerschool.net"
@@ -67448,6 +67560,20 @@
 "phone": "",
 "requests": 0,
 "state": "",
+"status": "no_website",
+"website": ""
+},
+"clear brook hs|friendswood|TX": {
+"checked": "2026-11-22",
+"city": "Friendswood",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Clear Brook HS",
+"phone": "",
+"requests": 0,
+"state": "TX",
 "status": "no_website",
 "website": ""
 },
@@ -70330,7 +70456,7 @@
 "manual": false,
 "name": "Colleton County High School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "SC",
 "status": "error",
 "website": "http://www.sshs.colleton.k12.sc.us"
@@ -73732,7 +73858,7 @@
 "manual": false,
 "name": "Concordia College - Theatre (csta)",
 "phone": "(218) 299-3728",
-"requests": 1,
+"requests": 0,
 "state": "MN",
 "status": "found",
 "website": "http://www.cord.edu/theatre"
@@ -74170,6 +74296,20 @@
 "state": "CT",
 "status": "found",
 "website": "https://www.cheneyhall.org/"
+},
+"connecticut family theatre|west hartford|CT": {
+"checked": "2026-11-22",
+"city": "West Hartford",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Connecticut Family Theatre",
+"phone": "",
+"requests": 0,
+"state": "CT",
+"status": "no_website",
+"website": ""
 },
 "connecticut performing arts center|south windsor|CT": {
 "checked": "2026-08-17",
@@ -74768,7 +74908,7 @@
 "manual": false,
 "name": "Conway Middle School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "FL",
 "status": "error",
 "website": "http://www.cms.ocps.net/"
@@ -77078,7 +77218,7 @@
 "manual": false,
 "name": "Cottonwood Elementary",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "KS",
 "status": "error",
 "website": "https://www.usd480.net/o/liberal-high"
@@ -77574,7 +77714,7 @@
 "website": ""
 },
 "courtyard theater group|broken arrow|OK": {
-"checked": "2026-11-15",
+"checked": "2026-11-22",
 "city": "Broken Arrow",
 "email": "",
 "facebook": "",
@@ -77582,7 +77722,7 @@
 "manual": false,
 "name": "Courtyard Theater Group",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "OK",
 "status": "error",
 "website": "http://www.bapac.org"
@@ -78758,7 +78898,7 @@
 "manual": false,
 "name": "Creative Cauldron",
 "phone": "(703) 436-9948",
-"requests": 3,
+"requests": 0,
 "state": "VA",
 "status": "found",
 "website": "http://www.creativecauldron.org"
@@ -79724,7 +79864,7 @@
 "manual": false,
 "name": "Crestwood Middle School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "MI",
 "status": "error",
 "website": "http://www.kentwoodps.org/ourschools/crestwoodmiddleschool/"
@@ -81658,6 +81798,20 @@
 "phone": "",
 "requests": 0,
 "state": "",
+"status": "no_website",
+"website": ""
+},
+"curtain players|galena|OH": {
+"checked": "2026-11-22",
+"city": "Galena",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Curtain Players, The",
+"phone": "",
+"requests": 0,
+"state": "OH",
 "status": "no_website",
 "website": ""
 },
@@ -89193,6 +89347,20 @@
 "status": "found",
 "website": ""
 },
+"discovery church|mars|PA": {
+"checked": "2026-11-22",
+"city": "Mars",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Discovery Church",
+"phone": "",
+"requests": 0,
+"state": "PA",
+"status": "no_website",
+"website": ""
+},
 "discovery elementary school|bakersfield|CA": {
 "checked": "2026-10-21",
 "city": "Bakersfield",
@@ -89552,7 +89720,7 @@
 "manual": false,
 "name": "Divine Savior Holy Angels High School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "WI",
 "status": "error",
 "website": "http://www.dsha.k12.wi.us"
@@ -90042,7 +90210,7 @@
 "manual": false,
 "name": "Dodgeland School District",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "WI",
 "status": "error",
 "website": "http://www.dodgeland.k12.wi.us"
@@ -90212,6 +90380,20 @@
 "phone": "",
 "requests": 0,
 "state": "FL",
+"status": "no_website",
+"website": ""
+},
+"dolph briscoe middle school|san antonio|TX": {
+"checked": "2026-11-22",
+"city": "San Antonio",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Dolph Briscoe Middle School",
+"phone": "",
+"requests": 0,
+"state": "TX",
 "status": "no_website",
 "website": ""
 },
@@ -90860,7 +91042,7 @@
 "website": ""
 },
 "double peak k 8 school|san marcos|CA": {
-"checked": "2026-11-15",
+"checked": "2026-11-22",
 "city": "San Marcos",
 "email": "",
 "facebook": "",
@@ -90868,7 +91050,7 @@
 "manual": false,
 "name": "Double Peak K-8 School",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "CA",
 "status": "error",
 "website": "http://doublepeakschool.smu.org"
@@ -91615,6 +91797,20 @@
 "status": "no_website",
 "website": ""
 },
+"dr joe j bernal middle school|san antonio|TX": {
+"checked": "2026-11-22",
+"city": "San Antonio",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Dr. Joe J. Bernal Middle School",
+"phone": "",
+"requests": 0,
+"state": "TX",
+"status": "no_website",
+"website": ""
+},
 "dr john long middle school|wesley chapel|FL": {
 "checked": "2026-08-17",
 "city": "",
@@ -92260,7 +92456,7 @@
 "website": ""
 },
 "dramatically incorrect|leominster|MA": {
-"checked": "2026-08-24",
+"checked": "2026-11-22",
 "city": "Leominster",
 "email": "",
 "facebook": "https://www.facebook.com/DramaticallyIncorrectInc",
@@ -92268,7 +92464,7 @@
 "manual": false,
 "name": "Dramatically Incorrect",
 "phone": "",
-"requests": 0,
+"requests": 2,
 "state": "MA",
 "status": "not_found",
 "website": "http://dramaticallyincorrect.org"
@@ -94186,7 +94382,7 @@
 "manual": false,
 "name": "E Ethel Little School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "MA",
 "status": "error",
 "website": "http://little.north-reading.k12.ma.us/pages/index"
@@ -94984,7 +95180,7 @@
 "manual": false,
 "name": "East Bay Waldorf School",
 "phone": "(510) 815-9332",
-"requests": 1,
+"requests": 0,
 "state": "CA",
 "status": "found",
 "website": "http://www.wildcatcanyon.org"
@@ -98714,7 +98910,7 @@
 "website": ""
 },
 "edith v pearce performing arts center|richardson|TX": {
-"checked": "2026-11-15",
+"checked": "2026-11-22",
 "city": "Richardson",
 "email": "",
 "facebook": "",
@@ -98722,7 +98918,7 @@
 "manual": false,
 "name": "Edith V. Pearce Performing Arts Center",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "TX",
 "status": "error",
 "website": "http://pearcetheater.com"
@@ -98781,6 +98977,20 @@
 "requests": 0,
 "state": "",
 "status": "found",
+"website": ""
+},
+"edmonson county high school auditorium|brownsville|KY": {
+"checked": "2026-11-22",
+"city": "Brownsville",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Edmonson County High School Auditorium",
+"phone": "",
+"requests": 0,
+"state": "KY",
+"status": "no_website",
 "website": ""
 },
 "edmonton international fringe festival|edmonton|AB": {
@@ -99735,6 +99945,20 @@
 "status": "no_website",
 "website": ""
 },
+"el camino real high school|woodland hills|CA": {
+"checked": "2026-11-22",
+"city": "Woodland Hills",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "El Camino Real High School",
+"phone": "",
+"requests": 1,
+"state": "CA",
+"status": "error",
+"website": "http://www.ecrchsdrama.org"
+},
 "el capitan high school|lakeside|CA": {
 "checked": "2026-10-20",
 "city": "Lakeside",
@@ -100668,7 +100892,7 @@
 "manual": false,
 "name": "Elizabeth Mellick Baker Elementary School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "NY",
 "status": "error",
 "website": "http://www.greatneck.k12.ny.us/gnps/emb/bakerhomepage/index.htm"
@@ -104663,6 +104887,20 @@
 "status": "no_website",
 "website": ""
 },
+"esquire theater|carthage|LA": {
+"checked": "2026-11-22",
+"city": "Carthage",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "The Esquire Theater",
+"phone": "",
+"requests": 0,
+"state": "LA",
+"status": "no_website",
+"website": ""
+},
 "esquire theater|carthage|TX": {
 "checked": "2026-11-18",
 "city": "Carthage",
@@ -106954,7 +107192,7 @@
 "manual": false,
 "name": "Faiss Middle School",
 "phone": "7027996850",
-"requests": 1,
+"requests": 0,
 "state": "NV",
 "status": "found",
 "website": "https://www.faissmiddleschool.net/"
@@ -111000,7 +111238,7 @@
 "manual": false,
 "name": "Five Forks Middle School",
 "phone": "(770) 972-1506",
-"requests": 1,
+"requests": 0,
 "state": "GA",
 "status": "found",
 "website": "http://www.fiveforksmiddleschool.org"
@@ -111210,7 +111448,7 @@
 "manual": false,
 "name": "Flat River Community Players",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "MI",
 "status": "not_found",
 "website": "http://frcp.org"
@@ -113758,7 +113996,7 @@
 "manual": false,
 "name": "Forsyth High School",
 "phone": "(417) 546-6384",
-"requests": 1,
+"requests": 0,
 "state": "MO",
 "status": "found",
 "website": "http://www.forsythpanthers.org"
@@ -115172,7 +115410,7 @@
 "manual": false,
 "name": "Frances Ellen Watkins Harper Junior High School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "CA",
 "status": "error",
 "website": "http://www.djusd.k12.ca.us/harper/"
@@ -116908,7 +117146,7 @@
 "manual": false,
 "name": "Frederick Middle School",
 "phone": "(580) 335-5516",
-"requests": 3,
+"requests": 0,
 "state": "OK",
 "status": "found",
 "website": "http://frederickbombers.net"
@@ -117400,6 +117638,20 @@
 "phone": "",
 "requests": 0,
 "state": "",
+"status": "no_website",
+"website": ""
+},
+"freeland center|bristow|VA": {
+"checked": "2026-11-22",
+"city": "Bristow,",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "The Freeland Center",
+"phone": "",
+"requests": 0,
+"state": "VA",
 "status": "no_website",
 "website": ""
 },
@@ -119797,6 +120049,20 @@
 "status": "no_website",
 "website": ""
 },
+"galena performing arts center|galena|MO": {
+"checked": "2026-11-22",
+"city": "Galena",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Galena Performing Arts Center",
+"phone": "",
+"requests": 0,
+"state": "MO",
+"status": "no_website",
+"website": ""
+},
 "gales ferry school juliet w long school|gales ferry|CT": {
 "checked": "2026-08-17",
 "city": "",
@@ -120268,7 +120534,7 @@
 "manual": false,
 "name": "Garden City Middle School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "NY",
 "status": "error",
 "website": "http://www.gardencity.k12.ny.us/middleschoolrm1.htm"
@@ -120982,7 +121248,7 @@
 "manual": false,
 "name": "Garry Marshall Educational Theatre",
 "phone": "818-955-8004",
-"requests": 1,
+"requests": 0,
 "state": "CA",
 "status": "found",
 "website": "http://www.garrymarshalltheatre.org"
@@ -121836,7 +122102,7 @@
 "manual": false,
 "name": "Gemini Middle School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "IL",
 "status": "error",
 "website": "https://www.emsd63.org/page/11"
@@ -123530,7 +123796,7 @@
 "manual": false,
 "name": "Ghostlight Theatre Ensemble",
 "phone": "(925) 852-3612",
-"requests": 2,
+"requests": 0,
 "state": "CA",
 "status": "found",
 "website": "http://www.ghostlightte.org"
@@ -125114,6 +125380,20 @@
 "phone": "",
 "requests": 0,
 "state": "",
+"status": "no_website",
+"website": ""
+},
+"glendale high school|glendale|AZ": {
+"checked": "2026-11-22",
+"city": "Glendale",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Glendale High School",
+"phone": "",
+"requests": 0,
+"state": "AZ",
 "status": "no_website",
 "website": ""
 },
@@ -129970,7 +130250,7 @@
 "manual": false,
 "name": "Greater Hartford Academy Of The Arts High School",
 "phone": "(860) 757-6300",
-"requests": 2,
+"requests": 0,
 "state": "CT",
 "status": "found",
 "website": "https://ghaafd.crecschools.org/"
@@ -130096,7 +130376,7 @@
 "manual": false,
 "name": "Greatworks Theatre",
 "phone": "(888) 588-7850",
-"requests": 1,
+"requests": 0,
 "state": "IL",
 "status": "found",
 "website": "http://www.greatworkstheatre.com"
@@ -133890,7 +134170,7 @@
 "manual": false,
 "name": "Haisley Elementary",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "MI",
 "status": "error",
 "website": "http://haisleypto.org"
@@ -134814,7 +135094,7 @@
 "manual": false,
 "name": "Hamilton High School",
 "phone": "(310) 280-1400",
-"requests": 3,
+"requests": 0,
 "state": "CA",
 "status": "found",
 "website": "http://www.hamiltonhs.org/"
@@ -136346,7 +136626,7 @@
 "website": ""
 },
 "hardin county schools performing arts center|elizabethtown|KY": {
-"checked": "2026-11-15",
+"checked": "2026-11-22",
 "city": "Elizabethtown",
 "email": "",
 "facebook": "",
@@ -136354,7 +136634,7 @@
 "manual": false,
 "name": "Hardin County Schools Performing Arts Center",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "KY",
 "status": "error",
 "website": "http://www.thepac.net/index.asp"
@@ -137348,7 +137628,7 @@
 "manual": false,
 "name": "Harriet Tubman Elementary School",
 "phone": "(773) 534-5725",
-"requests": 2,
+"requests": 0,
 "state": "IL",
 "status": "found",
 "website": "http://www.tubmanelementarycps.org"
@@ -138585,6 +138865,20 @@
 "status": "no_website",
 "website": ""
 },
+"haskell high school|haskell|": {
+"checked": "2026-11-22",
+"city": "Haskell",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Haskell High School",
+"phone": "",
+"requests": 0,
+"state": "",
+"status": "no_website",
+"website": ""
+},
 "haskell opera house|derby line|VT": {
 "checked": "2026-08-17",
 "city": "",
@@ -139098,7 +139392,7 @@
 "manual": false,
 "name": "Haviland Middle School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "NY",
 "status": "error",
 "website": "http://www.hydeparkschools.org"
@@ -140769,6 +141063,20 @@
 "status": "no_website",
 "website": ""
 },
+"hellgate high school auditorium|missoula|MT": {
+"checked": "2026-11-22",
+"city": "Missoula",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Hellgate High School Auditorium",
+"phone": "",
+"requests": 0,
+"state": "MT",
+"status": "no_website",
+"website": ""
+},
 "hellstern middle school|springdale|AR": {
 "checked": "2026-09-09",
 "city": "Springdale",
@@ -141660,7 +141968,7 @@
 "manual": false,
 "name": "Herbert Clark Hoover Elementary School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "MA",
 "status": "error",
 "website": "http://www.melroseschools.com/hoover/index.cfm"
@@ -141758,7 +142066,7 @@
 "manual": false,
 "name": "Herget Middle School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "IL",
 "status": "error",
 "website": "http://www.sd129.org/herget/"
@@ -143088,7 +143396,7 @@
 "manual": false,
 "name": "Heyjojo Productions",
 "phone": "(858) 756-1141",
-"requests": 1,
+"requests": 0,
 "state": "CA",
 "status": "found",
 "website": "http://www.rsfschool.net"
@@ -145720,7 +146028,7 @@
 "manual": false,
 "name": "Hilton Head Prep School- Upper School",
 "phone": "(843) 671-2286",
-"requests": 3,
+"requests": 0,
 "state": "SC",
 "status": "found",
 "website": "http://www.hhprep.org"
@@ -147512,7 +147820,7 @@
 "manual": false,
 "name": "Holt Elementary School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "UT",
 "status": "error",
 "website": "http://www.davis.k12.ut.us/holtel/hawkhome.htm"
@@ -147742,7 +148050,7 @@
 "website": ""
 },
 "holy comforter episcopal school|tallahassee|FL": {
-"checked": "2026-08-24",
+"checked": "2026-11-22",
 "city": "Tallahassee",
 "email": "",
 "facebook": "",
@@ -147750,7 +148058,7 @@
 "manual": false,
 "name": "Holy Comforter Episcopal School",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "FL",
 "status": "not_found",
 "website": "http://www.holy-comforter.org"
@@ -148478,7 +148786,7 @@
 "manual": false,
 "name": "Holy Spirit High School",
 "phone": "(609) 646-3000",
-"requests": 1,
+"requests": 0,
 "state": "NJ",
 "status": "found",
 "website": "http://www.holyspirithighschool.com"
@@ -149962,7 +150270,7 @@
 "manual": false,
 "name": "Horace Mann Middle School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "WI",
 "status": "error",
 "website": "http://www.sheboygan.k12.wi.us/hmann/"
@@ -150766,7 +151074,7 @@
 "website": ""
 },
 "howard county summer theatre|ellicott city|MD": {
-"checked": "2026-08-24",
+"checked": "2026-11-22",
 "city": "Ellicott City",
 "email": "",
 "facebook": "http://www.facebook.com/howardcountysummertheatre",
@@ -150774,7 +151082,7 @@
 "manual": false,
 "name": "Howard County Summer Theatre",
 "phone": "",
-"requests": 0,
+"requests": 3,
 "state": "MD",
 "status": "not_found",
 "website": "http://www.howardcountysummertheatre.org"
@@ -150900,7 +151208,7 @@
 "manual": false,
 "name": "Howe Hall Arts Infused Magnet School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "SC",
 "status": "error",
 "website": "http://www.berkeley.k12.sc.us/aims.cfm"
@@ -152068,7 +152376,7 @@
 "website": ""
 },
 "huntingtown high little theatre|huntingtown|MD": {
-"checked": "2026-11-15",
+"checked": "2026-11-22",
 "city": "Huntingtown",
 "email": "",
 "facebook": "",
@@ -152076,7 +152384,7 @@
 "manual": false,
 "name": "Huntingtown High Little Theatre",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "MD",
 "status": "error",
 "website": "http://www.calvertnet.k12.md.us/schools/schoolhomepages/hhs.shtml"
@@ -153504,7 +153812,7 @@
 "manual": false,
 "name": "Imagine School @ Broward",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "FL",
 "status": "error",
 "website": "http://www.imaginebroward.org"
@@ -154350,7 +154658,7 @@
 "website": ""
 },
 "independence community theatre|independence|OH": {
-"checked": "2026-11-15",
+"checked": "2026-11-22",
 "city": "Independence",
 "email": "",
 "facebook": "",
@@ -154358,7 +154666,7 @@
 "manual": false,
 "name": "Independence Community Theatre",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "OH",
 "status": "error",
 "website": "http://www.independencetheatre.org"
@@ -155438,6 +155746,20 @@
 "phone": "",
 "requests": 0,
 "state": "WA",
+"status": "no_website",
+"website": ""
+},
+"ingram tom more auditorium|ingram|TX": {
+"checked": "2026-11-22",
+"city": "Ingram",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Ingram Tom More Auditorium",
+"phone": "",
+"requests": 0,
+"state": "TX",
 "status": "no_website",
 "website": ""
 },
@@ -157108,7 +157430,7 @@
 "website": ""
 },
 "irvine high school|irvine|CA": {
-"checked": "2026-11-15",
+"checked": "2026-11-22",
 "city": "Irvine",
 "email": "",
 "facebook": "",
@@ -157116,7 +157438,7 @@
 "manual": false,
 "name": "Irvine High School",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "CA",
 "status": "error",
 "website": "http://www.irvinehighdrama.org"
@@ -157766,7 +158088,7 @@
 "website": ""
 },
 "island theatre workshop|oak bluffs|MA": {
-"checked": "2026-11-15",
+"checked": "2026-11-22",
 "city": "Oak Bluffs",
 "email": "",
 "facebook": "",
@@ -157774,7 +158096,7 @@
 "manual": false,
 "name": "Island Theatre Workshop",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "MA",
 "status": "error",
 "website": "http://www.itwmv.org"
@@ -161008,7 +161330,7 @@
 "manual": false,
 "name": "Jefferson Middle School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "IL",
 "status": "error",
 "website": "http://www.d45.dupage.k12.il.us"
@@ -162721,6 +163043,20 @@
 "status": "found",
 "website": "http://johnadamsacademy.org"
 },
+"john adams academy|lincoln|CA": {
+"checked": "2026-11-22",
+"city": "Lincoln",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "John Adams Academy",
+"phone": "",
+"requests": 0,
+"state": "CA",
+"status": "no_website",
+"website": ""
+},
 "john adams high school|south bend|IN": {
 "checked": "2026-08-17",
 "city": "",
@@ -163010,7 +163346,7 @@
 "manual": false,
 "name": "John Carroll Catholic High School",
 "phone": "(205) 940-2400",
-"requests": 2,
+"requests": 0,
 "state": "AL",
 "status": "found",
 "website": "http://www.jcchs.org"
@@ -163402,7 +163738,7 @@
 "manual": false,
 "name": "John G Borden Middle School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "NY",
 "status": "error",
 "website": "http://www.wallkillcsd.k12.ny.us/wms/default.htm"
@@ -163472,7 +163808,7 @@
 "manual": false,
 "name": "John Glenn Middle School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "MA",
 "status": "error",
 "website": "http://www.bedfordps.org/jgms"
@@ -163654,7 +163990,7 @@
 "manual": false,
 "name": "John Jay High School",
 "phone": "(914) 763-7000",
-"requests": 3,
+"requests": 0,
 "state": "NY",
 "status": "found",
 "website": "http://www.klschools.org"
@@ -163738,7 +164074,7 @@
 "manual": false,
 "name": "John Lewis Childs Elementary School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "NY",
 "status": "error",
 "website": "http://www.floralpark.k12.ny.us"
@@ -164508,7 +164844,7 @@
 "manual": false,
 "name": "Johnson County Arts and Heritage Center",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "KS",
 "status": "error",
 "website": "http://www.theabarnplayers.org"
@@ -165236,7 +165572,7 @@
 "manual": false,
 "name": "Jordan Small Middle School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "ME",
 "status": "error",
 "website": "http://www.windhamraymondschools.org/jsms/default.html"
@@ -175106,7 +175442,7 @@
 "manual": false,
 "name": "Lagrange Middle School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "NY",
 "status": "error",
 "website": "http://www.teacherweb.com/ny/arlington/lagrangemiddleschool/sdhp"
@@ -178312,7 +178648,7 @@
 "manual": false,
 "name": "Lancaster Middle School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "NY",
 "status": "error",
 "website": "http://www.lancasterschools.org/lancaster/site/default.asp"
@@ -182680,7 +183016,7 @@
 "manual": false,
 "name": "Leo Yassenoff Jewish Community Center",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "OH",
 "status": "error",
 "website": "http://www.jccgalleryplayers.org"
@@ -185205,6 +185541,20 @@
 "status": "no_website",
 "website": ""
 },
+"lincoln christian school|lincoln|NE": {
+"checked": "2026-11-22",
+"city": "Lincoln",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Lincoln Christian School",
+"phone": "",
+"requests": 0,
+"state": "NE",
+"status": "no_website",
+"website": ""
+},
 "lincoln christian school|tulsa|OK": {
 "checked": "2026-08-21",
 "city": "Tulsa",
@@ -187188,7 +187538,7 @@
 "manual": false,
 "name": "Little Chute Intermediate Middle School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "WI",
 "status": "error",
 "website": "http://www.littlechute.k12.wi.us"
@@ -188860,15 +189210,15 @@
 "website": ""
 },
 "logan high school auditorium|logan|UT": {
-"checked": "2026-08-24",
+"checked": "2026-11-22",
 "city": "Logan",
 "email": "",
-"facebook": "",
-"instagram": "",
+"facebook": "https://developers.facebook.com/docs/instagram",
+"instagram": "https://about.instagram.com/",
 "manual": false,
 "name": "Logan High School Auditorium",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "UT",
 "status": "not_found",
 "website": "https://www.instagram.com/loganhigh_theatre/"
@@ -188944,15 +189294,15 @@
 "website": "http://www.logrog.net/our/administrative.html"
 },
 "logan senior high school|logan|UT": {
-"checked": "2026-08-24",
+"checked": "2026-11-22",
 "city": "Logan",
 "email": "",
-"facebook": "",
-"instagram": "",
+"facebook": "https://developers.facebook.com/docs/instagram",
+"instagram": "https://about.instagram.com/",
 "manual": false,
 "name": "Logan Senior High School",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "UT",
 "status": "not_found",
 "website": "https://www.instagram.com/loganhigh_theatre/"
@@ -189134,7 +189484,7 @@
 "manual": false,
 "name": "Lomastro Performing Arts Academy",
 "phone": "(847) 615-5400",
-"requests": 1,
+"requests": 0,
 "state": "IL",
 "status": "found",
 "website": "http://www.lomastro.com"
@@ -190352,7 +190702,7 @@
 "manual": false,
 "name": "Lord Byng Secondary",
 "phone": "",
-"requests": 2,
+"requests": 0,
 "state": "BC",
 "status": "found",
 "website": "http://theaco.ca"
@@ -191766,7 +192116,7 @@
 "manual": false,
 "name": "Lower Gwynedd Elementary School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "PA",
 "status": "error",
 "website": "http://lg.wsdweb.org/"
@@ -193068,7 +193418,7 @@
 "manual": false,
 "name": "Lyman Gilmore Middle School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "CA",
 "status": "error",
 "website": "http://www.lymangilmoremuscialtheater.com"
@@ -195070,7 +195420,7 @@
 "manual": false,
 "name": "Madisonville Community College",
 "phone": "(270) 821-2787",
-"requests": 2,
+"requests": 0,
 "state": "KY",
 "status": "found",
 "website": "http://glemacenter.org"
@@ -196392,7 +196742,7 @@
 "website": ""
 },
 "mainstage theatre|toronto|ON": {
-"checked": "2026-08-24",
+"checked": "2026-11-22",
 "city": "Toronto",
 "email": "",
 "facebook": "https://www.facebook.com/MainstageTheatreCompany/",
@@ -196400,7 +196750,7 @@
 "manual": false,
 "name": "Mainstage Theatre Company",
 "phone": "",
-"requests": 0,
+"requests": 3,
 "state": "ON",
 "status": "not_found",
 "website": "http://mainstagetheatre.com"
@@ -201515,6 +201865,20 @@
 "status": "no_website",
 "website": ""
 },
+"marvelwood school|kent|CT": {
+"checked": "2026-11-22",
+"city": "Kent",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "The Marvelwood School",
+"phone": "",
+"requests": 0,
+"state": "CT",
+"status": "no_website",
+"website": ""
+},
 "marvin cole auditorium|clarkston|GA": {
 "checked": "2026-09-23",
 "city": "Clarkston",
@@ -202070,7 +202434,7 @@
 "manual": false,
 "name": "Marymount High School",
 "phone": "(310) 472-1205",
-"requests": 3,
+"requests": 0,
 "state": "CA",
 "status": "found",
 "website": "http://www.mhs-la.org"
@@ -202280,7 +202644,7 @@
 "manual": false,
 "name": "Maryville Middle School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "MO",
 "status": "error",
 "website": "http://www.maryvillek12.mo.us"
@@ -206566,6 +206930,20 @@
 "phone": "",
 "requests": 0,
 "state": "CO",
+"status": "no_website",
+"website": ""
+},
+"meeker high school auditorium|meeker|OK": {
+"checked": "2026-11-22",
+"city": "Meeker",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Meeker High School Auditorium",
+"phone": "",
+"requests": 0,
+"state": "OK",
 "status": "no_website",
 "website": ""
 },
@@ -212584,7 +212962,7 @@
 "manual": false,
 "name": "Milwaukee Lutheran High School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "WI",
 "status": "error",
 "website": "http://www.milwaukeelutheranhs.org"
@@ -214586,7 +214964,7 @@
 "manual": false,
 "name": "Mohave Middle School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "AZ",
 "status": "error",
 "website": "http://susd.mohave.schoolfusion.us/"
@@ -214812,6 +215190,20 @@
 "phone": "",
 "requests": 0,
 "state": "NH",
+"status": "no_website",
+"website": ""
+},
+"monahans hs auditorium|monahans|TX": {
+"checked": "2026-11-22",
+"city": "Monahans",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Monahans HS Auditorium",
+"phone": "",
+"requests": 0,
+"state": "TX",
 "status": "no_website",
 "website": ""
 },
@@ -215832,7 +216224,7 @@
 "manual": false,
 "name": "Montessori School - Childrens Meeting House",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "OH",
 "status": "not_found",
 "website": "http://www.grailville.org"
@@ -220004,7 +220396,7 @@
 "manual": false,
 "name": "Mt Elizabeth Secondary School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "BC",
 "status": "error",
 "website": "http://www.mountelizabethsecondary.ca"
@@ -220900,7 +221292,7 @@
 "manual": false,
 "name": "Muir Middle School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "MI",
 "status": "error",
 "website": "http://www.huronvalley.k12.mi.us/academics/muir/default.aspx"
@@ -221549,6 +221941,20 @@
 "status": "no_website",
 "website": ""
 },
+"murray middle school auditorium|saint augustine|FL": {
+"checked": "2026-11-22",
+"city": "Saint Augustine",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Murray Middle School Auditorium",
+"phone": "",
+"requests": 0,
+"state": "FL",
+"status": "no_website",
+"website": ""
+},
 "murray middle school center for arts|st augustine|FL": {
 "checked": "2026-08-17",
 "city": "",
@@ -222068,7 +222474,7 @@
 "website": "http://www.mtionline.org"
 },
 "music theatre of madison|madison|WI": {
-"checked": "2026-08-24",
+"checked": "2026-11-22",
 "city": "Madison",
 "email": "",
 "facebook": "",
@@ -222076,7 +222482,7 @@
 "manual": false,
 "name": "Music Theatre Of Madison",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "WI",
 "status": "not_found",
 "website": "http://www.overture.org"
@@ -222138,7 +222544,7 @@
 "website": ""
 },
 "music theatre wichita|wichita|KS": {
-"checked": "2026-11-15",
+"checked": "2026-11-22",
 "city": "Wichita",
 "email": "",
 "facebook": "",
@@ -222146,7 +222552,7 @@
 "manual": false,
 "name": "Music Theatre Wichita",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "KS",
 "status": "error",
 "website": "http://www.musictheatreofwichita.org"
@@ -224475,6 +224881,20 @@
 "status": "no_website",
 "website": ""
 },
+"neaaat|elizabeth city|VA": {
+"checked": "2026-11-22",
+"city": "Elizabeth City",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "NEAAAT",
+"phone": "",
+"requests": 0,
+"state": "VA",
+"status": "no_website",
+"website": ""
+},
 "nebo elementary school|nebo|NC": {
 "checked": "2026-08-28",
 "city": "Nebo",
@@ -226766,7 +227186,7 @@
 "manual": false,
 "name": "New Paradigm Theatre Company",
 "phone": "",
-"requests": 3,
+"requests": 0,
 "state": "CT",
 "status": "not_found",
 "website": "http://nptheatre.org"
@@ -226912,7 +227332,7 @@
 "website": ""
 },
 "new richmond high school|new richmond|WI": {
-"checked": "2026-08-24",
+"checked": "2026-11-22",
 "city": "New Richmond",
 "email": "",
 "facebook": "",
@@ -226920,7 +227340,7 @@
 "manual": false,
 "name": "New Richmond High School",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "WI",
 "status": "not_found",
 "website": "https://nrtigers.org/teams/3864494/drama/high-school"
@@ -228936,7 +229356,7 @@
 "manual": false,
 "name": "Nightwood Theatre",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "ON",
 "status": "error",
 "website": "http://www.stlc.com"
@@ -229188,7 +229608,7 @@
 "manual": false,
 "name": "Niverville Middle School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "MB",
 "status": "error",
 "website": "http://www.nms.hsd.ca"
@@ -231336,7 +231756,7 @@
 "website": "http://ues.nhanover.com"
 },
 "north hardin high school|elizabethtown|KY": {
-"checked": "2026-08-24",
+"checked": "2026-11-22",
 "city": "Elizabethtown",
 "email": "",
 "facebook": "",
@@ -231344,9 +231764,9 @@
 "manual": false,
 "name": "North Hardin High School",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "KY",
-"status": "not_found",
+"status": "error",
 "website": "http://www.thepac.net/index.asp"
 },
 "north henderson high school|hendersonville|NC": {
@@ -232674,7 +233094,7 @@
 "manual": false,
 "name": "North Shore Middle School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "NY",
 "status": "error",
 "website": "http://www.northshore.k12.ny.us/middleschool/index.htm"
@@ -235110,7 +235530,7 @@
 "manual": false,
 "name": "Northwest High School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "MO",
 "status": "error",
 "website": "http://www.nwr1.k12.mo.us"
@@ -235479,6 +235899,20 @@
 "status": "found",
 "website": ""
 },
+"northwood baptist church|n charleston|SC": {
+"checked": "2026-11-22",
+"city": "N Charleston",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Northwood Baptist church",
+"phone": "",
+"requests": 0,
+"state": "SC",
+"status": "no_website",
+"website": ""
+},
 "northwood elementary school|mooresville|IN": {
 "checked": "2026-08-17",
 "city": "",
@@ -235614,7 +236048,7 @@
 "manual": false,
 "name": "Northwood Middle School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "IN",
 "status": "error",
 "website": "http://nwms.wanee.k12.in.us/"
@@ -235978,7 +236412,7 @@
 "manual": false,
 "name": "Not So Common Players/town Of Clifton Park",
 "phone": "(518) 417-1610",
-"requests": 2,
+"requests": 0,
 "state": "NY",
 "status": "found",
 "website": "http://www.notsocommonplayers.org"
@@ -236384,7 +236818,7 @@
 "manual": false,
 "name": "Notre Dame Schools Of Milwaukee",
 "phone": "(414) 431-7950",
-"requests": 3,
+"requests": 0,
 "state": "WI",
 "status": "found",
 "website": "http://www.notredamemke.org"
@@ -239478,7 +239912,7 @@
 "manual": false,
 "name": "Ogden Community High School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "IA",
 "status": "error",
 "website": "http://www.ogden.k12.ia.us/high/"
@@ -246078,7 +246512,7 @@
 "website": "https://visitaddison.com/atc/"
 },
 "outcry theatre|plano|TX": {
-"checked": "2026-11-15",
+"checked": "2026-11-22",
 "city": "Plano",
 "email": "",
 "facebook": "",
@@ -246086,7 +246520,7 @@
 "manual": false,
 "name": "Outcry Theatre",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "TX",
 "status": "error",
 "website": "https://www.plano.gov/415/courtyard-theater"
@@ -246282,7 +246716,7 @@
 "manual": false,
 "name": "Ovations Dance Repertory Company",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "FL",
 "status": "error",
 "website": "http://hillsborughschools.org"
@@ -246456,7 +246890,7 @@
 "website": "http://overture.org"
 },
 "overture center wisconsin|madison|WI": {
-"checked": "2026-08-24",
+"checked": "2026-11-22",
 "city": "Madison",
 "email": "",
 "facebook": "",
@@ -246464,7 +246898,7 @@
 "manual": false,
 "name": "Overture Center Wisconsin",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "WI",
 "status": "not_found",
 "website": "http://www.overture.org"
@@ -246680,7 +247114,7 @@
 "website": "http://www.bath.kyschools.us/4/home"
 },
 "owosso community players|owosso|MI": {
-"checked": "2026-08-24",
+"checked": "2026-11-22",
 "city": "Owosso",
 "email": "",
 "facebook": "",
@@ -246688,7 +247122,7 @@
 "manual": false,
 "name": "Owosso Community Players",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "MI",
 "status": "not_found",
 "website": "http://www.owossoplayers.com/"
@@ -251733,6 +252167,20 @@
 "status": "no_website",
 "website": ""
 },
+"patrick henry middle school|sioux falls|SD": {
+"checked": "2026-11-22",
+"city": "Sioux Falls",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Patrick Henry MIddle School",
+"phone": "",
+"requests": 0,
+"state": "SD",
+"status": "no_website",
+"website": ""
+},
 "patrick j drouhard auditorium|cardington|OH": {
 "checked": "2026-10-31",
 "city": "Cardington",
@@ -253226,7 +253674,7 @@
 "manual": false,
 "name": "Pemberton Elementary School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "VA",
 "status": "error",
 "website": "http://www.henrico.k12.va.us/es/pemberton/"
@@ -253259,6 +253707,20 @@
 "status": "no_website",
 "website": ""
 },
+"pembroke academy theater|pembroke|NC": {
+"checked": "2026-11-22",
+"city": "Pembroke",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Pembroke Academy Theater",
+"phone": "",
+"requests": 0,
+"state": "NC",
+"status": "no_website",
+"website": ""
+},
 "pembroke academy theater|pembroke|NH": {
 "checked": "2026-08-17",
 "city": "",
@@ -253284,6 +253746,20 @@
 "phone": "",
 "requests": 0,
 "state": "MA",
+"status": "no_website",
+"website": ""
+},
+"pembroke high shool|pembroke|NC": {
+"checked": "2026-11-22",
+"city": "Pembroke",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Pembroke High Shool",
+"phone": "",
+"requests": 0,
+"state": "NC",
 "status": "no_website",
 "website": ""
 },
@@ -254701,6 +255177,20 @@
 "status": "no_website",
 "website": ""
 },
+"performing arts center at ottawa high school|ottawa|KS": {
+"checked": "2026-11-22",
+"city": "Ottawa",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Performing Arts Center at Ottawa High School",
+"phone": "",
+"requests": 0,
+"state": "KS",
+"status": "no_website",
+"website": ""
+},
 "performing arts center of dawson county|dawsonville|GA": {
 "checked": "2026-08-17",
 "city": "",
@@ -254786,18 +255276,18 @@
 "website": "http://www.leavenworthks.org"
 },
 "performing arts center|newtonville|MA": {
-"checked": "2026-08-17",
-"city": "",
-"email": "",
+"checked": "2026-11-22",
+"city": "Newtonville",
+"email": "browna@newton.k12.ma.us",
 "facebook": "",
-"instagram": "",
+"instagram": "https://www.instagram.com/theatreinknnhs/",
 "manual": false,
-"name": "",
+"name": "Performing Arts Center",
 "phone": "",
-"requests": 0,
-"state": "",
-"status": "not_found",
-"website": ""
+"requests": 1,
+"state": "MA",
+"status": "found",
+"website": "http://theatreink.net"
 },
 "performing arts center|oak bluffs|MA": {
 "checked": "2026-09-30",
@@ -255118,6 +255608,20 @@
 "phone": "",
 "requests": 0,
 "state": "NC",
+"status": "no_website",
+"website": ""
+},
+"perquimans county high school auditorium|hertford|VA": {
+"checked": "2026-11-22",
+"city": "Hertford",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Perquimans County High School Auditorium",
+"phone": "",
+"requests": 0,
+"state": "VA",
 "status": "no_website",
 "website": ""
 },
@@ -257398,7 +257902,7 @@
 "manual": false,
 "name": "Pierz Healy High School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "MN",
 "status": "error",
 "website": "http://pierz.k12.mn.us"
@@ -259442,7 +259946,7 @@
 "manual": false,
 "name": "Plainfield Central Choir Department",
 "phone": "(815) 577-4000",
-"requests": 2,
+"requests": 0,
 "state": "IL",
 "status": "found",
 "website": "http://www.psd202.org"
@@ -262200,7 +262704,7 @@
 "manual": false,
 "name": "Pond Road Middle School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "NJ",
 "status": "error",
 "website": "http://www.robbinsville.k12.gov"
@@ -263502,7 +264006,7 @@
 "manual": false,
 "name": "Portland Performing Arts Nw Dba Spotlight Mta",
 "phone": "(503) 635-3901",
-"requests": 1,
+"requests": 0,
 "state": "OR",
 "status": "found",
 "website": "http://lakewood-center.org"
@@ -263516,7 +264020,7 @@
 "manual": false,
 "name": "Portland Performing Arts Nw Dba Spotlight Mta",
 "phone": "(503) 740-6088",
-"requests": 1,
+"requests": 0,
 "state": "OR",
 "status": "found",
 "website": "https://www.spotlightmusicaltheatre.com/"
@@ -263914,17 +264418,17 @@
 "website": ""
 },
 "post theatre cw post campus long island univ|brookville|NY": {
-"checked": "2026-11-15",
+"checked": "2026-11-22",
 "city": "Brookville",
 "email": "",
-"facebook": "",
-"instagram": "",
+"facebook": "https://www.facebook.com/groups/235611496590433/",
+"instagram": "https://www.instagram.com/liuposttheatre/",
 "manual": false,
 "name": "Post Theatre Co/cw Post Campus/long Island Univ",
 "phone": "",
-"requests": 0,
+"requests": 3,
 "state": "NY",
-"status": "error",
+"status": "not_found",
 "website": "https://posttheatrecompany.org/"
 },
 "postal playhouse|le mars|IA": {
@@ -265700,7 +266204,7 @@
 "manual": false,
 "name": "Princess Theatre",
 "phone": "(509) 786-2180",
-"requests": 1,
+"requests": 0,
 "state": "WA",
 "status": "found",
 "website": "http://www.prosserprincess.com"
@@ -269261,6 +269765,20 @@
 "status": "found",
 "website": ""
 },
+"qm martin auditorium panola college|carthage|LA": {
+"checked": "2026-11-22",
+"city": "Carthage",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "QM Martin Auditorium, Panola College",
+"phone": "",
+"requests": 0,
+"state": "LA",
+"status": "no_website",
+"website": ""
+},
 "qm martin auditorium panola college|carthage|TX": {
 "checked": "2026-08-17",
 "city": "",
@@ -269620,7 +270138,7 @@
 "manual": false,
 "name": "Queen Of Heaven School",
 "phone": "(716) 674-5206",
-"requests": 3,
+"requests": 0,
 "state": "NY",
 "status": "found",
 "website": "http://www.qofhschool.org"
@@ -274484,7 +275002,7 @@
 "website": ""
 },
 "renegade theater|santa cruz|CA": {
-"checked": "2026-11-15",
+"checked": "2026-11-22",
 "city": "Santa Cruz",
 "email": "",
 "facebook": "",
@@ -274492,9 +275010,9 @@
 "manual": false,
 "name": "Renegade Theater Co",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "CA",
-"status": "error",
+"status": "not_found",
 "website": "http://renegadetheaterco.org"
 },
 "renegade theatre|atlanta|GA": {
@@ -274730,7 +275248,7 @@
 "manual": false,
 "name": "Reston Community Players",
 "phone": "(703) 476-4500",
-"requests": 1,
+"requests": 0,
 "state": "VA",
 "status": "found",
 "website": "http://www.restonplayers.org"
@@ -275376,6 +275894,20 @@
 "phone": "",
 "requests": 0,
 "state": "GA",
+"status": "no_website",
+"website": ""
+},
+"rialto community arts center|morrilton|AR": {
+"checked": "2026-11-22",
+"city": "Morrilton",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Rialto Community Arts Center",
+"phone": "",
+"requests": 0,
+"state": "AR",
 "status": "no_website",
 "website": ""
 },
@@ -281400,7 +281932,7 @@
 "website": ""
 },
 "rock valley college|rockford|IL": {
-"checked": "2026-11-15",
+"checked": "2026-11-22",
 "city": "Rockford",
 "email": "",
 "facebook": "",
@@ -281408,7 +281940,7 @@
 "manual": false,
 "name": "Rock Valley College",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "IL",
 "status": "error",
 "website": "http://rvcstarlight.com"
@@ -282304,7 +282836,7 @@
 "manual": false,
 "name": "Rodeph Sholom School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "NY",
 "status": "error",
 "website": "http://www.rodephsholomschool.org/index.cfm?section_id=12"
@@ -285720,7 +286252,7 @@
 "manual": false,
 "name": "Ruckersville Elementary School",
 "phone": "(434) 939-9000",
-"requests": 2,
+"requests": 0,
 "state": "VA",
 "status": "found",
 "website": "http://www.greenecountyschools.com"
@@ -287092,7 +287624,7 @@
 "manual": false,
 "name": "Sacred Heart School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "CT",
 "status": "error",
 "website": "http://sacredheartgroton.org"
@@ -288290,6 +288822,20 @@
 "salem high school|virginia bch|VA": {
 "checked": "2026-10-15",
 "city": "Virginia Bch",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Salem High School",
+"phone": "",
+"requests": 0,
+"state": "VA",
+"status": "no_website",
+"website": ""
+},
+"salem high school|virginia beach|VA": {
+"checked": "2026-11-22",
+"city": "Virginia Beach",
 "email": "",
 "facebook": "",
 "instagram": "",
@@ -290816,7 +291362,7 @@
 "manual": false,
 "name": "Santa Monica High School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "CA",
 "status": "found",
 "website": "http://www.samohitheatre.org"
@@ -297065,6 +297611,20 @@
 "status": "no_website",
 "website": ""
 },
+"shawnee heights high school|tecumseh|MI": {
+"checked": "2026-11-22",
+"city": "Tecumseh",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Shawnee Heights High School",
+"phone": "",
+"requests": 0,
+"state": "MI",
+"status": "no_website",
+"website": ""
+},
 "shawnee high school|medford|NJ": {
 "checked": "2026-08-17",
 "city": "",
@@ -298465,6 +299025,20 @@
 "status": "no_website",
 "website": ""
 },
+"sheryl and harvey white theatre|san diego|CA": {
+"checked": "2026-11-22",
+"city": "San Diego",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Sheryl & Harvey White Theatre",
+"phone": "",
+"requests": 0,
+"state": "CA",
+"status": "no_website",
+"website": ""
+},
 "shhs|columbia|TN": {
 "checked": "2026-09-13",
 "city": "Columbia",
@@ -298838,7 +299412,7 @@
 "manual": false,
 "name": "Shipley School- Upper School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "PA",
 "status": "error",
 "website": "http://www.shipleyschool.org"
@@ -298970,7 +299544,7 @@
 "website": ""
 },
 "shoals community theatre zodiac players|florence|AL": {
-"checked": "2026-11-15",
+"checked": "2026-11-22",
 "city": "Florence",
 "email": "",
 "facebook": "",
@@ -298978,13 +299552,13 @@
 "manual": false,
 "name": "Shoals Community Theatre/ Zodiac Players",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "AL",
 "status": "error",
 "website": "http://www.shoalstheatre.com"
 },
 "shoals theatre|florence|AL": {
-"checked": "2026-11-15",
+"checked": "2026-11-22",
 "city": "Florence",
 "email": "",
 "facebook": "",
@@ -298992,7 +299566,7 @@
 "manual": false,
 "name": "Shoals Theatre",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "AL",
 "status": "error",
 "website": "http://www.shoalstheatre.com"
@@ -303716,7 +304290,7 @@
 "website": ""
 },
 "somerset valley players|hillsborough|NJ": {
-"checked": "2026-08-24",
+"checked": "2026-11-22",
 "city": "Hillsborough",
 "email": "",
 "facebook": "",
@@ -303724,9 +304298,9 @@
 "manual": false,
 "name": "Somerset Valley Players",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "NJ",
-"status": "not_found",
+"status": "error",
 "website": "http://www.svptheatre.org/home_inital.htm"
 },
 "somerville high school|somerville|MA": {
@@ -304080,7 +304654,7 @@
 "website": ""
 },
 "sophie dance westside players|los angeles|CA": {
-"checked": "2026-08-24",
+"checked": "2026-11-22",
 "city": "Los Angeles",
 "email": "",
 "facebook": "//facebook.com/thepico.la",
@@ -304088,7 +304662,7 @@
 "manual": false,
 "name": "Sophie Dance Westside Players",
 "phone": "",
-"requests": 0,
+"requests": 3,
 "state": "CA",
 "status": "not_found",
 "website": "http://www.thepico.com/"
@@ -304639,6 +305213,20 @@
 "status": "no_website",
 "website": ""
 },
+"south dearborn high school|aurora|IN": {
+"checked": "2026-11-22",
+"city": "Aurora",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "South Dearborn High School",
+"phone": "",
+"requests": 0,
+"state": "IN",
+"status": "no_website",
+"website": ""
+},
 "south decatur elementary school|greensburg|IN": {
 "checked": "2026-11-16",
 "city": "Greensburg",
@@ -304732,7 +305320,7 @@
 "manual": false,
 "name": "South Elementary School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "MA",
 "status": "error",
 "website": "http://www.aps1.net/wms/"
@@ -304776,6 +305364,20 @@
 "phone": "",
 "requests": 0,
 "state": "OR",
+"status": "no_website",
+"website": ""
+},
+"south fayette high school|mcdonald|PA": {
+"checked": "2026-11-22",
+"city": "McDonald",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "South Fayette High School",
+"phone": "",
+"requests": 0,
+"state": "PA",
 "status": "no_website",
 "website": ""
 },
@@ -305031,6 +305633,20 @@
 "status": "no_website",
 "website": ""
 },
+"south harrison high school|bethany|MO": {
+"checked": "2026-11-22",
+"city": "Bethany",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "South Harrison High School",
+"phone": "",
+"requests": 0,
+"state": "MO",
+"status": "no_website",
+"website": ""
+},
 "south harrison township elementary school|harrisonville|NJ": {
 "checked": "2026-09-26",
 "city": "Harrisonville",
@@ -305280,6 +305896,20 @@
 "phone": "",
 "requests": 0,
 "state": "IN",
+"status": "no_website",
+"website": ""
+},
+"south kortright central school|south kortright|NY": {
+"checked": "2026-11-22",
+"city": "South Kortright",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "South Kortright Central School",
+"phone": "",
+"requests": 0,
+"state": "NY",
 "status": "no_website",
 "website": ""
 },
@@ -307901,6 +308531,20 @@
 "status": "no_website",
 "website": ""
 },
+"southwestern college|winfield|AL": {
+"checked": "2026-11-22",
+"city": "Winfield",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Southwestern College",
+"phone": "",
+"requests": 0,
+"state": "AL",
+"status": "no_website",
+"website": ""
+},
 "southwestern college|winfield|KS": {
 "checked": "2026-08-17",
 "city": "",
@@ -308994,7 +309638,7 @@
 "website": ""
 },
 "split stage productions|irwin|PA": {
-"checked": "2026-08-24",
+"checked": "2026-11-22",
 "city": "Irwin",
 "email": "",
 "facebook": "",
@@ -309002,7 +309646,7 @@
 "manual": false,
 "name": "Split Stage Productions",
 "phone": "",
-"requests": 0,
+"requests": 3,
 "state": "PA",
 "status": "not_found",
 "website": "http://www.splitstage.com"
@@ -309652,17 +310296,17 @@
 "website": ""
 },
 "spotswood high school|penn laird|VA": {
-"checked": "2026-08-24",
+"checked": "2026-11-22",
 "city": "Penn Laird",
-"email": "",
+"email": "jdavidson01@rockingham.k12.va.us",
 "facebook": "https://www.facebook.com/spotswoodmusical",
 "instagram": "",
 "manual": false,
 "name": "Spotswood High School",
-"phone": "",
-"requests": 0,
+"phone": "(540) 289-3100",
+"requests": 2,
 "state": "VA",
-"status": "not_found",
+"status": "found",
 "website": "http://www.spotswoodmusic.weebly.com/musical"
 },
 "spotswood memorial middle school|spotswood|NJ": {
@@ -310015,6 +310659,20 @@
 "status": "no_website",
 "website": ""
 },
+"spring woods high school|houston|TX": {
+"checked": "2026-11-22",
+"city": "Houston",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Spring Woods High School",
+"phone": "",
+"requests": 0,
+"state": "TX",
+"status": "no_website",
+"website": ""
+},
 "springboro community theatre|springboro|OH": {
 "checked": "2026-08-17",
 "city": "",
@@ -310114,7 +310772,7 @@
 "website": ""
 },
 "springer theatre|gananoque|ON": {
-"checked": "2026-11-15",
+"checked": "2026-11-22",
 "city": "Gananoque",
 "email": "",
 "facebook": "",
@@ -310122,7 +310780,7 @@
 "manual": false,
 "name": "Springer Theatre",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "ON",
 "status": "error",
 "website": "http://www.1000islandsplayhouse.com"
@@ -310794,7 +311452,7 @@
 "manual": false,
 "name": "St Agnes Academy",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "NE",
 "status": "error",
 "website": "http://www.stagnesacademy.com"
@@ -310962,7 +311620,7 @@
 "manual": false,
 "name": "St Albert Childrens Theatre",
 "phone": "(780) 459-1500",
-"requests": 3,
+"requests": 0,
 "state": "AB",
 "status": "found",
 "website": "http://www.sact.ca"
@@ -313496,7 +314154,7 @@
 "manual": false,
 "name": "St Edmunds Academy",
 "phone": "412-521-1907",
-"requests": 1,
+"requests": 0,
 "state": "PA",
 "status": "found",
 "website": "http://www.stedmunds.net"
@@ -313524,7 +314182,7 @@
 "manual": false,
 "name": "St Edward The Confessor School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "NY",
 "status": "error",
 "website": "http://www.st-edwards.org/school.html"
@@ -314294,7 +314952,7 @@
 "manual": false,
 "name": "St George School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "PA",
 "status": "error",
 "website": "http://www.sgs-online.org/links/navigation.html"
@@ -317164,7 +317822,7 @@
 "manual": false,
 "name": "St Laurence Catholic School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "TX",
 "status": "error",
 "website": "http://www.stlaurence.org"
@@ -318746,7 +319404,7 @@
 "manual": false,
 "name": "St Mary School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "IL",
 "status": "error",
 "website": "http://www.stmarymokena.org/stmaryschool2/"
@@ -319152,7 +319810,7 @@
 "manual": false,
 "name": "St Marys Of Kickapoo",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "IL",
 "status": "error",
 "website": "http://www.stmaryskickapoo.com"
@@ -319236,7 +319894,7 @@
 "manual": false,
 "name": "St Marys Visitation Parish School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "WI",
 "status": "error",
 "website": "http://www.stmaryeg.org/school/index.html"
@@ -322890,7 +323548,7 @@
 "manual": false,
 "name": "St Vincents Academy",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "GA",
 "status": "error",
 "website": "https://www.trusteestheater.com"
@@ -323856,7 +324514,7 @@
 "manual": false,
 "name": "Stage Presence Llc",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "CA",
 "status": "found",
 "website": "http://www.mystagepresence.com"
@@ -324869,6 +325527,20 @@
 "status": "no_website",
 "website": ""
 },
+"stanley powell auditorium|shreveport|LA": {
+"checked": "2026-11-22",
+"city": "Shreveport",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Stanley Powell Auditorium",
+"phone": "",
+"requests": 0,
+"state": "LA",
+"status": "no_website",
+"website": ""
+},
 "stanley switlik elementary school|marathon|FL": {
 "checked": "2026-11-19",
 "city": "Marathon",
@@ -325396,7 +326068,7 @@
 "manual": false,
 "name": "Starbuck Middle School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "WI",
 "status": "error",
 "website": "http://www.racine.k12.wi.us"
@@ -326270,17 +326942,17 @@
 "website": "http://www.statesvillechristian.org/"
 },
 "statesville community theatre statesville|statesville|NC": {
-"checked": "2026-11-15",
+"checked": "2026-11-22",
 "city": "Statesville",
 "email": "",
-"facebook": "",
-"instagram": "",
+"facebook": "https://www.facebook.com/theatrestatesville",
+"instagram": "https://www.instagram.com/theatrestatesville",
 "manual": false,
 "name": "Statesville Community Dba Theatre Statesville",
 "phone": "",
-"requests": 0,
+"requests": 2,
 "state": "NC",
-"status": "error",
+"status": "not_found",
 "website": "http://www.theatrestatesville.com"
 },
 "statesville high school|statesville|NC": {
@@ -328174,7 +328846,7 @@
 "website": ""
 },
 "stonehill auditorium|beachwood|OH": {
-"checked": "2026-11-15",
+"checked": "2026-11-22",
 "city": "Beachwood",
 "email": "",
 "facebook": "",
@@ -328182,7 +328854,7 @@
 "manual": false,
 "name": "Stonehill Auditorium",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "OH",
 "status": "error",
 "website": "http://www.mandeljcc.org"
@@ -329602,7 +330274,7 @@
 "website": ""
 },
 "strough middle school|rome|NY": {
-"checked": "2026-08-24",
+"checked": "2026-11-22",
 "city": "Rome",
 "email": "",
 "facebook": "",
@@ -329610,7 +330282,7 @@
 "manual": false,
 "name": "Strough Middle School",
 "phone": "",
-"requests": 0,
+"requests": 2,
 "state": "NY",
 "status": "not_found",
 "website": "http://rome.ny.schoolwebpages.com/education/school/school.php?se"
@@ -331841,6 +332513,20 @@
 "status": "no_website",
 "website": ""
 },
+"summit christian academy|cedar park|TX": {
+"checked": "2026-11-22",
+"city": "Cedar Park",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Summit Christian Academy",
+"phone": "",
+"requests": 0,
+"state": "TX",
+"status": "no_website",
+"website": ""
+},
 "summit country day school|cincinnati|OH": {
 "checked": "2026-11-18",
 "city": "Cincinnati",
@@ -331892,7 +332578,7 @@
 "manual": false,
 "name": "Summit High School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "CA",
 "status": "error",
 "website": "http://www.summithigh.net"
@@ -333530,7 +334216,7 @@
 "manual": false,
 "name": "Susquenita High School",
 "phone": "(717) 957-6000",
-"requests": 3,
+"requests": 0,
 "state": "PA",
 "status": "found",
 "website": "http://www.susquenita.org"
@@ -334991,6 +335677,20 @@
 "status": "no_website",
 "website": ""
 },
+"tahquitz high school|hemet|CA": {
+"checked": "2026-11-22",
+"city": "Hemet",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Tahquitz High School",
+"phone": "",
+"requests": 0,
+"state": "CA",
+"status": "no_website",
+"website": ""
+},
 "take a bow|plainview|NY": {
 "checked": "2026-08-17",
 "city": "",
@@ -335938,7 +336638,7 @@
 "manual": false,
 "name": "Taylorville Community Senior High School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "IL",
 "status": "error",
 "website": "https://tcusd3ths.ss19.sharpschool.com/"
@@ -336260,7 +336960,7 @@
 "manual": false,
 "name": "Telfair Peet Theatre (Mainstage)",
 "phone": "(334) 844-4748",
-"requests": 1,
+"requests": 0,
 "state": "AL",
 "status": "found",
 "website": "http://www.auburnuniversitytheatre.org"
@@ -338262,7 +338962,7 @@
 "manual": false,
 "name": "Theatre Academy Productions",
 "phone": "(919) 834-4001",
-"requests": 2,
+"requests": 0,
 "state": "NC",
 "status": "found",
 "website": "http://www.burningcoal.org"
@@ -342482,7 +343182,7 @@
 "website": ""
 },
 "thumb area community theatre tact|sebewaing|MI": {
-"checked": "2026-08-24",
+"checked": "2026-11-22",
 "city": "Sebewaing",
 "email": "",
 "facebook": "https://www.facebook.com/groups/2398427737",
@@ -342490,7 +343190,7 @@
 "manual": false,
 "name": "Thumb Area Community Theatre - Tact",
 "phone": "",
-"requests": 0,
+"requests": 2,
 "state": "MI",
 "status": "not_found",
 "website": "http://www.tactdrama.com"
@@ -346802,7 +347502,7 @@
 "manual": false,
 "name": "Trinity Christian Academy",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "KY",
 "status": "error",
 "website": "http://www.trinitlex.org"
@@ -347012,7 +347712,7 @@
 "manual": false,
 "name": "Trinity Episcopal School",
 "phone": "(504) 522-0276",
-"requests": 3,
+"requests": 0,
 "state": "LA",
 "status": "found",
 "website": "http://www.trinitynola.com"
@@ -347180,7 +347880,7 @@
 "manual": false,
 "name": "Trinity Lutheran School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "OR",
 "status": "error",
 "website": "https://saints.ludus.com/"
@@ -347684,7 +348384,7 @@
 "manual": false,
 "name": "Troup County Comp High School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "GA",
 "status": "error",
 "website": "http://thsdrama.com"
@@ -349280,7 +349980,7 @@
 "manual": false,
 "name": "Tweedlie Center For The Arts",
 "phone": "951-452-9029",
-"requests": 2,
+"requests": 0,
 "state": "CA",
 "status": "found",
 "website": "http://www.tcariverside.com"
@@ -349746,6 +350446,20 @@
 "state": "TX",
 "status": "found",
 "website": "http://www.tylercivictheatre.com"
+},
+"tyler classical academy|tyler|TX": {
+"checked": "2026-11-22",
+"city": "Tyler",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Tyler Classical Academy",
+"phone": "",
+"requests": 0,
+"state": "TX",
+"status": "no_website",
+"website": ""
 },
 "tyler jr college|tyler|TX": {
 "checked": "2026-08-17",
@@ -350448,7 +351162,7 @@
 "website": "http://www.bluevalleyk12schools.org"
 },
 "union 32 middle high school u 32|montpelier|VT": {
-"checked": "2026-08-24",
+"checked": "2026-11-22",
 "city": "Montpelier",
 "email": "",
 "facebook": "",
@@ -350456,7 +351170,7 @@
 "manual": false,
 "name": "Union 32 Middle High School U 32",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "VT",
 "status": "not_found",
 "website": "http://u32.org"
@@ -351240,7 +351954,7 @@
 "manual": false,
 "name": "Unity Middle School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "WI",
 "status": "error",
 "website": "http://www.unity.k12.wi.us/middleschool.asp"
@@ -360177,6 +360891,20 @@
 "status": "found",
 "website": "http://vistapeakexplore.aurorak12.org/"
 },
+"vista peak preparatory|aurora|CO": {
+"checked": "2026-11-22",
+"city": "Aurora",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Vista PEAK Preparatory",
+"phone": "",
+"requests": 0,
+"state": "CO",
+"status": "no_website",
+"website": ""
+},
 "vista preparatory academy|red bluff|CA": {
 "checked": "2026-09-01",
 "city": "Red Bluff",
@@ -361434,6 +362162,20 @@
 "phone": "",
 "requests": 0,
 "state": "NE",
+"status": "no_website",
+"website": ""
+},
+"wahpeton high school auditorium|wahpeton|MN": {
+"checked": "2026-11-22",
+"city": "Wahpeton",
+"email": "",
+"facebook": "",
+"instagram": "",
+"manual": false,
+"name": "Wahpeton High School Auditorium",
+"phone": "",
+"requests": 0,
+"state": "MN",
 "status": "no_website",
 "website": ""
 },
@@ -364148,7 +364890,7 @@
 "manual": false,
 "name": "Washington Park School",
 "phone": "(973) 956-0010",
-"requests": 2,
+"requests": 0,
 "state": "NJ",
 "status": "found",
 "website": "http://totowa.k12.nj.us"
@@ -366458,7 +367200,7 @@
 "manual": false,
 "name": "Webster Middle School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "WI",
 "status": "error",
 "website": "http://www.cedarburg.k12.wi.us/display/router.asp?docid=666"
@@ -368964,7 +369706,7 @@
 "manual": false,
 "name": "West Middle School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "MA",
 "status": "error",
 "website": "http://www.aps1.net/wms/"
@@ -373626,7 +374368,7 @@
 "manual": false,
 "name": "White Knoll High School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "SC",
 "status": "error",
 "website": "http://www.lexington1.net/wkhs"
@@ -374438,13 +375180,13 @@
 "manual": false,
 "name": "Why Not Theatre Company",
 "phone": "3618519700",
-"requests": 3,
+"requests": 0,
 "state": "TX",
 "status": "found",
 "website": "https://www.auroraartstheatre.com/"
 },
 "wichita childrens theatre|wichita|KS": {
-"checked": "2026-08-24",
+"checked": "2026-11-22",
 "city": "Wichita",
 "email": "",
 "facebook": "",
@@ -374452,9 +375194,9 @@
 "manual": false,
 "name": "Wichita Childrens Theatre",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "KS",
-"status": "not_found",
+"status": "error",
 "website": "http://www.wctdc.com"
 },
 "wichita collegiate school|wichita|KS": {
@@ -376586,7 +377328,7 @@
 "website": ""
 },
 "willink middle school|webster|NY": {
-"checked": "2026-11-15",
+"checked": "2026-11-22",
 "city": "Webster",
 "email": "",
 "facebook": "",
@@ -376594,7 +377336,7 @@
 "manual": false,
 "name": "Willink Middle School",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "NY",
 "status": "error",
 "website": "http://www.websterschools.org/willink.cfm"
@@ -377406,7 +378148,7 @@
 "manual": false,
 "name": "Wilson Central Middle/high School",
 "phone": "(716) 751-9341",
-"requests": 2,
+"requests": 0,
 "state": "NY",
 "status": "found",
 "website": "http://www.wilsoncsd.org"
@@ -377518,7 +378260,7 @@
 "manual": false,
 "name": "Wilson Middle School",
 "phone": "(920) 852-5300",
-"requests": 3,
+"requests": 0,
 "state": "WI",
 "status": "found",
 "website": "http://www.aasd.k12.wi.us"
@@ -379288,7 +380030,7 @@
 "website": ""
 },
 "wits end theatre|chatfield|MN": {
-"checked": "2026-08-24",
+"checked": "2026-11-22",
 "city": "Chatfield",
 "email": "",
 "facebook": "https://www.facebook.com/WitsEndMn/",
@@ -379296,7 +380038,7 @@
 "manual": false,
 "name": "Wits End Theatre",
 "phone": "",
-"requests": 0,
+"requests": 2,
 "state": "MN",
 "status": "not_found",
 "website": "http://witsendtheatre.org"
@@ -380128,7 +380870,7 @@
 "website": "http://woodford.cps-k12.org/"
 },
 "woodford theatre|versailles|KY": {
-"checked": "2026-08-24",
+"checked": "2026-11-22",
 "city": "Versailles",
 "email": "",
 "facebook": "",
@@ -380136,9 +380878,9 @@
 "manual": false,
 "name": "Woodford Theatre",
 "phone": "",
-"requests": 0,
+"requests": 1,
 "state": "KY",
-"status": "not_found",
+"status": "error",
 "website": "http://www.woodfordtheatre.com"
 },
 "woodgrove high school|purcellville|VA": {
@@ -380332,7 +381074,7 @@
 "manual": false,
 "name": "Woodland High School",
 "phone": "",
-"requests": 1,
+"requests": 0,
 "state": "GA",
 "status": "error",
 "website": "https://schoolwires.henry.k12.ga.us/wm"
